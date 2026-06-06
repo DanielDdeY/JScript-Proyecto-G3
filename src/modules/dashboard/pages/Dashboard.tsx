@@ -1,5 +1,7 @@
 import React from 'react';
-import { useWallet, type Tarjeta, type Proyeccion } from '../../../core/context/WalletContext';
+import { useWallet } from '../../../core/context/WalletContext';
+import type { Tarjeta } from '../../../shared/types/tarjeta';
+import type { Proyeccion } from '../../../shared/types/proyeccion';
 
 export const Dashboard: React.FC = () => {
     const { perfil, tarjetas, resumenFinanciero, proyecciones } = useWallet();
@@ -7,7 +9,7 @@ export const Dashboard: React.FC = () => {
     return (
         <div className="d-flex flex-column gap-4">
 
-            {/* Sección Superior: Saldo Total y Tarjetas de Crédito */}
+            {/* Seccion Superior: Saldo Total y Tarjetas de Credito */}
             <div className="row g-3 align-items-center">
                 <div className="col-12 col-xl-3">
                     <span className="text-uppercase text-muted fw-bold small">Saldo Total</span>
@@ -37,7 +39,7 @@ export const Dashboard: React.FC = () => {
                 </div>
             </div>
 
-            {/* Sección Intermedia: Resumen Financiero */}
+            {/* Seccion Intermedia: Resumen Financiero */}
             <div className="card p-3 border-0 shadow-sm">
                 <h6 className="text-muted text-uppercase fw-bold small mb-3">Resumen Financiero</h6>
                 <div className="row text-center g-3">
@@ -56,7 +58,7 @@ export const Dashboard: React.FC = () => {
                 </div>
             </div>
 
-            {/* Sección Inferior: Proyecciones Financieras */}
+            {/* Seccion Inferior: Proyecciones Financieras */}
             <div>
                 <h6 className="text-muted text-uppercase fw-bold small mb-3">Proyección Financiera</h6>
                 <div className="row g-3">

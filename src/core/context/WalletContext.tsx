@@ -1,39 +1,11 @@
 import React, { createContext, useState, type ReactNode, useContext } from 'react';
+import type { Perfil } from '../../shared/types/perfil';
+import type { Tarjeta } from '../../shared/types/tarjeta';
+import type { ResumenFinanciero } from '../../shared/types/resumenFinanciero';
+import type { Proyeccion } from '../../shared/types/proyeccion';
+import type { WalletContextType } from '../../shared/types/walletContextType';
 
-// 1. Definición de las Interfaces de Datos
-export interface Perfil {
-    nombre: string;
-    saldoTotal: number;
-}
 
-export interface Tarjeta {
-    id: string;
-    banco: string;
-    numero: string;
-    saldo: number;
-}
-
-export interface ResumenFinanciero {
-    ingresos: number;
-    gastos: number;
-    ahorro: number;
-}
-
-export interface Proyeccion {
-    tiempo: string;
-    monto: number;
-    porcentaje: string;
-}
-
-// Interface para el contenido del Contexto
-export interface WalletContextType {
-    perfil: Perfil;
-    tarjetas: Tarjeta[];
-    resumenFinanciero: ResumenFinanciero;
-    proyecciones: Proyeccion[];
-}
-
-// Inicialización del Contexto con soporte estricto de tipos
 export const WalletContext = createContext<WalletContextType | undefined>(undefined);
 
 interface WalletProviderProps {
