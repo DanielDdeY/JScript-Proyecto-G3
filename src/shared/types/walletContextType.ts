@@ -4,8 +4,9 @@ import type { ResumenFinanciero } from '../../shared/types/resumenFinanciero';
 import type { Proyeccion } from '../../shared/types/proyeccion';
 
 export interface WalletContextType {
-    perfil: Perfil;
+    perfil: Perfil | null;
     tarjetas: Tarjeta[];
-    resumenFinanciero: ResumenFinanciero;
+    resumenFinanciero: ResumenFinanciero | null;
     proyecciones: Proyeccion[];
+    cargando: boolean;
 }

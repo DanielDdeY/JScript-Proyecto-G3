@@ -1,18 +1,232 @@
 {
   "perfil": {
+    "id": "user-1",
     "nombre": "Pepito",
+    "email": "daniel@mibilletera.edu.pe",
     "saldoTotal": 12450.75
+
   },
+  "bancos": [
+    {
+      "id": "banco-1",
+      "nombre": "BCP",
+      "logoUrl": "https://logo.com/bcp.png",
+      "tcea": 85.5,
+      "tiemposDePagoMeses": [6, 12, 24, 36],
+      "seguroDesgravamen": "A"
+    },
+    {
+      "id": "banco-2",
+      "nombre": "BBVA",
+      "logoUrl": "https://logo.com/bbva.png",
+      "tcea": 65.2,
+      "tiemposDePagoMeses": [12, 24, 36, 48],
+      "seguroDesgravamen": "B"
+    },
+    {
+      "id": "banco-3",
+      "nombre": "VISA",
+      "logoUrl": "https://logo.com/visa.png",
+      "tcea": 45.0,
+      "tiemposDePagoMeses": [1, 3, 6, 12],
+      "seguroDesgravamen": "C"
+    }
+  ],
   "tarjetas": [
-    { "id": "1", "banco": "VISA", "numero": "1234", "saldo": 4500.00 },
-    { "id": "2", "banco": "BCP", "numero": "5678", "saldo": 3200.00 },
-    { "id": "3", "banco": "BBVA", "numero": "7890", "saldo": 4750.75 }
+    {
+      "id": "tj-1",
+      "bancoId": "banco-1",
+      "numero": "5678",
+      "saldo": 3200.00,
+      "tipo": "DEBITO"
+    },
+    {
+      "id": "tj-2",
+      "bancoId": "banco-2",
+      "numero": "7890",
+      "saldo": 4750.75,
+      "tipo": "CREDITO",
+      "lineaCredito": {
+        "limiteTotal": 10000.00,
+        "lineaDisponible": 4750.75,
+        "lineaUtilizada": 5249.25
+      },
+      "cicloFacturacion": {
+        "diaCorte": 15,
+        "diaPago": 5,
+        "mesActual": "2026-06",
+        "Facturado": 1249.25,
+        "pagoMinimo": 150.00
+      }
+    },
+    {
+      "id": "tj-3",
+      "bancoId": "banco-3",
+      "numero": "1234",
+      "saldo": 4500.00,
+      "tipo": "DEBITO"
+    }
   ],
   "gastos": [
-    { "id": "1", "categoria": "Alimentación", "monto": 650, "fecha": "2026-05-10" },
-    { "id": "2", "categoria": "Transporte", "monto": 420, "fecha": "2026-05-12" }
+    {
+      "id": "g-1",
+      "monto": 15.50,
+      "fecha": "2026-06-15",
+      "categoria": {
+        "nombre": "Alimentación",
+        "importancia": "Alta"
+      },
+      "tarjetaId": "tj-1",
+      "descripcion": "Café Starbucks y Sandwich"
+    },
+    {
+      "id": "g-2",
+      "monto": 3000.00,
+      "fecha": "2026-06-10",
+      "categoria": {
+        "nombre": "Tecnología",
+        "importancia": "Media"
+      },
+      "tarjetaId": "tj-2",
+      "descripcion": "Laptop para la universidad",
+      "detalleCuotas": {
+        "cuotasTotales": 6,
+        "cuotasPagadas": 1,
+        "montoPorCuota": 500.00,
+        "mesesSinIntereses": true
+      }
+    },
+    {
+      "id": "g-3",
+      "monto": 45.90,
+      "fecha": "2026-06-05",
+      "categoria": {
+        "nombre": "Entretenimiento",
+        "importancia": "Baja"
+      },
+      "tarjetaId": "tj-2",
+      "descripcion": "Netflix Familiar",
+      "suscripcionId": "sub-1"
+    }
   ],
   "ingresos": [
-    { "id": "1", "fuente": "Sueldo", "monto": 3800, "fecha": "2026-05-01" }
+    {
+      "id": "ing-1",
+      "monto": 3800.00,
+      "fuente": "Sueldo",
+      "fecha": "2026-06-01",
+      "descripcion": "Pago mensual de empresa"
+    },
+    {
+      "id": "ing-2",
+      "monto": 850.00,
+      "fuente": "Freelance",
+      "fecha": "2026-06-12",
+      "descripcion": "Proyecto web React"
+    }
+  ],
+  "inversiones": [
+    {
+      "idUsuario": "user-1",
+      "riesgo": "MEDIO",
+      "activos": [
+        {
+          "id": "inv-1",
+          "nombreSimbolo": "Fondo Mutuo BCP",
+          "capitalInvertido": 2000.00,
+          "valorActual": 2150.00,
+          "historial": [
+            {
+              "fecha": "2026-05-01",
+              "porcentajeGanancia": 5.2
+            },
+            {
+              "fecha": "2026-06-01",
+              "porcentajeGanancia": 7.5
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "presupuestos": [
+    {
+      "id": "pres-1",
+      "mes": "2026-06",
+      "totalAsignado": 1500.00,
+      "desgloseCategorias": [
+        {
+          "categoria": {
+            "nombre": "Alimentación",
+            "importancia": "Alta"
+          },
+          "limiteSoles": 650.00,
+          "gastadoSoles": 320.50
+        },
+        {
+          "categoria": {
+            "nombre": "Transporte",
+            "importancia": "Alta"
+          },
+          "limiteSoles": 400.00,
+          "gastadoSoles": 150.00
+        }
+      ],
+      "alertasActivas": []
+    }
+  ],
+  "prestamos": [
+    {
+      "id": "prestamo-1",
+      "banco": {
+        "id": "banco-1",
+        "nombre": "BCP",
+        "tcea": 85.5,
+        "tiemposDePagoMeses": [6, 12, 24, 36],
+        "seguroDesgravamen": "A"
+      },
+      "montoAprobado": 15000.00,
+      "deudaRestante": 12500.00,
+      "fechaDesembolso": "2025-12-01",
+      "cuotasPagadas": 6,
+      "cuotasTotales": 36
+    }
+  ],
+  "suscripciones": [
+    {
+      "id": "sub-1",
+      "servicio": "Netflix",
+      "montoMensual": 45.90,
+      "diaDeCobro": 5,
+      "tarjetaVinculadaId": "tj-2",
+      "historial": [
+        {
+          "fechaCobro": "2026-06-05",
+          "estado": "EXITOSO"
+        }
+      ]
+    }
+  ],
+  "proyecciones": [
+    {
+      "tiempo": "En 1 mes",
+      "monto": 13900.00,
+      "porcentaje": "+ 11.6%"
+    },
+    {
+      "tiempo": "En 3 meses",
+      "monto": 16750.00,
+      "porcentaje": "+ 34.6%"
+    },
+    {
+      "tiempo": "En 6 meses",
+      "monto": 20450.00,
+      "porcentaje": "+ 64.2%"
+    },
+    {
+      "tiempo": "En 1 año",
+      "monto": 26500.00,
+      "porcentaje": "+ 112.9%"
+    }
   ]
 }

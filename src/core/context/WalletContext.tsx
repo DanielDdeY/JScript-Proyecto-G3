@@ -1,51 +1,77 @@
-import React, { createContext, useState, type ReactNode, useContext } from 'react';
-import type { Perfil } from '../../shared/types/perfil';
-import type { Tarjeta } from '../../shared/types/tarjeta';
-import type { ResumenFinanciero } from '../../shared/types/resumenFinanciero';
-import type { Proyeccion } from '../../shared/types/proyeccion';
+import React, { createContext, useState, useEffect,type ReactNode, useContext } from 'react';
+import { apiAlova } from '../services/alovaClient';
+
 import type { WalletContextType } from '../../shared/types/walletContextType';
+import type { Perfil } from '../../shared/types/perfil';
+import type { Proyeccion } from '../../shared/types/proyeccion';
+import type { ResumenFinanciero } from '../../shared/types/resumenFinanciero';
+import type { Tarjeta } from '../../shared/types/tarjeta';
 
 
 export const WalletContext = createContext<WalletContextType | undefined>(undefined);
 
 interface WalletProviderProps {
-    children: ReactNode;
+  children: ReactNode;
 }
 
 export const WalletProvider: React.FC<WalletProviderProps> = ({ children }) => {
-    const [perfil] = useState<Perfil>({ nombre: "Pepito", saldoTotal: 12450.75 });
+  const [perfil, setPerfil] = useState<Perfil | null>(null);
+  const [tarjetas, setTarjetas] = useState<Tarjeta[]>([]);
+  const [proyecciones, setProyecciones] = useState<Proyeccion[]>([]);
+  const [resumenFinanciero, setResumenFinanciero] = useState<ResumenFinanciero | null>(null);
+  const [cargando, setCargando] = useState<boolean>(true);
 
-    const [tarjetas] = useState<Tarjeta[]>([
-        { id: "1", banco: "VISA", numero: "1234", saldo: 4500.00 },
-        { id: "2", banco: "BCP", numero: "5678", saldo: 3200.00 },
-        { id: "3", banco: "BBVA", numero: "7890", saldo: 4750.75 }
-    ]);
+  useEffect(() => {
+    const cargarDatosConAlova = async () => {
+      try {
+        setCargando(true);
 
-    const [resumenFinanciero] = useState<ResumenFinanciero>({
-        ingresos: 3800.00,
-        gastos: 2300.00,
-        ahorro: 1500.00
-    });
+        // 1. Definimos los métodos de Alova especificando el tipado estricto genérico <T>
+        const metodoPerfil = apiAlova.Get<Perfil>('/perfil');
+        const metodoTarjetas = apiAlova.Get<Tarjeta[]>('/tarjetas?_expand=banco'); // JOIN relacional con Banco
+        const metodoProyecciones = apiAlova.Get<Proyeccion[]>('/proyecciones');
 
-    const [proyecciones] = useState<Proyeccion[]>([
-        { tiempo: "En 1 mes", monto: 13900.00, porcentaje: "+ 11.6%" },
-        { tiempo: "En 3 meses", monto: 16750.00, porcentaje: "+ 34.6%" },
-        { tiempo: "En 6 meses", monto: 20450.00, porcentaje: "+ 64.2%" },
-        { tiempo: "En 1 año", monto: 26500.00, porcentaje: "+ 112.9%" }
-    ]);
+        // 2. Ejecutamos las promesas en paralelo usando el método .send() de Alova
+        const [perfilData, tarjetasData, proyeccionesData] = await Promise.all([
+          metodoPerfil.send(),
+          metodoTarjetas.send(),
+          metodoProyecciones.send()
+        ]);
 
-    return (
-        <WalletContext.Provider value={{ perfil, tarjetas, resumenFinanciero, proyecciones }}>
-            {children}
-        </WalletContext.Provider>
-    );
+        // 3. Almacenamos las respuestas asíncronas en el estado de React
+        setPerfil(perfilData);
+        setTarjetas(tarjetasData);
+        setProyecciones(proyeccionesData);
+
+        // Armamos el bloque del resumen sumando los flujos de tu db.json
+        setResumenFinanciero({
+          ingresos: 4650.00, // Sueldo + Freelance
+          gastos: 3061.40,   // Cafés + Laptop + Suscripción
+          ahorro: 1588.60
+        });
+
+      } catch (error) {
+        console.error('Error cargando la billetera virtual con Alova:', error);
+      } finally {
+        setCargando(false);
+      }
+    };
+
+    cargarDatosConAlova();
+  }, []);
+
+  return (
+    <WalletContext.Provider value={{ perfil, tarjetas, resumenFinanciero, proyecciones, cargando }}>
+      {children}
+    </WalletContext.Provider>
+  );
 };
 
-// Hook personalizado para evitar validar null/undefined en cada componente
+// Hook personalizado para consumir el estado en cualquier parte de la App de forma segura
 export const useWallet = (): WalletContextType => {
-    const context = useContext(WalletContext);
-    if (!context) {
-        throw new Error('useWallet debe ser utilizado dentro de un WalletProvider');
-    }
-    return context;
+  const context = useContext(WalletContext);
+  if (!context) {
+    throw new Error('useWallet debe ser utilizado dentro de un WalletProvider');
+  }
+  return context;
 };
