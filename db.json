@@ -1,18 +1,32 @@
 {
-  "perfil": {
-    "nombre": "Pepito",
-    "saldoTotal": 12450.75
-  },
-  "tarjetas": [
-    { "id": "1", "banco": "VISA", "numero": "1234", "saldo": 4500.00 },
-    { "id": "2", "banco": "BCP", "numero": "5678", "saldo": 3200.00 },
-    { "id": "3", "banco": "BBVA", "numero": "7890", "saldo": 4750.75 }
+  "usuarios": [
+    {
+      "nombres": "Rosaura",
+      "apellidos": "Mateo",
+      "dni": "74250828",
+      "correo": "rosauramateo864@gmail.com",
+      "celular": "958412377",
+      "password": "Keylapol@27",
+      "id": "wNJM77-pzp8"
+    },
+    {
+      "nombres": "Rosaura",
+      "apellidos": "Uzumaki Kuya",
+      "dni": "74250822",
+      "correo": "rosaurauzumaki@gmail.com",
+      "celular": "958412370",
+      "password": "Polpol27@",
+      "id": "_J5-YgDrvDU"
+    },
+    {
+      "nombres": "Rosaura",
+      "apellidos": "Mateo",
+      "dni": "74250828",
+      "correo": "rosauramateo@gmail.com",
+      "celular": "958412377",
+      "password": "Keylapol@27",
+      "id": "TE87rTqvnac"
+    }
   ],
-  "gastos": [
-    { "id": "1", "categoria": "Alimentación", "monto": 650, "fecha": "2026-05-10" },
-    { "id": "2", "categoria": "Transporte", "monto": 420, "fecha": "2026-05-12" }
-  ],
-  "ingresos": [
-    { "id": "1", "fuente": "Sueldo", "monto": 3800, "fecha": "2026-05-01" }
-  ]
+  "$schema": "./node_modules/json-server/schema.json"
 }

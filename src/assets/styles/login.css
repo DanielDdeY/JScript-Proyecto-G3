@@ -1,0 +1,355 @@
+body{
+    margin:0;
+    background:#f5f5f5;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+.login-page{
+
+    width:100%;
+    min-height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+}
+
+.login-card{
+
+    width:1200px;
+    height:670px;
+
+    background:white;
+
+    border-radius:0 0 40px 40px;
+
+    display:flex;
+
+    overflow:hidden;
+
+    box-shadow:0px 0px 10px rgba(0,0,0,.15);
+
+}
+
+/* IZQUIERDA */
+
+.login-left{
+
+    width:55%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+.login-image {
+    width: 500px;
+    border-radius: 30px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.login-image:hover {
+    transform: scale(1.05); /* Se agranda un 5% */
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3); /* Sombra */
+}
+/* DERECHA */
+
+.login-right{
+
+    width:45%;
+
+    border-left:1px solid #ececec;
+
+    border-radius:40px 0 0 40px;
+
+    padding:60px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+}
+
+.brand{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+}
+
+.brand-phone{
+
+    width:65px;
+}
+
+.brand h2{
+
+    margin:0;
+
+    color:#1b2be0;
+
+    font-weight:bold;
+
+    font-size:34px;
+
+    font-style:italic;
+
+}
+
+.brand span{
+
+    font-size:26px;
+
+}
+
+.login-title{
+
+    text-align:center;
+
+    font-size:38px;
+
+    font-weight:500;
+
+    margin:40px 0;
+
+}
+
+.input-login{
+
+    height:55px;
+
+    font-size:17px;
+
+    border:none;
+
+    border-bottom:2px solid #ddd;
+
+    border-radius:0;
+
+    box-shadow:0 3px 8px rgba(0,0,0,.15);
+
+    padding-left:12px;
+
+}
+
+.input-login:focus{
+
+    border-bottom:2px solid #1437e0;
+
+    box-shadow:0 3px 8px rgba(0,0,0,.15);
+
+}
+
+.ingresar-btn{
+
+    width:180px;
+
+    height:50px;
+
+    border-radius:30px;
+
+    background:#1628ff;
+
+    color:white;
+
+    font-size:22px;
+
+    font-weight:bold;
+
+}
+
+.ingresar-btn:hover{
+
+    background:#0014ff;
+
+    color:white;
+
+}
+
+.registro{
+
+    text-align:center;
+
+    margin-top:35px;
+
+}
+
+.registro a{
+
+    color:#1628ff;
+
+    text-decoration:none;
+
+}
+
+/* ============================
+   TABLETS
+============================ */
+
+@media (max-width:992px){
+
+    .login-card{
+
+        width:95%;
+        height:auto;
+
+        flex-direction:column;
+
+        border-radius:25px;
+
+    }
+
+    .login-left{
+
+        width:100%;
+        padding:30px;
+
+    }
+
+    .login-right{
+
+        width:100%;
+        border-left:none;
+        border-top:1px solid #ececec;
+
+        border-radius:0;
+
+        padding:40px;
+
+    }
+
+    .login-image{
+
+        width:100%;
+        max-width:450px;
+
+    }
+
+}
+
+/* ============================
+   CELULARES
+============================ */
+
+@media (max-width:768px){
+
+    .login-page{
+
+        padding:20px;
+
+    }
+
+    .login-card{
+
+        width:100%;
+        border-radius:20px;
+
+    }
+
+    .login-left{
+
+        display:none;
+
+    }
+
+    .login-right{
+
+        width:100%;
+
+        padding:35px 25px;
+
+    }
+
+    .brand{
+
+        justify-content:center;
+
+        margin-bottom:15px;
+
+    }
+
+    .brand h2{
+
+        font-size:28px;
+
+    }
+
+    .brand span{
+
+        font-size:20px;
+
+    }
+
+    .brand-phone{
+
+        width:55px;
+
+    }
+
+    .login-title{
+
+        font-size:30px;
+
+        margin:30px 0;
+
+    }
+
+    .ingresar-btn{
+
+        width:100%;
+
+        height:48px;
+
+        font-size:20px;
+
+    }
+
+}
+
+/* ============================
+   CELULARES PEQUEÑOS
+============================ */
+
+@media (max-width:480px){
+
+    .login-right{
+
+        padding:25px 18px;
+
+    }
+
+    .brand h2{
+
+        font-size:24px;
+
+    }
+
+    .brand span{
+
+        font-size:18px;
+
+    }
+
+    .login-title{
+
+        font-size:26px;
+
+    }
+
+    .input-login{
+
+        height:45px;
+
+    }
+
+}

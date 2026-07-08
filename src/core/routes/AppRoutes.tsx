@@ -8,6 +8,9 @@ import { GastosPage } from '../../modules/gastos/pages/GastosPage';
 import { IngresosPage } from '../../modules/ingresos/pages/IngresosPage';
 import { ProyeccionesPage } from '../../modules/proyecciones/pages/ProyeccionesPage';
 import { PerfilPage } from '../../modules/perfil/pages/PerfilPage';
+import { Register } from '../../modules/auth/pages/Register';
+import { ProtectedRoute } from "../guards/ProtectedRoute";
+
 
 export const router = createBrowserRouter([
     {
@@ -18,9 +21,20 @@ export const router = createBrowserRouter([
         path: '/login',
         element: <Login />
     },
+
     {
-        path: '/app',
-        element: <DashboardLayout />, // Layout contenedor privado
+    path: '/register',
+    element: <Register />
+},
+
+   {
+    path: '/app',
+    element: (
+        <ProtectedRoute>
+            <DashboardLayout />
+        </ProtectedRoute>
+    ), // Layout contenedor privado
+    
         children: [
             { path: 'dashboard', element: <Dashboard /> },
             { path: 'saldo', element: <SaldoPage /> },
