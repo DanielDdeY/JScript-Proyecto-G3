@@ -1,0 +1,3 @@
+export const environment = {
+  apiBaseUrl: import.meta.env.VITE_API_URL ?? 'http://localhost:4000',
+} as const;

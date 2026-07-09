@@ -1,2 +1,13 @@
-import React from 'react';
-export const EstimacionCard: React.FC = () => <div className="card p-3">Cálculo predictivo en base a algoritmos activo</div>;
+interface EstimacionCardProps {
+  titulo?: string;
+  valor?: string;
+}
+
+export function EstimacionCard({ titulo = 'Estimación', valor = 'Pendiente' }: EstimacionCardProps) {
+  return (
+    <article className="card p-3 border-0 shadow-sm">
+      <span className="text-muted small">{titulo}</span>
+      <strong>{valor}</strong>
+    </article>
+  );
+}

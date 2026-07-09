@@ -1,2 +1,8 @@
-import React from 'react';
-export const Hero: React.FC = () => <div className="p-5 bg-light rounded-3"><h2>Bienvenido a MiBilletera Virtual</h2></div>;
+export function Hero() {
+  return (
+    <section className="hero text-center">
+      <h1>MiBilletera</h1>
+      <p className="lead text-muted">Controla ingresos, gastos, tarjetas y proyecciones desde una sola app.</p>
+    </section>
+  );
+}

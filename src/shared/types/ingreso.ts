@@ -1,6 +1,9 @@
+import type { Id } from './id';
+
 export interface Ingreso {
-  id: string;
+  id: Id;
   monto: number;
   fecha: string;
-  descripcion?: string;
+  fuente: string;
+  descripcion: string;
 }

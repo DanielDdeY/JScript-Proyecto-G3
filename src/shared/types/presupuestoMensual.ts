@@ -1,10 +1,10 @@
-import type { DetalleCategoria } from '../../shared/types/detalleCategoria';
-import type { AlertaPresupuesto } from '../../shared/types/alertaPresupuesto';
+import type { AlertaPresupuesto } from './alertaPresupuesto';
+import type { DetalleCategoria } from './detalleCategoria';
 
 export interface PresupuestoMensual {
   id: string;
-  mes: string; // ej. "2026-06"
+  mes: string;
   totalAsignado: number;
-  desgloseCategorias: DetalleCategoria[]; // Nivel 1
-  alertasActivas: AlertaPresupuesto[];    // Nivel 1
+  desgloseCategorias: DetalleCategoria[];
+  alertasActivas: AlertaPresupuesto[];
 }

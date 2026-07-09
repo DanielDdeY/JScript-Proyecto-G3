@@ -1,33 +1,14 @@
-import React from 'react';
-import { Outlet, Link, useLocation } from 'react-router-dom';
+import { FeatureShell } from '../../../shared/components/FeatureShell/FeatureShell';
 
-export const SaldoPage: React.FC = () => {
-  const location = useLocation();
-
-  const getButtonClass = (path: string) => {
-    const isActive = location.pathname.includes(path);
-    return `btn ${isActive ? 'btn-primary' : 'btn-outline-primary'} fw-semibold`;
-  };
-
+export function SaldoPage() {
   return (
-    <div className="d-flex flex-column gap-4">
-
-      <div className="card p-4 border-0 shadow-sm bg-white">
-        <h3 className="text-dark fw-bold mb-3">Proyecciones a futuro</h3>
-        
-        <div className="d-flex flex-wrap gap-2">
-          <Link to="convertir" className={getButtonClass('agregar')}>
-            Convertir la plata
-          </Link>
-          <Link to="separar" className={getButtonClass('listar')}>
-            Separar para que no se use 
-          </Link>
-        </div>
-      </div>
-
-      <div className="w-100">
-        <Outlet />
-      </div>
-    </div>
+    <FeatureShell
+      title="Módulo de Saldo"
+      description="Consulta tu saldo y simula acciones futuras."
+      actions={[
+        { to: 'convertir', label: 'Convertir la plata', match: 'convertir' },
+        { to: 'separar', label: 'Separar para que no se use', match: 'separar' },
+      ]}
+    />
   );
-};
+}

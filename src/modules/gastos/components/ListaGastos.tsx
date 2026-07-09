@@ -1,2 +1,3 @@
-import React from 'react';
-export const ListaGastos: React.FC = () => <p>Lista de egresos del mes...</p>;
+export function ListaGastos() {
+  return <p>Lista de gastos</p>;
+}

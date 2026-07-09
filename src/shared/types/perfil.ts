@@ -1,5 +1,9 @@
+import type { Id } from './id';
+
 export interface Perfil {
-    nombre: string;
-    avatarUrl?: string;
-    saldoTotal: number;
+  id?: Id;
+  nombre: string;
+  email?: string;
+  avatarUrl?: string;
+  saldoTotal: number;
 }

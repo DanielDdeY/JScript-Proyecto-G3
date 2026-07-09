@@ -182,3 +182,21 @@
     border-right-color: var(--border);
   }
 }
+
+.wallet-card {
+  border: 0;
+  color: #fff;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.wallet-card--visa {
+  background: linear-gradient(135deg, #0d6efd, #0a4baf);
+}
+
+.wallet-card--bcp {
+  background: linear-gradient(135deg, #6f42c1, #492787);
+}
+
+.wallet-card--default {
+  background: linear-gradient(135deg, #0dcaf0, #087990);
+}

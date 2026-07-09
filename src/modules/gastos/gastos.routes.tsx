@@ -1,17 +1,17 @@
-import { Navigate } from 'react-router-dom';
-import type {RouteObject} from 'react-router-dom';
+import { Navigate, type RouteObject } from 'react-router-dom';
 import { GastosPage } from './pages/GastosPage';
 import { AgregarGastoPage } from './pages/agregar-gasto-page/AgregarGastoPage';
-import { ListarGastoPage } from './pages/listar-gasto-page/ListarGastoPage';
 import { ConfigurarPresupuestoPage } from './pages/configurar-presupuesto-page/ConfigurarPresupuestoPage';
+import { ListarGastoPage } from './pages/listar-gasto-page/ListarGastoPage';
 
 export const gastosRoutes: RouteObject = {
   path: 'gastos',
   element: <GastosPage />,
   children: [
-    { path: 'agregar', element: <AgregarGastoPage /> },
+    { index: true, element: <Navigate to="listar" replace /> },
     { path: 'listar', element: <ListarGastoPage /> },
+    { path: 'agregar', element: <AgregarGastoPage /> },
     { path: 'configurar-presupuesto', element: <ConfigurarPresupuestoPage /> },
-    { path: '', element: <Navigate to="listar" replace /> }
-  ]
+    { path: 'presupuesto', element: <Navigate to="../configurar-presupuesto" replace /> },
+  ],
 };

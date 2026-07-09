@@ -1,4 +1,6 @@
+export type ImportanciaGasto = 'Alta' | 'Media' | 'Baja';
+
 export interface GastoCategoria {
-    nombre: string;
-    importacia: string;
+  nombre: string;
+  importancia: ImportanciaGasto;
 }

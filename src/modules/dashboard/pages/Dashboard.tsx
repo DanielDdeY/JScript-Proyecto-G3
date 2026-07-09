@@ -1,79 +1,116 @@
-import React from 'react';
-import { useWallet } from '../../../core/context/WalletContext';
-import type { Tarjeta } from '../../../shared/types/tarjeta';
-import type { Proyeccion } from '../../../shared/types/proyeccion';
+import { useWallet } from '../../../modules/wallet/presentation/hooks/useWallet';
+import { formatCurrencyPen } from '../../../shared/utils/formatters';
+import { obtenerClaseTarjeta, obtenerNombreBanco, obtenerUltimosDigitos } from '../../../shared/utils/tarjetaUtils';
 
-export const Dashboard: React.FC = () => {
-    const { perfil, tarjetas, resumenFinanciero, proyecciones } = useWallet();
+export function Dashboard() {
+  const { perfil, tarjetas, resumenFinanciero, proyecciones, cargando, error, recargar } = useWallet();
 
+  if (cargando) {
     return (
-        <div className="d-flex flex-column gap-4">
-
-            {/* Seccion Superior: Saldo Total y Tarjetas de Credito */}
-            <div className="row g-3 align-items-center">
-                <div className="col-12 col-xl-3">
-                    <span className="text-uppercase text-muted fw-bold small">Saldo Total</span>
-                    <h2 className="fw-bold m-0 text-dark">S/. {perfil.saldoTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}</h2>
-                    <span className="badge bg-success-subtle text-success mt-1">↑ + 8.3% vs mes anterior</span>
-                </div>
-
-                <div className="col-12 col-xl-9">
-                    <div className="row g-3">
-                        {tarjetas.map((tarjeta: Tarjeta) => (
-                            <div key={tarjeta.id} className="col-12 col-sm-4">
-                                <div className="card p-3 text-white border-0 shadow-sm" style={{
-                                    background: tarjeta.banco === 'VISA' ? 'linear-gradient(135deg, #0d6efd, #0a4baf)' :
-                                        tarjeta.banco === 'BCP' ? 'linear-gradient(135deg, #6f42c1, #492787)' :
-                                            'linear-gradient(135deg, #0dcaf0, #087990)'
-                                }}>
-                                    <div className="d-flex justify-content-between align-items-center mb-4">
-                                        <span className="fw-bold fs-5">{tarjeta.banco}</span>
-                                        <span className="small">**** {tarjeta.numero}</span>
-                                    </div>
-                                    <span className="small opacity-75">Saldo disponible</span>
-                                    <span className="fw-bold fs-5">S/. {tarjeta.saldo.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-
-            {/* Seccion Intermedia: Resumen Financiero */}
-            <div className="card p-3 border-0 shadow-sm">
-                <h6 className="text-muted text-uppercase fw-bold small mb-3">Resumen Financiero</h6>
-                <div className="row text-center g-3">
-                    <div className="col-4 border-end">
-                        <span className="text-muted small d-block">Ingresos</span>
-                        <span className="fw-bold text-success fs-5">S/. {resumenFinanciero.ingresos.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
-                    </div>
-                    <div className="col-4 border-end">
-                        <span className="text-muted small d-block">Gastos</span>
-                        <span className="fw-bold text-danger fs-5">S/. {resumenFinanciero.gastos.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
-                    </div>
-                    <div className="col-4">
-                        <span className="text-muted small d-block">Ahorro</span>
-                        <span className="fw-bold text-info fs-5">S/. {resumenFinanciero.ahorro.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
-                    </div>
-                </div>
-            </div>
-
-            {/* Seccion Inferior: Proyecciones Financieras */}
-            <div>
-                <h6 className="text-muted text-uppercase fw-bold small mb-3">Proyección Financiera</h6>
-                <div className="row g-3">
-                    {proyecciones.map((proy: Proyeccion, idx: number) => (
-                        <div key={idx} className="col-12 col-sm-6 col-lg-3">
-                            <div className="card p-3 border-0 shadow-sm bg-white">
-                                <span className="text-muted small">{proy.tiempo}</span>
-                                <h4 className="fw-bold text-primary my-1">S/. {proy.monto.toLocaleString('en-US', { minimumFractionDigits: 2 })}</h4>
-                                <span className="text-success small fw-semibold">↑ {proy.porcentaje}</span>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-
+      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '300px' }}>
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Cargando...</span>
         </div>
+      </div>
     );
-};
+  }
+
+  if (error) {
+    return (
+      <div className="alert alert-danger d-flex justify-content-between align-items-center">
+        <span>{error}</span>
+        <button type="button" className="btn btn-sm btn-outline-danger" onClick={() => void recargar()}>
+          Reintentar
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="d-flex flex-column gap-4">
+      <section className="row g-4 align-items-stretch">
+        <div className="col-12 col-xl-3">
+          <div className="card h-100 border-0 shadow-sm p-4 text-center text-xl-start justify-content-center">
+            <span className="text-uppercase text-muted fw-bold small mb-2 d-block">Saldo Total</span>
+            <h2 className="fw-bold m-0 text-dark display-6 mb-2">{formatCurrencyPen(perfil?.saldoTotal ?? 0)}</h2>
+            <div>
+              <span className="badge bg-success-subtle text-success py-2 px-3 fw-semibold">↑ + 8.3% vs mes anterior</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="col-12 col-xl-9">
+          <div className="row g-3 h-100">
+            {tarjetas.map((tarjeta) => (
+              <div key={String(tarjeta.id)} className="col-12 col-md-6 col-lg-4">
+                <article className={`${obtenerClaseTarjeta(tarjeta)} card p-4 h-100 d-flex flex-column justify-content-between`}>
+                  <div className="d-flex justify-content-between align-items-center mb-4">
+                    <span className="fw-bold fs-5">{obtenerNombreBanco(tarjeta)}</span>
+                    <span className="small opacity-75 font-monospace">**** {obtenerUltimosDigitos(tarjeta.numero)}</span>
+                  </div>
+                  <div>
+                    <span className="small opacity-75 d-block mb-1">Saldo disponible</span>
+                    <span className="fw-bold fs-4 font-monospace">{formatCurrencyPen(tarjeta.saldo)}</span>
+                  </div>
+                </article>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="card p-4 border-0 shadow-sm">
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h5 className="fw-bold text-dark mb-0">Resumen Financiero del Mes</h5>
+        </div>
+        <div className="row text-center g-4">
+          <div className="col-12 col-md-4 border-end-md position-relative">
+            <div
+              className="bg-success-subtle rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+              style={{ width: '48px', height: '48px' }}
+            >
+              <i className="bi bi-arrow-down-left text-success fs-4" />
+            </div>
+            <span className="text-muted small fw-semibold d-block text-uppercase mb-1">Ingresos Totales</span>
+            <span className="fw-bold text-success fs-3">{formatCurrencyPen(resumenFinanciero.ingresos)}</span>
+          </div>
+          <div className="col-12 col-md-4 border-end-md position-relative">
+            <div
+              className="bg-danger-subtle rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+              style={{ width: '48px', height: '48px' }}
+            >
+              <i className="bi bi-arrow-up-right text-danger fs-4" />
+            </div>
+            <span className="text-muted small fw-semibold d-block text-uppercase mb-1">Gastos Totales</span>
+            <span className="fw-bold text-danger fs-3">{formatCurrencyPen(resumenFinanciero.gastos)}</span>
+          </div>
+          <div className="col-12 col-md-4">
+            <div
+              className="bg-primary-subtle rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+              style={{ width: '48px', height: '48px' }}
+            >
+              <i className="bi bi-piggy-bank text-primary fs-4" />
+            </div>
+            <span className="text-muted small fw-semibold d-block text-uppercase mb-1">Ahorro Neto</span>
+            <span className="fw-bold text-primary fs-3">{formatCurrencyPen(resumenFinanciero.ahorro)}</span>
+          </div>
+        </div>
+      </section>
+
+      <section className="mb-2">
+        <h5 className="fw-bold text-dark mb-3">Proyección Financiera</h5>
+        <div className="row g-3">
+          {proyecciones.map((proyeccion) => (
+            <div key={`${proyeccion.tiempo}-${proyeccion.monto}`} className="col-12 col-sm-6 col-lg-3">
+              <article className="card p-3 border-0 shadow-sm bg-white h-100 d-flex flex-column justify-content-center">
+                <span className="text-muted small fw-semibold text-uppercase mb-2">{proyeccion.tiempo}</span>
+                <h4 className="fw-bold text-dark mb-1">{formatCurrencyPen(proyeccion.monto)}</h4>
+                <span className="badge bg-success-subtle text-success align-self-start fw-bold">{proyeccion.porcentaje}</span>
+              </article>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}

@@ -1,16 +1,11 @@
+import { AppProviders } from './app/providers/AppProviders';
+import { AppRouter } from './app/routes/AppRouter';
+import './App.css';
 
-import { WalletProvider } from './core/context/WalletContext';
-import { RouterProvider } from 'react-router-dom';
-import { router } from './core/routes/AppRoutes';
-
-import './App.css'
-
-function App() {
+export default function App() {
   return (
-      <WalletProvider>
-          <RouterProvider router={router} />
-      </WalletProvider>
+    <AppProviders>
+      <AppRouter />
+    </AppProviders>
   );
 }
-
-export default App

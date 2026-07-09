@@ -1,20 +1,41 @@
 import { createAlova } from 'alova';
 import GlobalFetch from 'alova/fetch';
 import ReactHook from 'alova/react';
+import { environment } from '../config/environment';
 
-// Configuramos la instancia de Alova apuntando al puerto 4000 de tu JSON-Server
 export const apiAlova = createAlova({
-
-   baseURL: 'http://localhost:4000',
-   statesHook: ReactHook,
-   requestAdapter: GlobalFetch(),
-   // also similar to axios
-   responded:{ 
+  baseURL: environment.apiBaseUrl,
+  statesHook: ReactHook,
+  requestAdapter: GlobalFetch(),
+  responded: {
     onSuccess: async (response) => {
       if (!response.ok) {
         throw new Error(`Error en el servidor: ${response.status}`);
       }
+
+      if (response.status === 204) {
+        return null;
+      }
+
       return response.json();
-    }
-  }
+    },
+  },
 });
+
+export const httpClient = {
+  get<TResponse>(url: string) {
+    return apiAlova.Get<TResponse>(url).send();
+  },
+  post<TResponse, TBody extends object>(url: string, body: TBody) {
+    return apiAlova.Post<TResponse>(url, body).send();
+  },
+  patch<TResponse, TBody extends object>(url: string, body: TBody) {
+    return apiAlova.Patch<TResponse>(url, body).send();
+  },
+  put<TResponse, TBody extends object>(url: string, body: TBody) {
+    return apiAlova.Put<TResponse>(url, body).send();
+  },
+  delete<TResponse>(url: string) {
+    return apiAlova.Delete<TResponse>(url).send();
+  },
+};

@@ -1,11 +1,10 @@
-import React from 'react';
+import { InfoCard } from '../../../../shared/components/InfoCard/InfoCard';
 
-export const SeparacionSaldoPage: React.FC = () => {
+export function SeparacionSaldoPage() {
   return (
-    <div className="card p-4 border-0 shadow-sm bg-white animate__animated animate__fadeIn">
-      <h4 className="text-dark fw-bold mb-2">Separa parte de tu dinero para que no se use</h4>
-      <p className="text-success fw-semibold">¡Funciona correctamente!</p>
-      <span className="text-muted small">Aqui se implementaran metodos para separar dinero de las cuentas principales</span>
-    </div>
+    <InfoCard
+      title="Separar parte de tu dinero"
+      detail="Aquí se implementarán métodos para reservar dinero de las cuentas principales."
+    />
   );
-};
+}

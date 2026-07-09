@@ -1,2 +1,3 @@
-import React from 'react';
-export const ListaTarjetas: React.FC = () => <p>Tarjetas registradas</p>;
+export function ListaTarjetas() {
+  return <p>Tarjetas registradas</p>;
+}

@@ -1,15 +1,15 @@
-import type { DetalleCategoria } from "./detalleCategoria";
-import type { DetalleCuotas } from "./detalleCuotas";
-import type { GastoCategoria } from "./gastoCategoria";
-import type { GastoCompartido } from "./gastoCompartido";
+import type { DetalleCuotas } from './detalleCuotas';
+import type { GastoCategoria } from './gastoCategoria';
+import type { GastoCompartido } from './gastoCompartido';
+import type { Id } from './id';
 
 export interface Gasto {
-  id: string;
+  id: Id;
   monto: number;
-  fecha: string; 
+  fecha: string;
   categoria: GastoCategoria;
-  tarjetaId: string; 
-  descripcion?: string;
+  tarjetaId: Id;
+  descripcion: string;
   detalleCuotas?: DetalleCuotas;
   gastoCompartido?: GastoCompartido;
 }

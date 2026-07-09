@@ -1,33 +1,16 @@
-import React from 'react';
-import { Outlet, Link, useLocation } from 'react-router-dom';
+import { FeatureShell } from '../../../shared/components/FeatureShell/FeatureShell';
 
-export const TarjetaPage: React.FC = () => {
-  const location = useLocation();
-
-  const getButtonClass = (path: string) => {
-    const isActive = location.pathname.includes(path);
-    return `btn ${isActive ? 'btn-primary' : 'btn-outline-primary'} fw-semibold`;
-  };
-
+export function TarjetaPage() {
   return (
-    <div className="d-flex flex-column gap-4">
-
-      <div className="card p-4 border-0 shadow-sm bg-white">
-        <h3 className="text-dark fw-bold mb-3">Módulo de Tarjetas</h3>
-        
-        <div className="d-flex flex-wrap gap-2">
-          <Link to="agregar" className={getButtonClass('agregar')}>
-            Agregar Tarjeta
-          </Link>
-          <Link to="listar" className={getButtonClass('listar')}>
-            Listar Tarjetas
-          </Link>
-        </div>
-      </div>
-
-      <div className="w-100">
-        <Outlet />
-      </div>
-    </div>
+    <FeatureShell
+      title="Módulo de Tarjetas"
+      description="Administra tus tarjetas y revisa sus datos principales."
+      icon="bi bi-credit-card"
+      iconClassName="text-primary"
+      actions={[
+        { to: 'listar', label: 'Listar Tarjetas' },
+        { to: 'agregar', label: 'Agregar Tarjeta' },
+      ]}
+    />
   );
-};
+}

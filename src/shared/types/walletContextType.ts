@@ -1,12 +1,3 @@
-import type { Perfil } from '../../shared/types/perfil';
-import type { Tarjeta } from '../../shared/types/tarjeta';
-import type { ResumenFinanciero } from '../../shared/types/resumenFinanciero';
-import type { Proyeccion } from '../../shared/types/proyeccion';
+import type { WalletContextValue } from '../../modules/wallet/presentation/context/WalletProvider';
 
-export interface WalletContextType {
-    perfil: Perfil | null;
-    tarjetas: Tarjeta[];
-    resumenFinanciero: ResumenFinanciero | null;
-    proyecciones: Proyeccion[];
-    cargando: boolean;
-}
+export type WalletContextType = WalletContextValue;
