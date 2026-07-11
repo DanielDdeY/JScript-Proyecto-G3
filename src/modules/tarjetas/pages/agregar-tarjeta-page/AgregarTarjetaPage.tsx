@@ -1,56 +1,168 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
-import { useWallet } from '../../../wallet/presentation/hooks/useWallet';
+import type { CicloFacturacion } from '../../../../shared/types/cicloFacturacion';
+import type { LineaCredito } from '../../../../shared/types/lineaCredito';
 import { idsIguales } from '../../../../shared/utils/ids';
+import { useTarjetas } from '../../presentation/hooks/useTarjetas';
 
-const tarjetaSchema = z.object({
-  bancoId: z.string().min(1, { message: 'Debe seleccionar un banco emisor' }),
-  numero: z
-    .string()
-    .length(4, { message: 'Debe ingresar exactamente los últimos 4 dígitos' })
-    .regex(/^\d+$/, { message: 'Solo se permiten caracteres numéricos' }),
-  saldo: z.coerce.number().min(0, { message: 'El saldo inicial no puede ser negativo' }),
-  tipo: z.enum(['DEBITO', 'CREDITO']),
-});
+const optionalNumber = () =>
+  z.preprocess(
+    (value) => (value === '' || value === null ? undefined : value),
+    z.coerce.number().optional(),
+  );
 
-type TarjetaFormValues = z.infer<typeof tarjetaSchema>;
+const tarjetaSchema = z
+  .object({
+    bancoId: z.string().min(1, { message: 'Debe seleccionar un banco emisor' }),
+    numero: z
+      .string()
+      .length(4, { message: 'Debe ingresar exactamente los últimos 4 dígitos' })
+      .regex(/^\d+$/, { message: 'Solo se permiten caracteres numéricos' }),
+    saldo: z.coerce.number().min(0, { message: 'El saldo inicial no puede ser negativo' }),
+    tipo: z.enum(['DEBITO', 'CREDITO']),
+    limiteTotal: optionalNumber(),
+    lineaDisponible: optionalNumber(),
+    lineaUtilizada: optionalNumber(),
+    diaCorte: optionalNumber(),
+    diaPago: optionalNumber(),
+    mesActual: z.string().optional(),
+    montoFacturado: optionalNumber(),
+    pagoMinimo: optionalNumber(),
+  })
+  .superRefine((data, context) => {
+    if (data.tipo !== 'CREDITO') return;
+
+    const camposObligatorios = [
+      ['limiteTotal', data.limiteTotal, 'Ingresa el límite total de la línea de crédito'],
+      ['lineaDisponible', data.lineaDisponible, 'Ingresa la línea disponible'],
+      ['lineaUtilizada', data.lineaUtilizada, 'Ingresa la línea utilizada'],
+      ['diaCorte', data.diaCorte, 'Ingresa el día de corte'],
+      ['diaPago', data.diaPago, 'Ingresa el día de pago'],
+      ['montoFacturado', data.montoFacturado, 'Ingresa el monto facturado'],
+      ['pagoMinimo', data.pagoMinimo, 'Ingresa el pago mínimo'],
+    ] as const;
+
+    camposObligatorios.forEach(([path, value, message]) => {
+      if (typeof value !== 'number' || Number.isNaN(value)) {
+        context.addIssue({ code: 'custom', path: [path], message });
+      }
+    });
+
+    if (typeof data.limiteTotal === 'number' && data.limiteTotal <= 0) {
+      context.addIssue({ code: 'custom', path: ['limiteTotal'], message: 'El límite total debe ser mayor que cero' });
+    }
+
+    if (typeof data.lineaDisponible === 'number' && data.lineaDisponible < 0) {
+      context.addIssue({ code: 'custom', path: ['lineaDisponible'], message: 'La línea disponible no puede ser negativa' });
+    }
+
+    if (typeof data.lineaUtilizada === 'number' && data.lineaUtilizada < 0) {
+      context.addIssue({ code: 'custom', path: ['lineaUtilizada'], message: 'La línea utilizada no puede ser negativa' });
+    }
+
+    if (
+      typeof data.limiteTotal === 'number' &&
+      typeof data.lineaDisponible === 'number' &&
+      typeof data.lineaUtilizada === 'number' &&
+      data.lineaDisponible + data.lineaUtilizada > data.limiteTotal
+    ) {
+      context.addIssue({
+        code: 'custom',
+        path: ['lineaDisponible'],
+        message: 'La línea disponible y utilizada no pueden superar el límite total',
+      });
+    }
+
+    if (typeof data.diaCorte === 'number' && (data.diaCorte < 1 || data.diaCorte > 31)) {
+      context.addIssue({ code: 'custom', path: ['diaCorte'], message: 'El día de corte debe estar entre 1 y 31' });
+    }
+
+    if (typeof data.diaPago === 'number' && (data.diaPago < 1 || data.diaPago > 31)) {
+      context.addIssue({ code: 'custom', path: ['diaPago'], message: 'El día de pago debe estar entre 1 y 31' });
+    }
+  });
+
+type TarjetaFormInput = z.input<typeof tarjetaSchema>;
+type TarjetaFormValues = z.output<typeof tarjetaSchema>;
+
+const obtenerMesActual = () => new Date().toISOString().slice(0, 7);
 
 export function AgregarTarjetaPage() {
-  const { bancos, agregarTarjeta, cargando } = useWallet();
+  const { bancos, agregarTarjeta, cargando } = useTarjetas();
+  const navigate = useNavigate();
   const [success, setSuccess] = useState(false);
+
+  const valoresIniciales = useMemo<TarjetaFormInput>(
+    () => ({
+      bancoId: '',
+      numero: '',
+      saldo: 0,
+      tipo: 'DEBITO',
+      limiteTotal: undefined,
+      lineaDisponible: undefined,
+      lineaUtilizada: undefined,
+      diaCorte: 15,
+      diaPago: 5,
+      mesActual: obtenerMesActual(),
+      montoFacturado: 0,
+      pagoMinimo: 0,
+    }),
+    [],
+  );
 
   const {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors, isSubmitting },
-  } = useForm<TarjetaFormValues>({
+  } = useForm<TarjetaFormInput, unknown, TarjetaFormValues>({
     resolver: zodResolver(tarjetaSchema),
-    defaultValues: {
-      bancoId: '',
-      numero: '',
-      saldo: 0,
-      tipo: 'DEBITO',
-    },
+    defaultValues: valoresIniciales,
   });
+
+  const tipoTarjeta = useWatch({ control, name: 'tipo' });
 
   const onSubmit = async (data: TarjetaFormValues) => {
     const banco = bancos.find((item) => idsIguales(item.id, data.bancoId));
 
     if (!banco) return;
 
+    const lineaCredito: LineaCredito | undefined =
+      data.tipo === 'CREDITO'
+        ? {
+            limiteTotal: data.limiteTotal ?? 0,
+            lineaDisponible: data.lineaDisponible ?? 0,
+            lineaUtilizada: data.lineaUtilizada ?? 0,
+          }
+        : undefined;
+
+    const cicloFacturacion: CicloFacturacion | undefined =
+      data.tipo === 'CREDITO'
+        ? {
+            diaCorte: data.diaCorte ?? 15,
+            diaPago: data.diaPago ?? 5,
+            mesActual: data.mesActual || obtenerMesActual(),
+            montoFacturado: data.montoFacturado ?? 0,
+            pagoMinimo: data.pagoMinimo ?? 0,
+          }
+        : undefined;
+
     await agregarTarjeta({
       bancoId: banco.id,
       numero: data.numero,
       saldo: data.saldo,
       tipo: data.tipo,
+      lineaCredito,
+      cicloFacturacion,
     });
 
     setSuccess(true);
-    reset({ bancoId: '', numero: '', saldo: 0, tipo: 'DEBITO' });
-    window.setTimeout(() => setSuccess(false), 4000);
+    reset(valoresIniciales);
+    navigate('/app/tarjetas/listar', { state: { message: '¡Tarjeta vinculada con éxito!' } });
   };
 
   if (cargando) {
@@ -72,7 +184,7 @@ export function AgregarTarjetaPage() {
 
       {success ? (
         <div className="alert alert-success border-0 shadow-sm" role="alert">
-          <i className="bi bi-check-circle-fill me-2" /> ¡Tarjeta vinculada con éxito! Ahora puedes seleccionarla para tus gastos.
+          <i className="bi bi-check-circle-fill me-2" /> ¡Tarjeta vinculada con éxito! Ahora puedes revisarla en el carrusel.
         </div>
       ) : null}
 
@@ -133,6 +245,58 @@ export function AgregarTarjetaPage() {
             </div>
           </div>
         </div>
+
+        {tipoTarjeta === 'CREDITO' ? (
+          <section className="border rounded-4 p-3 p-md-4 mt-4 bg-light-subtle">
+            <div className="d-flex align-items-center justify-content-between mb-3">
+              <h5 className="fw-bold mb-0">Datos de crédito y facturación</h5>
+              <span className="badge bg-primary-subtle text-primary">Opciones avanzadas</span>
+            </div>
+
+            <div className="row g-3">
+              <div className="col-12 col-md-4">
+                <label className="form-label fw-semibold">Límite total</label>
+                <input type="number" step="0.01" className={`form-control ${errors.limiteTotal ? 'is-invalid' : ''}`} {...register('limiteTotal')} />
+                {errors.limiteTotal ? <div className="invalid-feedback fw-semibold">{errors.limiteTotal.message}</div> : null}
+              </div>
+              <div className="col-12 col-md-4">
+                <label className="form-label fw-semibold">Línea disponible</label>
+                <input type="number" step="0.01" className={`form-control ${errors.lineaDisponible ? 'is-invalid' : ''}`} {...register('lineaDisponible')} />
+                {errors.lineaDisponible ? <div className="invalid-feedback fw-semibold">{errors.lineaDisponible.message}</div> : null}
+              </div>
+              <div className="col-12 col-md-4">
+                <label className="form-label fw-semibold">Línea utilizada</label>
+                <input type="number" step="0.01" className={`form-control ${errors.lineaUtilizada ? 'is-invalid' : ''}`} {...register('lineaUtilizada')} />
+                {errors.lineaUtilizada ? <div className="invalid-feedback fw-semibold">{errors.lineaUtilizada.message}</div> : null}
+              </div>
+
+              <div className="col-12 col-md-3">
+                <label className="form-label fw-semibold">Día de corte</label>
+                <input type="number" className={`form-control ${errors.diaCorte ? 'is-invalid' : ''}`} {...register('diaCorte')} />
+                {errors.diaCorte ? <div className="invalid-feedback fw-semibold">{errors.diaCorte.message}</div> : null}
+              </div>
+              <div className="col-12 col-md-3">
+                <label className="form-label fw-semibold">Día de pago</label>
+                <input type="number" className={`form-control ${errors.diaPago ? 'is-invalid' : ''}`} {...register('diaPago')} />
+                {errors.diaPago ? <div className="invalid-feedback fw-semibold">{errors.diaPago.message}</div> : null}
+              </div>
+              <div className="col-12 col-md-3">
+                <label className="form-label fw-semibold">Mes actual</label>
+                <input type="month" className="form-control" {...register('mesActual')} />
+              </div>
+              <div className="col-12 col-md-3">
+                <label className="form-label fw-semibold">Pago mínimo</label>
+                <input type="number" step="0.01" className={`form-control ${errors.pagoMinimo ? 'is-invalid' : ''}`} {...register('pagoMinimo')} />
+                {errors.pagoMinimo ? <div className="invalid-feedback fw-semibold">{errors.pagoMinimo.message}</div> : null}
+              </div>
+              <div className="col-12 col-md-4">
+                <label className="form-label fw-semibold">Monto facturado</label>
+                <input type="number" step="0.01" className={`form-control ${errors.montoFacturado ? 'is-invalid' : ''}`} {...register('montoFacturado')} />
+                {errors.montoFacturado ? <div className="invalid-feedback fw-semibold">{errors.montoFacturado.message}</div> : null}
+              </div>
+            </div>
+          </section>
+        ) : null}
 
         <button
           type="submit"

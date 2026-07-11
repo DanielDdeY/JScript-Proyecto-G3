@@ -43,7 +43,7 @@ export function ListarGastoPage() {
             </thead>
             <tbody>
               {gastos.map((gasto) => {
-                const tarjeta = tarjetas.find((item) => idsIguales(item.id, gasto.tarjetaId));
+                const tarjeta = gasto.tarjetaId ? tarjetas.find((item) => idsIguales(item.id, gasto.tarjetaId)) : undefined;
                 const priorityClass =
                   gasto.categoria.importancia === 'Alta'
                     ? 'bg-danger-subtle text-danger'
@@ -72,7 +72,10 @@ export function ListarGastoPage() {
                           {obtenerNombreBanco(tarjeta)} (**** {obtenerUltimosDigitos(tarjeta.numero)})
                         </>
                       ) : (
-                        'No especificado'
+                        <>
+                          <i className="bi bi-cash-stack me-1" />
+                          Efectivo
+                        </>
                       )}
                     </td>
                     <td className="py-3 text-end fw-bold text-danger font-monospace">

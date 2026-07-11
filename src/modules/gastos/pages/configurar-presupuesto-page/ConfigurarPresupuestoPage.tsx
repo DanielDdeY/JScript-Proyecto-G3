@@ -10,7 +10,8 @@ const presupuestoSchema = z.object({
   mes: z.string().min(1, { message: 'Debe indicar el mes de vigencia' }),
 });
 
-type PresupuestoFormValues = z.infer<typeof presupuestoSchema>;
+type PresupuestoFormInput = z.input<typeof presupuestoSchema>;
+type PresupuestoFormValues = z.output<typeof presupuestoSchema>;
 
 interface Budget {
   categoria: string;
@@ -32,7 +33,7 @@ export function ConfigurarPresupuestoPage() {
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<PresupuestoFormValues>({
+  } = useForm<PresupuestoFormInput, unknown, PresupuestoFormValues>({
     resolver: zodResolver(presupuestoSchema),
     defaultValues: {
       categoria: 'Alimentación',

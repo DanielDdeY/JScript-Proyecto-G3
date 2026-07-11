@@ -2,29 +2,42 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { useWallet } from '../../../wallet/presentation/hooks/useWallet';
+import type { OrigenGasto } from '../../../../shared/types/gasto';
 import type { Tarjeta } from '../../../../shared/types/tarjeta';
 import { formatCurrencyPen } from '../../../../shared/utils/formatters';
 import { idsIguales } from '../../../../shared/utils/ids';
 import { obtenerNombreBanco, obtenerUltimosDigitos } from '../../../../shared/utils/tarjetaUtils';
+import { useWallet } from '../../../wallet/presentation/hooks/useWallet';
 
-const gastoSchema = z.object({
-  monto: z.coerce.number().positive({ message: 'El monto debe ser un número positivo mayor que cero' }),
-  fecha: z.string().min(1, { message: 'La fecha es requerida' }),
-  tarjetaId: z.string().min(1, { message: 'Debe seleccionar una tarjeta o cuenta de origen' }),
-  categoriaNombre: z.string().min(1, { message: 'Debe seleccionar una categoría' }),
-  importancia: z.enum(['Alta', 'Media', 'Baja']),
-  descripcion: z
-    .string()
-    .min(3, { message: 'La descripción debe tener al menos 3 caracteres' })
-    .max(100, { message: 'La descripción no puede exceder los 100 caracteres' }),
-});
+const gastoSchema = z
+  .object({
+    monto: z.coerce.number().positive({ message: 'El monto debe ser un número positivo mayor que cero' }),
+    fecha: z.string().min(1, { message: 'La fecha es requerida' }),
+    origen: z.enum(['EFECTIVO', 'TARJETA']),
+    tarjetaId: z.string().optional(),
+    categoriaNombre: z.string().min(1, { message: 'Debe seleccionar una categoría' }),
+    importancia: z.enum(['Alta', 'Media', 'Baja']),
+    descripcion: z
+      .string()
+      .min(3, { message: 'La descripción debe tener al menos 3 caracteres' })
+      .max(100, { message: 'La descripción no puede exceder los 100 caracteres' }),
+  })
+  .superRefine((data, context) => {
+    if (data.origen === 'TARJETA' && !data.tarjetaId) {
+      context.addIssue({
+        code: 'custom',
+        path: ['tarjetaId'],
+        message: 'Debe seleccionar una tarjeta cuando el gasto sale de una tarjeta',
+      });
+    }
+  });
 
-type GastoFormValues = z.infer<typeof gastoSchema>;
+type GastoFormInput = z.input<typeof gastoSchema>;
+type GastoFormValues = z.output<typeof gastoSchema>;
 
 const today = () => new Date().toISOString().substring(0, 10);
 
-const buscarTarjeta = (tarjetas: Tarjeta[], tarjetaId: string) =>
+const buscarTarjeta = (tarjetas: Tarjeta[], tarjetaId?: string) =>
   tarjetas.find((tarjeta) => idsIguales(tarjeta.id, tarjetaId));
 
 export function AgregarGastoPage() {
@@ -38,11 +51,12 @@ export function AgregarGastoPage() {
     reset,
     watch,
     formState: { errors, isSubmitting },
-  } = useForm<GastoFormValues>({
+  } = useForm<GastoFormInput, unknown, GastoFormValues>({
     resolver: zodResolver(gastoSchema),
     defaultValues: {
       monto: 0,
       fecha: today(),
+      origen: 'EFECTIVO',
       tarjetaId: '',
       categoriaNombre: 'Alimentación',
       importancia: 'Alta',
@@ -50,8 +64,9 @@ export function AgregarGastoPage() {
     },
   });
 
+  const selectedOrigen = watch('origen');
   const selectedTarjetaId = watch('tarjetaId');
-  const inputMonto = watch('monto');
+  const inputMonto = Number(watch('monto') ?? 0);
 
   const selectedTarjeta = useMemo(
     () => buscarTarjeta(tarjetas, selectedTarjetaId),
@@ -59,7 +74,7 @@ export function AgregarGastoPage() {
   );
 
   useEffect(() => {
-    if (selectedTarjeta && inputMonto > 0 && selectedTarjeta.saldo < inputMonto) {
+    if (selectedOrigen === 'TARJETA' && selectedTarjeta && inputMonto > 0 && selectedTarjeta.saldo < inputMonto) {
       setBalanceWarning(
         `Atención: el saldo disponible en esta tarjeta (${formatCurrencyPen(selectedTarjeta.saldo)}) es menor que el gasto.`,
       );
@@ -67,12 +82,11 @@ export function AgregarGastoPage() {
     }
 
     setBalanceWarning(null);
-  }, [inputMonto, selectedTarjeta]);
+  }, [inputMonto, selectedOrigen, selectedTarjeta]);
 
   const onSubmit = async (data: GastoFormValues) => {
-    const tarjeta = buscarTarjeta(tarjetas, data.tarjetaId);
-
-    if (!tarjeta) return;
+    const origen = data.origen as OrigenGasto;
+    const tarjeta = origen === 'TARJETA' ? buscarTarjeta(tarjetas, data.tarjetaId) : undefined;
 
     await agregarGasto({
       monto: data.monto,
@@ -81,7 +95,8 @@ export function AgregarGastoPage() {
         nombre: data.categoriaNombre,
         importancia: data.importancia,
       },
-      tarjetaId: tarjeta.id,
+      origen,
+      tarjetaId: tarjeta?.id,
       descripcion: data.descripcion,
     });
 
@@ -89,6 +104,7 @@ export function AgregarGastoPage() {
     reset({
       monto: 0,
       fecha: today(),
+      origen: 'EFECTIVO',
       tarjetaId: '',
       categoriaNombre: 'Alimentación',
       importancia: 'Alta',
@@ -117,13 +133,7 @@ export function AgregarGastoPage() {
       {success ? (
         <div className="alert alert-success d-flex align-items-center gap-2 mb-4" role="alert">
           <i className="bi bi-check-circle-fill" />
-          <div>¡Gasto registrado exitosamente! El saldo de la cuenta se actualizó.</div>
-        </div>
-      ) : null}
-
-      {tarjetas.length === 0 ? (
-        <div className="alert alert-warning">
-          No tienes tarjetas registradas. Primero agrega una tarjeta para poder registrar gastos.
+          <div>¡Gasto registrado exitosamente! El saldo total se actualizó.</div>
         </div>
       ) : null}
 
@@ -155,22 +165,42 @@ export function AgregarGastoPage() {
           </div>
 
           <div className="col-12 col-md-6">
-            <label className="form-label fw-semibold">Tarjeta / Cuenta de Origen</label>
-            <select className={`form-select ${errors.tarjetaId ? 'is-invalid' : ''}`} {...register('tarjetaId')}>
-              <option value="">-- Seleccione una cuenta --</option>
-              {tarjetas.map((tarjeta) => (
-                <option key={String(tarjeta.id)} value={String(tarjeta.id)}>
-                  {obtenerNombreBanco(tarjeta)} (**** {obtenerUltimosDigitos(tarjeta.numero)}) - Disponible: {formatCurrencyPen(tarjeta.saldo)}
-                </option>
-              ))}
+            <label className="form-label fw-semibold">Origen del dinero</label>
+            <select className={`form-select ${errors.origen ? 'is-invalid' : ''}`} {...register('origen')}>
+              <option value="EFECTIVO">Efectivo</option>
+              <option value="TARJETA">Tarjeta / Cuenta vinculada</option>
             </select>
-            {errors.tarjetaId ? <div className="invalid-feedback fw-semibold">{errors.tarjetaId.message}</div> : null}
-            {balanceWarning ? (
-              <div className="text-warning small fw-bold mt-1 d-flex align-items-center gap-1">
-                <i className="bi bi-exclamation-triangle-fill" /> {balanceWarning}
-              </div>
-            ) : null}
+            {errors.origen ? <div className="invalid-feedback fw-semibold">{errors.origen.message}</div> : null}
+            <div className="form-text">
+              Puedes registrar gastos en efectivo aunque no tengas tarjetas agregadas.
+            </div>
           </div>
+
+          {selectedOrigen === 'TARJETA' ? (
+            <div className="col-12 col-md-6">
+              <label className="form-label fw-semibold">Tarjeta / Cuenta de Origen</label>
+              <select className={`form-select ${errors.tarjetaId ? 'is-invalid' : ''}`} {...register('tarjetaId')}>
+                <option value="">-- Seleccione una cuenta --</option>
+                {tarjetas.map((tarjeta) => (
+                  <option key={String(tarjeta.id)} value={String(tarjeta.id)}>
+                    {obtenerNombreBanco(tarjeta)} (**** {obtenerUltimosDigitos(tarjeta.numero)}) - Disponible:{' '}
+                    {formatCurrencyPen(tarjeta.saldo)}
+                  </option>
+                ))}
+              </select>
+              {errors.tarjetaId ? (
+                <div className="invalid-feedback fw-semibold">{errors.tarjetaId.message}</div>
+              ) : null}
+              {tarjetas.length === 0 ? (
+                <div className="text-muted small mt-1">No hay tarjetas registradas, cambia el origen a efectivo.</div>
+              ) : null}
+              {balanceWarning ? (
+                <div className="text-warning small fw-bold mt-1 d-flex align-items-center gap-1">
+                  <i className="bi bi-exclamation-triangle-fill" /> {balanceWarning}
+                </div>
+              ) : null}
+            </div>
+          ) : null}
 
           <div className="col-12 col-md-6">
             <label className="form-label fw-semibold">Categoría</label>
@@ -230,7 +260,7 @@ export function AgregarGastoPage() {
 
         <button
           type="submit"
-          disabled={isSubmitting || tarjetas.length === 0}
+          disabled={isSubmitting}
           className="btn btn-danger w-100 fw-bold py-2.5 mt-4 d-flex align-items-center justify-content-center gap-2"
         >
           {isSubmitting ? (

@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useAuth } from '../../../auth/presentation/hooks/useAuth';
 
 const passwordSchema = z
   .object({
@@ -17,7 +18,9 @@ const passwordSchema = z
 type PasswordFormValues = z.infer<typeof passwordSchema>;
 
 export function SeguridadPerfilPage() {
+  const { actualizarPassword } = useAuth();
   const [success, setSuccess] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   const {
     register,
@@ -33,13 +36,16 @@ export function SeguridadPerfilPage() {
     },
   });
 
-  const onSubmit = async () => {
-    await new Promise((resolve) => {
-      window.setTimeout(resolve, 500);
-    });
-    setSuccess(true);
-    reset({ currentPassword: '', newPassword: '', confirmPassword: '' });
-    window.setTimeout(() => setSuccess(false), 3000);
+  const onSubmit = async (data: PasswordFormValues) => {
+    setFormError(null);
+    try {
+      await actualizarPassword(data.newPassword);
+      setSuccess(true);
+      reset({ currentPassword: '', newPassword: '', confirmPassword: '' });
+      window.setTimeout(() => setSuccess(false), 3000);
+    } catch (error) {
+      setFormError(error instanceof Error ? error.message : 'No se pudo actualizar la contraseña.');
+    }
   };
 
   return (
@@ -48,6 +54,12 @@ export function SeguridadPerfilPage() {
         <h4 className="fw-bold text-dark m-0">Cambiar Contraseña de Acceso</h4>
         <i className="bi bi-shield-lock text-secondary fs-3" />
       </div>
+
+      {formError ? (
+        <div className="alert alert-danger border-0 shadow-sm mb-4" role="alert">
+          <i className="bi bi-exclamation-triangle-fill me-2" /> {formError}
+        </div>
+      ) : null}
 
       {success ? (
         <div className="alert alert-success border-0 shadow-sm mb-4" role="alert">

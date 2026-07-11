@@ -1,118 +1,83 @@
 # Actualización e integración React 19.2.6
 
-## Estado
+## Versión
 
-El proyecto quedó actualizado a React 19.2.6 e integrado con la rama `Avanze2`, manteniendo la estructura modular del proyecto base.
+El proyecto queda fijado en:
 
-## Cambios principales
+- `react`: `19.2.6`
+- `react-dom`: `19.2.6`
 
-- Se integraron las páginas funcionales de Tarjetas, Gastos e Ingresos.
-- Se reemplazaron páginas placeholder por formularios reales con validación.
-- Se agregó validación con `react-hook-form`, `zod` y `@hookform/resolvers`.
-- Se agregó `bootstrap-icons` para que los íconos usados por la rama de Gemini se vean correctamente.
-- Se extendió el `WalletProvider` para manejar gastos, ingresos, bancos y mutaciones.
-- Se mantuvo Clean Architecture: dominio, aplicación, infraestructura y presentación.
-- Se agregó `json-server` y `concurrently` para levantar la base de datos local junto con Vite usando `npm run dev`.
-- Se agregó `db.json` de ejemplo con `perfil`, `bancos`, `tarjetas`, `gastos`, `ingresos` y `proyecciones`.
-- Se eliminó `package-lock.json` del ZIP para evitar rutas internas de registro npm.
+## Arquitectura aplicada
 
-## Scripts
+Se mantiene una organización por módulos, separando responsabilidades:
 
-```bash
-npm install
-npm run dev
-```
+- `src/app`: proveedores y rutas globales.
+- `src/core`: configuración y cliente HTTP.
+- `src/modules`: funcionalidades de negocio.
+- `src/shared`: tipos, utilidades, componentes compartidos y layouts.
 
-`npm run dev` levanta dos procesos:
+Principios aplicados:
 
-```bash
-vite --host 0.0.0.0
-json-server --watch db.json --port 4000
-```
+- Clean Architecture: dominio, aplicación, infraestructura y presentación separadas en los módulos principales.
+- SOLID: servicios y repositorios dependen de contratos, no de implementaciones directas.
+- Modularidad: cada funcionalidad vive en su propio módulo.
+- Baja dependencia entre módulos: las páginas consumen hooks o casos de uso, no detalles de HTTP.
+- Alta cohesión: cada módulo concentra lo que pertenece a su dominio.
 
-También puedes ejecutarlos por separado:
+## Integración solicitada
 
-```bash
-npm run dev:front
-npm run api
-```
+### Autenticación
 
-## Scripts disponibles
+Se agregó un módulo de autenticación local con:
+
+- `AuthProvider`,
+- `useAuth`,
+- `ProtectedRoute`,
+- `PublicRoute`,
+- repositorio local `authLocalRepository`.
+
+La sesión se guarda en `localStorage` bajo la clave `vizcash.auth.session`.
+
+### Base de datos
+
+La base se normalizó para evitar repetición entre usuario y perfil:
 
 ```json
-{
-  "dev": "concurrently \"vite --host 0.0.0.0\" \"json-server --watch db.json --port 4000\"",
-  "dev:front": "vite --host 0.0.0.0",
-  "api": "json-server --watch db.json --port 4000",
-  "build": "tsc -b && vite build",
-  "preview": "vite preview",
-  "typecheck": "tsc --noEmit"
+"usuarios": [
+  {
+    "id": "user-1",
+    "nombre": "Pepito",
+    "email": "daniel@mibilletera.edu.pe",
+    "avatarUrl": "",
+    "password": "123456"
+  }
+],
+"perfil": {
+  "id": "perfil-1",
+  "usuarioId": "user-1",
+  "saldoTotal": 12450.75
 }
 ```
 
-## Variables de entorno
+La app sigue usando `perfil`, pero el repositorio lo hidrata combinando `perfil` + `usuario`.
 
-El proyecto usa por defecto:
+### Gastos
 
-```env
-VITE_API_URL=http://localhost:4000
-```
+Ahora `tarjetaId` es opcional. Un gasto puede registrarse con:
 
-Si cambias el puerto de `json-server`, actualiza también esta variable.
+- `origen: "EFECTIVO"`, sin tarjeta,
+- `origen: "TARJETA"`, con `tarjetaId`.
 
-## Estructura aplicada
+Cuando el gasto usa tarjeta, se descuenta también del saldo de la tarjeta. Cuando usa efectivo, solo afecta el saldo total del perfil.
 
-```txt
-src/app                  composición de rutas y providers
-src/core                 configuración transversal y cliente HTTP
-src/modules/wallet       dominio, casos de uso, infraestructura y provider
-src/modules/tarjetas     rutas y páginas de tarjetas
-src/modules/gastos       rutas y páginas de gastos
-src/modules/ingresos     rutas y páginas de ingresos
-src/shared               tipos, layout, componentes y utilidades reutilizables
-```
+### Tarjetas
 
-## Dependencias agregadas desde la rama Avanze2
+Se corrigió la carga de tarjetas para que aparezcan en la lista después de agregarlas. La solución fue no depender de `tarjetas?_expand=banco`, sino cargar `tarjetas` y `bancos` por separado y unirlos dentro del repositorio.
 
-Se conservaron solo las dependencias necesarias:
-
-```bash
-react-hook-form
-zod
-@hookform/resolvers
-bootstrap-icons
-json-server
-concurrently
-```
-
-No se copiaron dependencias no usadas como `@google/genai`, `express`, `motion`, `lucide-react`, `react-bootstrap`, `@tanstack/react-query` ni `dotenv`, porque aumentaban acoplamiento o peso sin ser necesarias para las páginas integradas.
-
-## Rutas integradas
-
-```txt
-/app/tarjetas/listar
-/app/tarjetas/agregar
-/app/gastos/listar
-/app/gastos/agregar
-/app/gastos/configurar-presupuesto
-/app/ingresos/listar
-/app/ingresos/agregar
-/app/perfil/editar
-/app/perfil/seguridad
-```
-
-También se dejó compatibilidad con:
-
-```txt
-/app/gastos/presupuesto
-/app/perfil/cambiar
-```
-
-## Nota para instalación
-
-Si vuelve a salir un error con un registry interno de OpenAI o `ETIMEDOUT`, elimina `package-lock.json` y `node_modules`, y ejecuta:
+## Instalación
 
 ```bash
 npm config set registry https://registry.npmjs.org/
 npm install
+npm run dev
 ```

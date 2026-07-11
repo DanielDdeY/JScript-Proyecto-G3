@@ -1,8 +1,13 @@
+import type { Id } from './id';
+
 export interface Usuario {
-  id: string;
+  id: Id;
   nombre: string;
   email: string;
   avatarUrl?: string;
-  fechaCreacion: string;
-  notificaciones: boolean;
+  password?: string;
+  fechaCreacion?: string;
+  notificaciones?: boolean;
 }
+
+export type UsuarioPerfil = Pick<Usuario, 'id' | 'nombre' | 'email' | 'avatarUrl'>;

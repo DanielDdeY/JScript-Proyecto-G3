@@ -14,7 +14,8 @@ const ingresoSchema = z.object({
     .max(100, { message: 'La descripción no puede exceder los 100 caracteres' }),
 });
 
-type IngresoFormValues = z.infer<typeof ingresoSchema>;
+type IngresoFormInput = z.input<typeof ingresoSchema>;
+type IngresoFormValues = z.output<typeof ingresoSchema>;
 
 const today = () => new Date().toISOString().substring(0, 10);
 
@@ -27,7 +28,7 @@ export function AgregarIngresoPage() {
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<IngresoFormValues>({
+  } = useForm<IngresoFormInput, unknown, IngresoFormValues>({
     resolver: zodResolver(ingresoSchema),
     defaultValues: {
       monto: 0,
