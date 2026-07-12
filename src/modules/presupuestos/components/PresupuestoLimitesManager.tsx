@@ -9,7 +9,6 @@ import { usePresupuestos } from '../presentation/hooks/usePresupuestos';
 const presupuestoSchema = z.object({
   categoriaNombre: z.string().min(1, { message: 'Debe seleccionar una categoría' }),
   limiteSoles: z.coerce.number().positive({ message: 'El límite debe ser mayor que cero' }),
-  mes: z.string().min(1, { message: 'Debe indicar el mes de vigencia' }),
 });
 
 type PresupuestoFormInput = z.input<typeof presupuestoSchema>;
@@ -28,8 +27,17 @@ export function PresupuestoLimitesManager({
 }: PresupuestoLimitesManagerProps) {
   const { presupuestos, cargando, guardando, error, guardarLimite } = usePresupuestos();
   const [success, setSuccess] = useState(false);
+  const mesActual = presupuestoService.obtenerMesActual();
 
-  const presupuestosOrdenados = useMemo(() => presupuestoService.ordenarPorMesDesc(presupuestos), [presupuestos]);
+  const presupuestoActual = useMemo(
+    () => presupuestoService.obtenerPresupuestoCategoriaVigente(presupuestos, mesActual),
+    [mesActual, presupuestos],
+  );
+
+  const totalLimiteMensual = useMemo(
+    () => presupuestoService.obtenerPresupuestoPorMes(presupuestos, mesActual)?.totalAsignado ?? 0,
+    [mesActual, presupuestos],
+  );
 
   const {
     register,
@@ -41,15 +49,18 @@ export function PresupuestoLimitesManager({
     defaultValues: {
       categoriaNombre: 'Alimentación',
       limiteSoles: 0,
-      mes: presupuestoService.obtenerMesActual(),
     },
   });
 
   const onSubmit = async (data: PresupuestoFormValues) => {
-    await guardarLimite(data);
+    await guardarLimite({ ...data, mes: mesActual });
     setSuccess(true);
-    reset({ categoriaNombre: data.categoriaNombre, limiteSoles: 0, mes: data.mes });
+    reset({ categoriaNombre: data.categoriaNombre, limiteSoles: data.limiteSoles });
     window.setTimeout(() => setSuccess(false), 3000);
+  };
+
+  const cargarParaModificar = (categoriaNombre: string, limiteSoles: number) => {
+    reset({ categoriaNombre, limiteSoles });
   };
 
   return (
@@ -58,6 +69,9 @@ export function PresupuestoLimitesManager({
         <div>
           <h4 className="fw-bold text-dark m-0">{titulo}</h4>
           <p className="text-muted mb-0 small">{descripcion}</p>
+          <p className="text-primary fw-bold small mb-0 mt-2">
+            Mes activo: {presupuestoService.formatearMes(mesActual)}. Si cambia el mes, se muestran los mismos límites hasta que el usuario los modifique.
+          </p>
         </div>
         <i className="bi bi-pie-chart text-danger fs-3" />
       </div>
@@ -83,12 +97,6 @@ export function PresupuestoLimitesManager({
 
             <form onSubmit={(event) => void handleSubmit(onSubmit)(event)}>
               <div className="mb-3">
-                <label className="form-label fw-semibold small">Mes de vigencia</label>
-                <input type="month" className={`form-control ${errors.mes ? 'is-invalid' : ''}`} {...register('mes')} />
-                {errors.mes ? <div className="invalid-feedback fw-semibold">{errors.mes.message}</div> : null}
-              </div>
-
-              <div className="mb-3">
                 <label className="form-label fw-semibold small">Categoría de gasto</label>
                 <select className={`form-select ${errors.categoriaNombre ? 'is-invalid' : ''}`} {...register('categoriaNombre')}>
                   {CATEGORIAS_PRESUPUESTO.map((categoria) => (
@@ -103,7 +111,7 @@ export function PresupuestoLimitesManager({
               </div>
 
               <div className="mb-4">
-                <label className="form-label fw-semibold small">Monto límite</label>
+                <label className="form-label fw-semibold small">Monto límite permitido</label>
                 <div className="input-group">
                   <span className="input-group-text fw-bold">S/.</span>
                   <input
@@ -132,53 +140,61 @@ export function PresupuestoLimitesManager({
 
         <div className="col-12 col-lg-7">
           <h5 className="fw-bold text-dark mb-1">Límites por categoría establecidos</h5>
-          <p className="text-muted small mb-3">El total límite mensual viene de Saldo &gt; Separar para que no se use.</p>
+          <p className="text-muted small mb-3">
+            Solo se muestran los límites vigentes del mes actual. El total límite mensual viene de Saldo &gt; Separar para que no se use.
+          </p>
 
           {cargando ? <p className="text-muted">Cargando límites...</p> : null}
 
-          {!cargando && presupuestosOrdenados.length === 0 ? (
+          {!cargando && !presupuestoActual ? (
             <div className="alert alert-info mb-0">Aún no hay límites de presupuesto guardados.</div>
           ) : null}
 
-          {!cargando && presupuestosOrdenados.length > 0 ? (
-            <div className="d-flex flex-column gap-3">
-              {presupuestosOrdenados.map((presupuesto) => (
-                <section className="border rounded-3 overflow-hidden bg-white" key={presupuesto.id}>
-                  <div className="bg-light px-3 py-3 d-flex flex-wrap justify-content-between gap-2">
-                    <strong>{presupuestoService.formatearMes(presupuesto.mes)}</strong>
-                    <span className="fw-bold text-primary">
-                      Total límite mensual: {presupuesto.totalAsignado > 0 ? formatCurrencyPen(presupuesto.totalAsignado) : 'No definido'}
-                    </span>
-                  </div>
-                  <div className="table-responsive">
-                    <table className="table table-hover align-middle mb-0">
-                      <thead className="table-light">
-                        <tr>
-                          <th className="fw-bold text-dark py-3">Categoría</th>
-                          <th className="fw-bold text-dark py-3">Importancia</th>
-                          <th className="fw-bold text-dark py-3 text-end">Límite permitido</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {presupuesto.desgloseCategorias.map((detalle) => (
-                          <tr key={`${presupuesto.id}-${detalle.categoria.nombre}`}>
-                            <td className="py-3">
-                              <span className="badge bg-light text-dark border py-1 px-2 small fw-semibold">
-                                {detalle.categoria.nombre}
-                              </span>
-                            </td>
-                            <td className="py-3 text-muted small">{detalle.categoria.importancia}</td>
-                            <td className="py-3 text-end fw-bold text-primary font-monospace">
-                              {formatCurrencyPen(detalle.limiteSoles)}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </section>
-              ))}
-            </div>
+          {!cargando && presupuestoActual ? (
+            <section className="border rounded-3 overflow-hidden bg-white">
+              <div className="bg-light px-3 py-3 d-flex flex-wrap justify-content-between gap-2">
+                <strong>{presupuestoService.formatearMes(mesActual)}</strong>
+                <span className="fw-bold text-primary">
+                  Total límite mensual: {totalLimiteMensual > 0 ? formatCurrencyPen(totalLimiteMensual) : 'No definido'}
+                </span>
+              </div>
+              <div className="table-responsive">
+                <table className="table table-hover align-middle mb-0">
+                  <thead className="table-light">
+                    <tr>
+                      <th className="fw-bold text-dark py-3">Categoría</th>
+                      <th className="fw-bold text-dark py-3">Importancia</th>
+                      <th className="fw-bold text-dark py-3 text-end">Límite permitido</th>
+                      <th className="fw-bold text-dark py-3 text-end">Acción</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {presupuestoActual.desgloseCategorias.map((detalle) => (
+                      <tr key={`${presupuestoActual.id}-${detalle.categoria.nombre}`}>
+                        <td className="py-3">
+                          <span className="badge bg-light text-dark border py-1 px-2 small fw-semibold">
+                            {detalle.categoria.nombre}
+                          </span>
+                        </td>
+                        <td className="py-3 text-muted small">{detalle.categoria.importancia}</td>
+                        <td className="py-3 text-end fw-bold text-primary font-monospace">
+                          {formatCurrencyPen(detalle.limiteSoles)}
+                        </td>
+                        <td className="py-3 text-end">
+                          <button
+                            className="btn btn-sm btn-outline-primary fw-semibold"
+                            type="button"
+                            onClick={() => cargarParaModificar(detalle.categoria.nombre, detalle.limiteSoles)}
+                          >
+                            Modificar
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
           ) : null}
         </div>
       </div>

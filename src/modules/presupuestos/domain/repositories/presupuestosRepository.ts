@@ -5,4 +5,5 @@ export interface PresupuestosRepository {
   listarPresupuestos(): Promise<PresupuestoMensual[]>;
   guardarLimite(payload: GuardarLimitePresupuestoPayload): Promise<PresupuestoMensual>;
   guardarLimiteMensual(payload: GuardarLimiteMensualPayload): Promise<PresupuestoMensual>;
+  eliminarLimiteMensual(mes: string): Promise<void>;
 }

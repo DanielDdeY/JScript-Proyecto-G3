@@ -45,4 +45,23 @@ export const presupuestosAlovaRepository: PresupuestosRepository = {
       },
     );
   },
+
+  async eliminarLimiteMensual(mes: string): Promise<void> {
+    const presupuestos = await this.listarPresupuestos();
+    const resultado = presupuestoService.eliminarLimiteMensual(presupuestos, mes);
+
+    if (!resultado.presupuesto) return;
+
+    if (resultado.debeEliminarRegistro) {
+      await httpClient.delete<null>(ENDPOINTS.presupuestoById(resultado.presupuesto.id));
+      return;
+    }
+
+    await httpClient.patch<PresupuestoMensual, Partial<PresupuestoMensual>>(
+      ENDPOINTS.presupuestoById(resultado.presupuesto.id),
+      {
+        totalAsignado: 0,
+      },
+    );
+  },
 };

@@ -19,6 +19,11 @@ export interface ResultadoGuardadoPresupuesto {
   esNuevo: boolean;
 }
 
+export interface ResultadoEliminacionLimiteMensual {
+  presupuesto: PresupuestoMensual | null;
+  debeEliminarRegistro: boolean;
+}
+
 export const CATEGORIAS_PRESUPUESTO: GastoCategoria[] = [
   { nombre: 'Alimentación', importancia: 'Alta' },
   { nombre: 'Transporte', importancia: 'Alta' },
@@ -57,6 +62,8 @@ const sumarGastosDelMes = (gastos: Gasto[], mes: string) =>
     .filter((gasto) => perteneceAlMes(gasto.fecha, mes))
     .reduce((total, gasto) => total + Number(gasto.monto || 0), 0);
 
+const tieneCategorias = (presupuesto: PresupuestoMensual) => presupuesto.desgloseCategorias.length > 0;
+
 export const presupuestoService = {
   obtenerMesActual(): string {
     return new Date().toISOString().substring(0, 7);
@@ -78,11 +85,40 @@ export const presupuestoService = {
     return presupuestos.find((presupuesto) => presupuesto.mes === mes) ?? null;
   },
 
-  obtenerPresupuestoMasRelevante(presupuestos: PresupuestoMensual[]): PresupuestoMensual | null {
-    if (presupuestos.length === 0) return null;
+  obtenerPresupuestoConCategoriasMasReciente(presupuestos: PresupuestoMensual[], mesReferencia: string): PresupuestoMensual | null {
+    const presupuestosConCategorias = this.ordenarPorMesDesc(presupuestos.filter(tieneCategorias));
+    return (
+      presupuestosConCategorias.find((presupuesto) => presupuesto.mes <= mesReferencia) ??
+      presupuestosConCategorias[0] ??
+      null
+    );
+  },
 
-    const mesActual = this.obtenerMesActual();
-    return this.obtenerPresupuestoPorMes(presupuestos, mesActual) ?? this.ordenarPorMesDesc(presupuestos)[0] ?? null;
+  obtenerPresupuestoCategoriaVigente(presupuestos: PresupuestoMensual[], mes: string): PresupuestoMensual | null {
+    const presupuestoMes = this.obtenerPresupuestoPorMes(presupuestos, mes);
+
+    if (presupuestoMes && presupuestoMes.desgloseCategorias.length > 0) {
+      return presupuestoMes;
+    }
+
+    const plantillaCategorias = this.obtenerPresupuestoConCategoriasMasReciente(presupuestos, mes);
+    if (!plantillaCategorias && !presupuestoMes) return null;
+
+    return {
+      id: presupuestoMes?.id ?? crearIdPresupuesto(mes),
+      mes,
+      totalAsignado: Number(presupuestoMes?.totalAsignado ?? 0),
+      desgloseCategorias: plantillaCategorias?.desgloseCategorias.map((detalle) => ({ ...detalle, gastadoSoles: 0 })) ?? [],
+      alertasActivas: presupuestoMes?.alertasActivas ?? [],
+    };
+  },
+
+  obtenerPresupuestoActual(presupuestos: PresupuestoMensual[]): PresupuestoMensual | null {
+    return this.obtenerPresupuestoCategoriaVigente(presupuestos, this.obtenerMesActual());
+  },
+
+  obtenerPresupuestoMasRelevante(presupuestos: PresupuestoMensual[]): PresupuestoMensual | null {
+    return this.obtenerPresupuestoActual(presupuestos);
   },
 
   calcularGastoTotalDelMes(gastos: Gasto[], mes: string): number {
@@ -134,11 +170,32 @@ export const presupuestoService = {
     };
   },
 
+  eliminarLimiteMensual(presupuestos: PresupuestoMensual[], mes: string): ResultadoEliminacionLimiteMensual {
+    const presupuestoExistente = this.obtenerPresupuestoPorMes(presupuestos, mes);
+
+    if (!presupuestoExistente) {
+      return { presupuesto: null, debeEliminarRegistro: false };
+    }
+
+    if (presupuestoExistente.desgloseCategorias.length === 0) {
+      return { presupuesto: presupuestoExistente, debeEliminarRegistro: true };
+    }
+
+    return {
+      debeEliminarRegistro: false,
+      presupuesto: {
+        ...presupuestoExistente,
+        totalAsignado: 0,
+      },
+    };
+  },
+
   actualizarLimite(
     presupuestos: PresupuestoMensual[],
     payload: GuardarLimitePresupuestoPayload,
   ): ResultadoGuardadoPresupuesto {
     const presupuestoExistente = this.obtenerPresupuestoPorMes(presupuestos, payload.mes);
+    const presupuestoVigente = this.obtenerPresupuestoCategoriaVigente(presupuestos, payload.mes);
     const detalleActualizado: DetalleCategoria = {
       categoria: crearCategoria(payload.categoriaNombre),
       limiteSoles: payload.limiteSoles,
@@ -146,29 +203,43 @@ export const presupuestoService = {
     };
 
     if (!presupuestoExistente) {
+      const categoriasBase = presupuestoVigente?.desgloseCategorias ?? [];
+      const categoriaExiste = categoriasBase.some((detalle) => detalle.categoria.nombre === payload.categoriaNombre);
+      const desgloseCategorias = categoriaExiste
+        ? categoriasBase.map((detalle) =>
+            detalle.categoria.nombre === payload.categoriaNombre
+              ? { ...detalle, categoria: detalleActualizado.categoria, limiteSoles: payload.limiteSoles }
+              : detalle,
+          )
+        : [...categoriasBase, detalleActualizado];
+
       return {
         esNuevo: true,
         presupuesto: {
           id: crearIdPresupuesto(payload.mes),
           mes: payload.mes,
           totalAsignado: 0,
-          desgloseCategorias: [detalleActualizado],
+          desgloseCategorias,
           alertasActivas: [],
         },
       };
     }
 
-    const categoriaExiste = presupuestoExistente.desgloseCategorias.some(
+    const categoriasBase = presupuestoExistente.desgloseCategorias.length > 0
+      ? presupuestoExistente.desgloseCategorias
+      : presupuestoVigente?.desgloseCategorias ?? [];
+
+    const categoriaExiste = categoriasBase.some(
       (detalle) => detalle.categoria.nombre === payload.categoriaNombre,
     );
 
     const desgloseCategorias = categoriaExiste
-      ? presupuestoExistente.desgloseCategorias.map((detalle) =>
+      ? categoriasBase.map((detalle) =>
           detalle.categoria.nombre === payload.categoriaNombre
             ? { ...detalle, categoria: detalleActualizado.categoria, limiteSoles: payload.limiteSoles }
             : detalle,
         )
-      : [...presupuestoExistente.desgloseCategorias, detalleActualizado];
+      : [...categoriasBase, detalleActualizado];
 
     return {
       esNuevo: false,

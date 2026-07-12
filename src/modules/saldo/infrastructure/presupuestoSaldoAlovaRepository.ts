@@ -28,7 +28,11 @@ export const presupuestoSaldoAlovaRepository: PresupuestoSaldoRepository = {
   },
 
   async obtenerPresupuestoActual(): Promise<PresupuestoMensual | null> {
-    const presupuestos = await this.listarPresupuestos();
-    return presupuestoService.obtenerPresupuestoMasRelevante(presupuestos);
+    const [presupuestos, gastos] = await Promise.all([
+      obtenerListaOpcional<PresupuestoMensual>(ENDPOINTS.presupuestos),
+      obtenerListaOpcional<Gasto>(ENDPOINTS.gastos),
+    ]);
+    const presupuestoActual = presupuestoService.obtenerPresupuestoActual(presupuestos);
+    return presupuestoActual ? presupuestoService.normalizarConGastos(presupuestoActual, gastos) : null;
   },
 };

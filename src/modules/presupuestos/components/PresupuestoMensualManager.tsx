@@ -15,14 +15,18 @@ type LimiteMensualFormInput = z.input<typeof limiteMensualSchema>;
 type LimiteMensualFormValues = z.output<typeof limiteMensualSchema>;
 
 export function PresupuestoMensualManager() {
-  const { presupuestos, cargando, guardando, error, guardarLimiteMensual } = usePresupuestos();
+  const { presupuestos, cargando, guardando, error, guardarLimiteMensual, eliminarLimiteMensual } = usePresupuestos();
   const [success, setSuccess] = useState(false);
+  const [deleted, setDeleted] = useState(false);
   const mesActual = presupuestoService.obtenerMesActual();
   const presupuestoMesActual = useMemo(
     () => presupuestoService.obtenerPresupuestoPorMes(presupuestos, mesActual),
     [mesActual, presupuestos],
   );
-  const presupuestosOrdenados = useMemo(() => presupuestoService.ordenarPorMesDesc(presupuestos), [presupuestos]);
+  const presupuestosOrdenados = useMemo(
+    () => presupuestoService.ordenarPorMesDesc(presupuestos).filter((presupuesto) => presupuesto.totalAsignado > 0),
+    [presupuestos],
+  );
 
   const {
     register,
@@ -40,12 +44,23 @@ export function PresupuestoMensualManager() {
   const onSubmit = async (data: LimiteMensualFormValues) => {
     await guardarLimiteMensual(data);
     setSuccess(true);
+    setDeleted(false);
     reset({ mes: data.mes, totalAsignado: data.totalAsignado });
     window.setTimeout(() => setSuccess(false), 3000);
   };
 
   const cargarParaModificar = (mes: string, totalAsignado: number) => {
     reset({ mes, totalAsignado });
+  };
+
+  const eliminar = async (mes: string) => {
+    const confirmado = window.confirm(`¿Eliminar el límite mensual de ${presupuestoService.formatearMes(mes)}?`);
+    if (!confirmado) return;
+
+    await eliminarLimiteMensual(mes);
+    setDeleted(true);
+    setSuccess(false);
+    window.setTimeout(() => setDeleted(false), 3000);
   };
 
   return (
@@ -86,6 +101,13 @@ export function PresupuestoMensualManager() {
           <div className="alert alert-success d-flex align-items-center gap-2" role="alert">
             <i className="bi bi-check-circle-fill" />
             <div>Límite mensual guardado correctamente.</div>
+          </div>
+        ) : null}
+
+        {deleted ? (
+          <div className="alert alert-warning d-flex align-items-center gap-2" role="alert">
+            <i className="bi bi-trash-fill" />
+            <div>Límite mensual eliminado.</div>
           </div>
         ) : null}
 
@@ -141,9 +163,9 @@ export function PresupuestoMensualManager() {
                       <strong className="d-block">{presupuestoService.formatearMes(presupuesto.mes)}</strong>
                       <span className="text-muted small">Límite general del mes</span>
                     </div>
-                    <div className="d-flex align-items-center gap-3">
-                      <span className="fw-bold text-primary font-monospace">
-                        {presupuesto.totalAsignado > 0 ? formatCurrencyPen(presupuesto.totalAsignado) : 'No definido'}
+                    <div className="d-flex align-items-center gap-2 flex-wrap">
+                      <span className="fw-bold text-primary font-monospace me-1">
+                        {formatCurrencyPen(presupuesto.totalAsignado)}
                       </span>
                       <button
                         type="button"
@@ -151,6 +173,14 @@ export function PresupuestoMensualManager() {
                         onClick={() => cargarParaModificar(presupuesto.mes, presupuesto.totalAsignado)}
                       >
                         Modificar
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-outline-danger fw-semibold"
+                        disabled={guardando}
+                        onClick={() => void eliminar(presupuesto.mes)}
+                      >
+                        Eliminar
                       </button>
                     </div>
                   </div>

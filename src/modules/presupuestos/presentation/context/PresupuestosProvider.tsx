@@ -12,6 +12,7 @@ export interface PresupuestosContextValue {
   recargar: () => Promise<void>;
   guardarLimite: (payload: GuardarLimitePresupuestoPayload) => Promise<void>;
   guardarLimiteMensual: (payload: GuardarLimiteMensualPayload) => Promise<void>;
+  eliminarLimiteMensual: (mes: string) => Promise<void>;
 }
 
 interface PresupuestosProviderProps {
@@ -87,6 +88,22 @@ export function PresupuestosProvider({ children, repository = presupuestosAlovaR
     [repository],
   );
 
+  const eliminarLimiteMensual = useCallback(
+    async (mes: string) => {
+      setState((currentState) => ({ ...currentState, guardando: true, error: null }));
+
+      try {
+        await repository.eliminarLimiteMensual(mes);
+        const presupuestos = await repository.listarPresupuestos();
+        setState((currentState) => ({ ...currentState, presupuestos, guardando: false, error: null }));
+      } catch (error) {
+        setState((currentState) => ({ ...currentState, guardando: false, error: getErrorMessage(error) }));
+        throw error;
+      }
+    },
+    [repository],
+  );
+
   const value = useMemo<PresupuestosContextValue>(
     () => ({
       presupuestos: state.presupuestos,
@@ -96,8 +113,9 @@ export function PresupuestosProvider({ children, repository = presupuestosAlovaR
       recargar,
       guardarLimite,
       guardarLimiteMensual,
+      eliminarLimiteMensual,
     }),
-    [guardarLimite, guardarLimiteMensual, recargar, state],
+    [eliminarLimiteMensual, guardarLimite, guardarLimiteMensual, recargar, state],
   );
 
   return <PresupuestosContext.Provider value={value}>{children}</PresupuestosContext.Provider>;
