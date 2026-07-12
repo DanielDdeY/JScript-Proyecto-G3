@@ -1,12 +1,30 @@
+import { useMemo, useState } from 'react';
+import type { Gasto } from '../../../../shared/types/gasto';
+import { GastoDetalleModal } from '../../components/GastoDetalleModal';
+import { ListaGastos } from '../../components/ListaGastos';
+import { GastosProvider } from '../../presentation/context/GastosProvider';
+import { useGastos } from '../../presentation/hooks/useGastos';
 import { useWallet } from '../../../wallet/presentation/hooks/useWallet';
-import { formatCurrencyPen, formatShortDate } from '../../../../shared/utils/formatters';
-import { idsIguales } from '../../../../shared/utils/ids';
-import { obtenerNombreBanco, obtenerUltimosDigitos } from '../../../../shared/utils/tarjetaUtils';
 
 export function ListarGastoPage() {
-  const { gastos, tarjetas, cargando } = useWallet();
+  return (
+    <GastosProvider>
+      <ListarGastoContent />
+    </GastosProvider>
+  );
+}
 
-  if (cargando) {
+function ListarGastoContent() {
+  const { gastos, cargando, error, actualizarEstadoDeudor } = useGastos();
+  const { tarjetas, cargando: cargandoWallet } = useWallet();
+  const [gastoSeleccionado, setGastoSeleccionado] = useState<Gasto | null>(null);
+
+  const gastoModal = useMemo(
+    () => gastos.find((gasto) => gastoSeleccionado && gasto.id === gastoSeleccionado.id) ?? gastoSeleccionado,
+    [gastoSeleccionado, gastos],
+  );
+
+  if (cargando || cargandoWallet) {
     return (
       <div className="text-center p-5">
         <div className="spinner-border text-primary" role="status">
@@ -17,77 +35,40 @@ export function ListarGastoPage() {
   }
 
   return (
-    <div className="card border-0 shadow-sm p-4 bg-white">
-      <div className="d-flex align-items-center justify-content-between mb-4">
-        <h4 className="fw-bold text-dark m-0">Historial de Gastos</h4>
-        <span className="badge bg-danger-subtle text-danger py-2 px-3 fw-bold">{gastos.length} Transacciones</span>
+    <>
+      <div className="card border-0 shadow-sm p-4 bg-white">
+        <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
+          <div>
+            <h4 className="fw-bold text-dark m-0">Historial de Gastos</h4>
+            <p className="text-muted small mb-0">Haz clic en un gasto para ver cuotas, deudores y detalles completos.</p>
+          </div>
+          <span className="badge bg-danger-subtle text-danger py-2 px-3 fw-bold align-self-start align-self-md-center">
+            {gastos.length} Transacciones
+          </span>
+        </div>
+
+        {error ? (
+          <div className="alert alert-danger border-0 rounded-4 fw-semibold" role="alert">
+            <i className="bi bi-exclamation-triangle-fill me-2" /> {error}
+          </div>
+        ) : null}
+
+        {gastos.length === 0 ? (
+          <div className="text-center py-5 text-muted">
+            <i className="bi bi-cart-x display-1 text-light" />
+            <p className="mt-3 fw-semibold">No se han registrado gastos aún.</p>
+            <p className="small">Usa el botón Agregar Gasto para registrar uno nuevo.</p>
+          </div>
+        ) : (
+          <ListaGastos gastos={gastos} tarjetas={tarjetas} onSeleccionarGasto={setGastoSeleccionado} />
+        )}
       </div>
 
-      {gastos.length === 0 ? (
-        <div className="text-center py-5 text-muted">
-          <i className="bi bi-cart-x display-1 text-light" />
-          <p className="mt-3 fw-semibold">No se han registrado gastos aún.</p>
-          <p className="small">Usa el botón Agregar Gasto para registrar uno nuevo.</p>
-        </div>
-      ) : (
-        <div className="table-responsive">
-          <table className="table table-hover align-middle">
-            <thead className="table-light">
-              <tr>
-                <th className="fw-bold text-dark py-3">Descripción</th>
-                <th className="fw-bold text-dark py-3">Categoría</th>
-                <th className="fw-bold text-dark py-3">Fecha</th>
-                <th className="fw-bold text-dark py-3">Cuenta / Tarjeta</th>
-                <th className="fw-bold text-dark py-3 text-end">Monto</th>
-              </tr>
-            </thead>
-            <tbody>
-              {gastos.map((gasto) => {
-                const tarjeta = gasto.tarjetaId ? tarjetas.find((item) => idsIguales(item.id, gasto.tarjetaId)) : undefined;
-                const priorityClass =
-                  gasto.categoria.importancia === 'Alta'
-                    ? 'bg-danger-subtle text-danger'
-                    : gasto.categoria.importancia === 'Media'
-                      ? 'bg-warning-subtle text-warning-emphasis'
-                      : 'bg-success-subtle text-success';
-
-                return (
-                  <tr key={String(gasto.id)}>
-                    <td className="py-3">
-                      <div className="fw-bold text-dark">{gasto.descripcion}</div>
-                    </td>
-                    <td className="py-3">
-                      <span className="badge bg-light text-dark border me-2 py-1 px-2 small fw-semibold">
-                        {gasto.categoria.nombre}
-                      </span>
-                      <span className={`badge ${priorityClass} py-1 px-2 small fw-bold`}>
-                        {gasto.categoria.importancia}
-                      </span>
-                    </td>
-                    <td className="py-3 text-muted">{formatShortDate(gasto.fecha)}</td>
-                    <td className="py-3 text-secondary small">
-                      {tarjeta ? (
-                        <>
-                          <i className="bi bi-credit-card me-1" />
-                          {obtenerNombreBanco(tarjeta)} (**** {obtenerUltimosDigitos(tarjeta.numero)})
-                        </>
-                      ) : (
-                        <>
-                          <i className="bi bi-cash-stack me-1" />
-                          Efectivo
-                        </>
-                      )}
-                    </td>
-                    <td className="py-3 text-end fw-bold text-danger font-monospace">
-                      - {formatCurrencyPen(gasto.monto)}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
+      <GastoDetalleModal
+        gasto={gastoModal}
+        onClose={() => setGastoSeleccionado(null)}
+        onActualizarEstadoDeudor={actualizarEstadoDeudor}
+      />
+    </>
   );
 }

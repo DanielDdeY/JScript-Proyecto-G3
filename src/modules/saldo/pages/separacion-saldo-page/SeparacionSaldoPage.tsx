@@ -1,10 +1,10 @@
-import { InfoCard } from '../../../../shared/components/InfoCard/InfoCard';
+import { PresupuestoMensualManager } from '../../../presupuestos/components/PresupuestoMensualManager';
+import { PresupuestosProvider } from '../../../presupuestos/presentation/context/PresupuestosProvider';
 
 export function SeparacionSaldoPage() {
   return (
-    <InfoCard
-      title="Separar parte de tu dinero"
-      detail="Aquí se implementarán métodos para reservar dinero de las cuentas principales."
-    />
+    <PresupuestosProvider>
+      <PresupuestoMensualManager />
+    </PresupuestosProvider>
   );
 }

@@ -381,3 +381,138 @@ a {
     align-items: stretch !important;
   }
 }
+
+.gasto-row {
+  cursor: pointer;
+}
+
+.gasto-row:hover {
+  background: rgba(220, 53, 69, 0.045);
+}
+
+.gasto-amigo-avatar {
+  width: 46px;
+  height: 46px;
+  min-width: 46px;
+  border-radius: 999px;
+  object-fit: cover;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  color: #ffffff;
+  background: linear-gradient(135deg, #0d6efd, #6f42c1);
+  border: 3px solid #ffffff;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.16);
+}
+
+.gasto-amigo-avatar--placeholder {
+  font-size: 0.9rem;
+}
+
+.notification-button {
+  width: 42px;
+  height: 42px;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #dc3545;
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  border: 2px solid #ffffff;
+}
+
+.notification-panel {
+  width: min(380px, calc(100vw - 2rem));
+  max-height: 460px;
+  overflow: hidden;
+  z-index: 1080;
+}
+
+.notification-list {
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.notification-item {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 12px;
+  white-space: normal;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.notification-item:last-child {
+  border-bottom: 0;
+}
+
+.notification-item-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(13, 110, 253, 0.08);
+  font-size: 1.1rem;
+}
+
+.presupuesto-header-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f4f8ff 100%);
+}
+
+.presupuesto-total-circle {
+  width: 128px;
+  height: 128px;
+  border-radius: 999px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  box-shadow: 0 18px 38px rgba(15, 23, 42, 0.1);
+  border: 8px solid rgba(13, 110, 253, 0.12);
+}
+
+.presupuesto-total-circle strong {
+  font-size: 1.05rem;
+}
+
+.presupuesto-progress {
+  height: 14px;
+  border-radius: 999px;
+  background: #edf1f7;
+}
+
+.presupuesto-progress .progress-bar {
+  border-radius: 999px;
+}
+
+.notification-item {
+  display: flex;
+  grid-template-columns: none;
+}
+
+.notification-dismiss {
+  flex: 0 0 auto;
+  line-height: 1;
+}
+
+.conversion-card {
+  border-radius: 18px;
+}
+
+.conversion-card .card-body {
+  min-height: 190px;
+}

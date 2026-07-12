@@ -2,6 +2,7 @@ import type { DetalleCuotas } from './detalleCuotas';
 import type { GastoCategoria } from './gastoCategoria';
 import type { GastoCompartido } from './gastoCompartido';
 import type { Id } from './id';
+import type { PrestacionGasto } from './prestacionGasto';
 
 export type OrigenGasto = 'EFECTIVO' | 'TARJETA';
 
@@ -15,4 +16,5 @@ export interface Gasto {
   descripcion: string;
   detalleCuotas?: DetalleCuotas;
   gastoCompartido?: GastoCompartido;
+  prestacion?: PrestacionGasto;
 }
