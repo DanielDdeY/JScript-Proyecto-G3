@@ -8,7 +8,7 @@ import type { Perfil, PerfilPersistido } from '../../../shared/types/perfil';
 import type { Proyeccion } from '../../../shared/types/proyeccion';
 import type { Tarjeta } from '../../../shared/types/tarjeta';
 import type { Usuario } from '../../../shared/types/usuario';
-import { idsIguales } from '../../../shared/utils/ids';
+import { generarIdConPrefijo, idsIguales } from '../../../shared/utils/ids';
 import type { WalletOverview } from '../domain/models/walletOverview';
 import type { NuevaTarjeta, NuevoGasto, NuevoIngreso, WalletRepository } from '../domain/repositories/walletRepository';
 
@@ -183,7 +183,7 @@ export const walletAlovaRepository: WalletRepository = {
   async agregarTarjeta(tarjeta: NuevaTarjeta, resumenActual: WalletOverview): Promise<void> {
     const nuevaTarjeta: Tarjeta = {
       ...tarjeta,
-      id: generarId('tj'),
+      id: generarIdConPrefijo(resumenActual.tarjetas, 'tj'),
     };
 
     await httpClient.post<Tarjeta, Tarjeta>(ENDPOINTS.tarjetasBase, nuevaTarjeta);

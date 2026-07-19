@@ -1,7 +1,8 @@
-import  type {ActivoInversion} from "./activoInversion";
+import type { ActivoInversion } from './activoInversion';
 
 export interface PortafolioInversiones {
+  id?: string;
   idUsuario: string;
   riesgo: 'BAJO' | 'MEDIO' | 'ALTO';
-  activos: ActivoInversion[]; // Nivel 2 (Portafolio -> Activo -> Historial)
+  activos: ActivoInversion[];
 }

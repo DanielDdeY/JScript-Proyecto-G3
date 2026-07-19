@@ -4,12 +4,13 @@ export function ProyeccionesPage() {
   return (
     <FeatureShell
       title="Módulo de Proyecciones"
-      description="Planifica metas y revisa proyecciones mensuales o anuales."
+      description="Planifica metas, inversiones, préstamos y proyecciones financieras."
       actions={[
         { to: 'agregar', label: 'Agregar Meta' },
         { to: 'listar', label: 'Listar Metas' },
-        { to: 'mensual', label: 'Proyección Mensual' },
-        { to: 'anual', label: 'Proyección Anual' },
+        { to: 'inversiones', label: 'Inversiones' },
+        { to: 'prestamos', label: 'Préstamos' },
+        { to: 'proyecciones', label: 'Proyecciones', match: '/app/proyecciones/proyecciones' },
       ]}
     />
   );

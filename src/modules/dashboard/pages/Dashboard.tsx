@@ -1,9 +1,57 @@
+import { useMemo } from 'react';
 import { useWallet } from '../../../modules/wallet/presentation/hooks/useWallet';
+import { calcularProyeccionPredictiva } from '../../proyecciones/domain/services/proyeccionPredictivaService';
+import { useProyecciones } from '../../proyecciones/presentation/hooks/useProyecciones';
 import { formatCurrencyPen } from '../../../shared/utils/formatters';
 import { obtenerClaseTarjeta, obtenerNombreBanco, obtenerUltimosDigitos } from '../../../shared/utils/tarjetaUtils';
 
+const opcionesResumenProyeccion = [
+  { etiqueta: 'EN 1 MES', meses: 1 },
+  { etiqueta: 'EN 3 MESES', meses: 3 },
+  { etiqueta: 'EN 6 MESES', meses: 6 },
+  { etiqueta: 'EN 1 AÑO', meses: 12 },
+] as const;
+
+const sumarMeses = (fecha: Date, meses: number) => new Date(fecha.getFullYear(), fecha.getMonth() + meses, 1);
+
+const formatPorcentajeVariacion = (montoFinal: number, saldoActual: number) => {
+  if (saldoActual === 0) return '+ 0.0%';
+
+  const variacion = ((montoFinal - saldoActual) / Math.abs(saldoActual)) * 100;
+  const signo = variacion >= 0 ? '+' : '-';
+
+  return `${signo} ${Math.abs(variacion).toFixed(1)}%`;
+};
+
 export function Dashboard() {
-  const { perfil, tarjetas, resumenFinanciero, proyecciones, cargando, error, recargar } = useWallet();
+  const { perfil, tarjetas, resumenFinanciero, cargando, error, recargar } = useWallet();
+  const { datos: datosProyeccion, cargando: cargandoProyecciones, error: errorProyecciones } = useProyecciones();
+
+  const proyeccionesCalculadas = useMemo(() => {
+    if (!datosProyeccion) return [];
+
+    const fechaActual = new Date();
+    const saldoActual = datosProyeccion.perfil?.saldoTotal ?? 0;
+
+    return opcionesResumenProyeccion.map((opcion) => {
+      const fechaObjetivo = sumarMeses(fechaActual, opcion.meses);
+      const resultado = calcularProyeccionPredictiva(
+        datosProyeccion,
+        {
+          mes: fechaObjetivo.getMonth() + 1,
+          anio: fechaObjetivo.getFullYear(),
+        },
+        fechaActual,
+      );
+
+      return {
+        tiempo: opcion.etiqueta,
+        monto: resultado.monto,
+        crecimiento: formatPorcentajeVariacion(resultado.monto, saldoActual),
+        precision: resultado.porcentaje,
+      };
+    });
+  }, [datosProyeccion]);
 
   if (cargando) {
     return (
@@ -99,13 +147,36 @@ export function Dashboard() {
 
       <section className="mb-2">
         <h5 className="fw-bold text-dark mb-3">Proyección Financiera</h5>
+        {errorProyecciones ? (
+          <div className="alert alert-warning border-0 shadow-sm" role="alert">
+            No se pudieron calcular las proyecciones del dashboard: {errorProyecciones}
+          </div>
+        ) : null}
         <div className="row g-3">
-          {proyecciones.map((proyeccion) => (
-            <div key={`${proyeccion.tiempo}-${proyeccion.monto}`} className="col-12 col-sm-6 col-lg-3">
+          {cargandoProyecciones && proyeccionesCalculadas.length === 0 ? (
+            <div className="col-12">
+              <div className="card p-4 border-0 shadow-sm bg-white text-muted">Calculando proyecciones...</div>
+            </div>
+          ) : null}
+          {proyeccionesCalculadas.map((proyeccion) => (
+            <div key={proyeccion.tiempo} className="col-12 col-sm-6 col-lg-3">
               <article className="card p-3 border-0 shadow-sm bg-white h-100 d-flex flex-column justify-content-center">
                 <span className="text-muted small fw-semibold text-uppercase mb-2">{proyeccion.tiempo}</span>
                 <h4 className="fw-bold text-dark mb-1">{formatCurrencyPen(proyeccion.monto)}</h4>
-                <span className="badge bg-success-subtle text-success align-self-start fw-bold">{proyeccion.porcentaje}</span>
+                <div className="d-flex flex-wrap gap-2">
+                  <span
+                    className={`badge fw-bold align-self-start ${
+                      proyeccion.crecimiento.trim().startsWith('-')
+                        ? 'bg-danger-subtle text-danger'
+                        : 'bg-success-subtle text-success'
+                    }`}
+                  >
+                    {proyeccion.crecimiento}
+                  </span>
+                  <span className="badge bg-primary-subtle text-primary align-self-start fw-semibold">
+                    Precisión {proyeccion.precision}
+                  </span>
+                </div>
               </article>
             </div>
           ))}

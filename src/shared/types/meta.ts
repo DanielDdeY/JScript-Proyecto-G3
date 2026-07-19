@@ -1,8 +1,10 @@
-export interface MetaAhorro {
+export interface Meta {
   id: string;
-  nombre: string; 
+  nombre: string;
   montoObjetivo: number;
   montoActual: number;
-  fechaLimite: string;
+  fechaLimite?: string;
   completada: boolean;
 }
+
+export type MetaAhorro = Meta;

@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { crearReincidencia, type TipoReincidencia } from '../../../../shared/types/reincidencia';
 import { useWallet } from '../../../wallet/presentation/hooks/useWallet';
 
 const ingresoSchema = z.object({
@@ -12,6 +13,7 @@ const ingresoSchema = z.object({
     .string()
     .min(3, { message: 'La descripción debe tener al menos 3 caracteres' })
     .max(100, { message: 'La descripción no puede exceder los 100 caracteres' }),
+  tipoReincidencia: z.enum(['esMensual', 'esAnual', 'esRecurrente', 'esProbable', 'esUnico']),
 });
 
 type IngresoFormInput = z.input<typeof ingresoSchema>;
@@ -35,13 +37,26 @@ export function AgregarIngresoPage() {
       fecha: today(),
       fuente: 'Sueldo',
       descripcion: '',
+      tipoReincidencia: 'esMensual',
     },
   });
 
   const onSubmit = async (data: IngresoFormValues) => {
-    await agregarIngreso(data);
+    await agregarIngreso({
+      monto: data.monto,
+      fecha: data.fecha,
+      fuente: data.fuente,
+      descripcion: data.descripcion,
+      reincidencia: crearReincidencia(data.tipoReincidencia as TipoReincidencia),
+    });
     setSuccess(true);
-    reset({ monto: 0, fecha: today(), fuente: 'Sueldo', descripcion: '' });
+    reset({
+      monto: 0,
+      fecha: today(),
+      fuente: 'Sueldo',
+      descripcion: '',
+      tipoReincidencia: 'esMensual',
+    });
     window.setTimeout(() => setSuccess(false), 4000);
   };
 
@@ -117,6 +132,45 @@ export function AgregarIngresoPage() {
               {...register('descripcion')}
             />
             {errors.descripcion ? <div className="invalid-feedback fw-semibold">{errors.descripcion.message}</div> : null}
+          </div>
+
+          <div className="col-12">
+            <div className="border rounded-4 p-3 bg-light">
+              <div className="d-flex align-items-center gap-2 mb-2">
+                <i className="bi bi-arrow-repeat text-success" />
+                <label className="form-label fw-bold m-0">Reincidencia del ingreso</label>
+              </div>
+              <p className="text-muted small mb-3">
+                Esta marca ayudará a proyectar ingresos mensuales, anuales, recurrentes, probables o únicos.
+              </p>
+              <div className="row g-2">
+                {[
+                  ['esMensual', 'Mensual'],
+                  ['esAnual', 'Anual'],
+                  ['esRecurrente', 'Recurrente'],
+                  ['esProbable', 'Probable'],
+                  ['esUnico', 'Único'],
+                ].map(([value, label]) => (
+                  <div key={value} className="col-12 col-md">
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        id={`ingreso-${value}`}
+                        value={value}
+                        {...register('tipoReincidencia')}
+                      />
+                      <label className="form-check-label" htmlFor={`ingreso-${value}`}>
+                        {label}
+                      </label>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              {errors.tipoReincidencia ? (
+                <div className="text-danger small fw-semibold mt-1">{errors.tipoReincidencia.message}</div>
+              ) : null}
+            </div>
           </div>
         </div>
 

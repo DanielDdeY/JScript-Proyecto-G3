@@ -2,7 +2,7 @@
   "perfil": {
     "id": "perfil-1",
     "usuarioId": "user-1",
-    "saldoTotal": 12450.75
+    "saldoTotal": 15952.75
   },
   "bancos": [
     {
@@ -78,6 +78,13 @@
       "numero": "1234",
       "saldo": 4500,
       "tipo": "DEBITO"
+    },
+    {
+      "bancoId": "banco-2",
+      "numero": "9999",
+      "saldo": 3502,
+      "tipo": "DEBITO",
+      "id": "2zQdoWuRVMo"
     }
   ],
   "gastos": [
@@ -90,7 +97,14 @@
         "importancia": "Alta"
       },
       "tarjetaId": "tj-1",
-      "descripcion": "Café Starbucks y Sandwich"
+      "descripcion": "Café Starbucks y Sandwich",
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": true
+      }
     },
     {
       "id": "g-2",
@@ -107,6 +121,13 @@
         "cuotasPagadas": 1,
         "montoPorCuota": 500,
         "mesesSinIntereses": true
+      },
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": true
       }
     },
     {
@@ -119,7 +140,13 @@
       },
       "tarjetaId": "tj-2",
       "descripcion": "Netflix Familiar",
-      "suscripcionId": "sub-1"
+      "reincidencia": {
+        "esMensual": true,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": false
+      }
     },
     {
       "id": "g-4",
@@ -155,6 +182,13 @@
             "avatarUrl": "https://i.pravatar.cc/100?img=47"
           }
         ]
+      },
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": true
       }
     },
     {
@@ -169,6 +203,13 @@
       "descripcion": "Préstamo personal",
       "prestacion": {
         "nombrePersona": "Andrea"
+      },
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": true,
+        "esUnico": false
       }
     },
     {
@@ -180,7 +221,14 @@
         "importancia": "Alta"
       },
       "origen": "EFECTIVO",
-      "descripcion": "Pasajes y movilidad del mes"
+      "descripcion": "Pasajes y movilidad del mes",
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": true
+      }
     },
     {
       "id": "g-7",
@@ -191,7 +239,14 @@
         "importancia": "Alta"
       },
       "origen": "EFECTIVO",
-      "descripcion": "Compras de comida del mes"
+      "descripcion": "Compras de comida del mes",
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": true
+      }
     },
     {
       "id": "g-8",
@@ -202,7 +257,14 @@
         "importancia": "Alta"
       },
       "origen": "EFECTIVO",
-      "descripcion": "Movilidad semanal"
+      "descripcion": "Movilidad semanal",
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": true
+      }
     },
     {
       "id": "g-9",
@@ -213,7 +275,14 @@
         "importancia": "Alta"
       },
       "origen": "EFECTIVO",
-      "descripcion": "Pago de internet"
+      "descripcion": "Pago de internet",
+      "reincidencia": {
+        "esMensual": true,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": false
+      }
     },
     {
       "id": "g-10",
@@ -224,7 +293,14 @@
         "importancia": "Alta"
       },
       "origen": "EFECTIVO",
-      "descripcion": "Almuerzo universidad"
+      "descripcion": "Almuerzo universidad",
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": true
+      }
     },
     {
       "id": "g-11",
@@ -235,7 +311,14 @@
         "importancia": "Alta"
       },
       "origen": "EFECTIVO",
-      "descripcion": "Taxi retorno"
+      "descripcion": "Taxi retorno",
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": true
+      }
     },
     {
       "id": "g-12",
@@ -247,7 +330,14 @@
       },
       "origen": "TARJETA",
       "descripcion": "Consulta médica",
-      "tarjetaId": "tj-2"
+      "tarjetaId": "tj-2",
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": true
+      }
     },
     {
       "id": "g-13",
@@ -258,7 +348,14 @@
         "importancia": "Baja"
       },
       "origen": "EFECTIVO",
-      "descripcion": "Cine con amigos"
+      "descripcion": "Cine con amigos",
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": true
+      }
     },
     {
       "id": "g-14",
@@ -269,7 +366,14 @@
         "importancia": "Alta"
       },
       "origen": "EFECTIVO",
-      "descripcion": "Recarga celular"
+      "descripcion": "Recarga celular",
+      "reincidencia": {
+        "esMensual": true,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": false
+      }
     },
     {
       "id": "g-15",
@@ -281,7 +385,14 @@
       },
       "origen": "TARJETA",
       "descripcion": "Accesorios laptop",
-      "tarjetaId": "tj-2"
+      "tarjetaId": "tj-2",
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": true
+      }
     },
     {
       "id": "g-16",
@@ -292,7 +403,14 @@
         "importancia": "Alta"
       },
       "origen": "EFECTIVO",
-      "descripcion": "Desayuno"
+      "descripcion": "Desayuno",
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": true
+      }
     },
     {
       "id": "g-17",
@@ -303,7 +421,14 @@
         "importancia": "Baja"
       },
       "origen": "EFECTIVO",
-      "descripcion": "Compra eventual"
+      "descripcion": "Compra eventual",
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": true
+      }
     },
     {
       "id": "g-18",
@@ -317,6 +442,13 @@
       "descripcion": "Préstamo a compañero",
       "prestacion": {
         "nombrePersona": "Luis"
+      },
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": true,
+        "esUnico": false
       }
     }
   ],
@@ -326,91 +458,182 @@
       "monto": 3800,
       "fuente": "Sueldo",
       "fecha": "2026-06-01",
-      "descripcion": "Pago mensual de empresa"
+      "descripcion": "Pago mensual de empresa",
+      "reincidencia": {
+        "esMensual": true,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": false
+      }
     },
     {
       "id": "ing-2",
       "monto": 850,
       "fuente": "Freelance",
       "fecha": "2026-06-12",
-      "descripcion": "Proyecto web React"
+      "descripcion": "Proyecto web React",
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": true,
+        "esUnico": false
+      }
     },
     {
       "id": "ing-3",
       "monto": 1200,
       "fuente": "Sueldo",
       "fecha": "2026-07-01",
-      "descripcion": "Adelanto mensual"
+      "descripcion": "Adelanto mensual",
+      "reincidencia": {
+        "esMensual": true,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": false
+      }
     },
     {
       "id": "ing-4",
       "monto": 700,
       "fuente": "Freelance",
       "fecha": "2026-07-03",
-      "descripcion": "Landing page cliente"
+      "descripcion": "Landing page cliente",
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": true,
+        "esUnico": false
+      }
     },
     {
       "id": "ing-5",
       "monto": 150,
       "fuente": "Inversiones",
       "fecha": "2026-07-04",
-      "descripcion": "Rendimiento fondo mutuo"
+      "descripcion": "Rendimiento fondo mutuo",
+      "reincidencia": {
+        "esMensual": true,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": false
+      }
     },
     {
       "id": "ing-6",
       "monto": 300,
       "fuente": "Venta",
       "fecha": "2026-07-06",
-      "descripcion": "Venta de equipo usado"
+      "descripcion": "Venta de equipo usado",
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": true
+      }
     },
     {
       "id": "ing-7",
       "monto": 3800,
       "fuente": "Sueldo",
       "fecha": "2026-07-15",
-      "descripcion": "Pago mensual de empresa"
+      "descripcion": "Pago mensual de empresa",
+      "reincidencia": {
+        "esMensual": true,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": false
+      }
     },
     {
       "id": "ing-8",
       "monto": 450,
       "fuente": "Freelance",
       "fecha": "2026-07-16",
-      "descripcion": "Correcciones sitio web"
+      "descripcion": "Correcciones sitio web",
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": true,
+        "esUnico": false
+      }
     },
     {
       "id": "ing-9",
       "monto": 200,
       "fuente": "Premio",
       "fecha": "2026-07-18",
-      "descripcion": "Bono académico"
+      "descripcion": "Bono académico",
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": true
+      }
     },
     {
       "id": "ing-10",
       "monto": 90,
       "fuente": "Otros",
       "fecha": "2026-07-20",
-      "descripcion": "Devolución de dinero"
+      "descripcion": "Devolución de dinero",
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": true
+      }
     },
     {
       "id": "ing-11",
       "monto": 180,
       "fuente": "Inversiones",
       "fecha": "2026-07-22",
-      "descripcion": "Intereses acumulados"
+      "descripcion": "Intereses acumulados",
+      "reincidencia": {
+        "esMensual": true,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": false
+      }
     },
     {
       "id": "ing-12",
       "monto": 550,
       "fuente": "Freelance",
       "fecha": "2026-07-24",
-      "descripcion": "Mantenimiento mensual"
+      "descripcion": "Mantenimiento mensual",
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": true,
+        "esUnico": false
+      }
     },
     {
       "id": "ing-13",
       "monto": 3800,
       "fuente": "Sueldo",
       "fecha": "2026-08-01",
-      "descripcion": "Pago mensual de agosto"
+      "descripcion": "Pago mensual de agosto",
+      "reincidencia": {
+        "esMensual": true,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": false
+      }
     }
   ],
   "inversiones": [
@@ -433,9 +656,29 @@
               "porcentajeGanancia": 7.5
             }
           ]
+        },
+        {
+          "id": "inv-2",
+          "nombreSimbolo": "Depósito a Plazo BBVA",
+          "capitalInvertido": 3500,
+          "valorActual": 3895,
+          "historial": [
+            {
+              "fecha": "2026-04-01",
+              "porcentajeGanancia": 6.5
+            },
+            {
+              "fecha": "2026-05-01",
+              "porcentajeGanancia": 9.2
+            },
+            {
+              "fecha": "2026-06-01",
+              "porcentajeGanancia": 11.3
+            }
+          ]
         }
       ],
-      "id": "Cpco6k2_clo"
+      "id": "portafolio-user-1"
     }
   ],
   "presupuestos": [
@@ -449,7 +692,7 @@
             "nombre": "Alimentación",
             "importancia": "Alta"
           },
-          "limiteSoles": 400,
+          "limiteSoles": 500,
           "gastadoSoles": 0
         },
         {
@@ -544,23 +787,233 @@
         "seguroDesgravamen": "A"
       },
       "montoAprobado": 15000,
-      "deudaRestante": 12500,
+      "deudaRestante": 12499.98,
       "fechaDesembolso": "2025-12-01",
       "cuotasPagadas": 6,
-      "cuotasTotales": 36
-    }
-  ],
-  "suscripciones": [
-    {
-      "id": "sub-1",
-      "servicio": "Netflix",
-      "montoMensual": 45.9,
-      "diaDeCobro": 5,
-      "tarjetaVinculadaId": "tj-2",
-      "historial": [
+      "cuotasTotales": 36,
+      "detalleCuotas": {
+        "cuotasTotales": 36,
+        "cuotasPagadas": 6,
+        "montoPorCuota": 416.67,
+        "mesesSinIntereses": false,
+        "tasaInteresAplicada": 85.5
+      },
+      "cuotas": [
         {
-          "fechaCobro": "2026-06-05",
-          "estado": "EXITOSO"
+          "numeroCuota": 1,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2026-01-05",
+          "estado": "PAGADA"
+        },
+        {
+          "numeroCuota": 2,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2026-02-05",
+          "estado": "PAGADA"
+        },
+        {
+          "numeroCuota": 3,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2026-03-05",
+          "estado": "PAGADA"
+        },
+        {
+          "numeroCuota": 4,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2026-04-05",
+          "estado": "PAGADA"
+        },
+        {
+          "numeroCuota": 5,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2026-05-05",
+          "estado": "PAGADA"
+        },
+        {
+          "numeroCuota": 6,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2026-06-05",
+          "estado": "PAGADA"
+        },
+        {
+          "numeroCuota": 7,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2026-07-05",
+          "estado": "ATRASADA"
+        },
+        {
+          "numeroCuota": 8,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2026-08-05",
+          "estado": "PENDIENTE"
+        },
+        {
+          "numeroCuota": 9,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2026-09-05",
+          "estado": "PENDIENTE"
+        },
+        {
+          "numeroCuota": 10,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2026-10-05",
+          "estado": "PENDIENTE"
+        },
+        {
+          "numeroCuota": 11,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2026-11-05",
+          "estado": "PENDIENTE"
+        },
+        {
+          "numeroCuota": 12,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2026-12-05",
+          "estado": "PENDIENTE"
+        },
+        {
+          "numeroCuota": 13,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2027-01-05",
+          "estado": "PENDIENTE"
+        },
+        {
+          "numeroCuota": 14,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2027-02-05",
+          "estado": "PENDIENTE"
+        },
+        {
+          "numeroCuota": 15,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2027-03-05",
+          "estado": "PENDIENTE"
+        },
+        {
+          "numeroCuota": 16,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2027-04-05",
+          "estado": "PENDIENTE"
+        },
+        {
+          "numeroCuota": 17,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2027-05-05",
+          "estado": "PENDIENTE"
+        },
+        {
+          "numeroCuota": 18,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2027-06-05",
+          "estado": "PENDIENTE"
+        },
+        {
+          "numeroCuota": 19,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2027-07-05",
+          "estado": "PENDIENTE"
+        },
+        {
+          "numeroCuota": 20,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2027-08-05",
+          "estado": "PENDIENTE"
+        },
+        {
+          "numeroCuota": 21,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2027-09-05",
+          "estado": "PENDIENTE"
+        },
+        {
+          "numeroCuota": 22,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2027-10-05",
+          "estado": "PENDIENTE"
+        },
+        {
+          "numeroCuota": 23,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2027-11-05",
+          "estado": "PENDIENTE"
+        },
+        {
+          "numeroCuota": 24,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2027-12-05",
+          "estado": "PENDIENTE"
+        },
+        {
+          "numeroCuota": 25,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2028-01-05",
+          "estado": "PENDIENTE"
+        },
+        {
+          "numeroCuota": 26,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2028-02-05",
+          "estado": "PENDIENTE"
+        },
+        {
+          "numeroCuota": 27,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2028-03-05",
+          "estado": "PENDIENTE"
+        },
+        {
+          "numeroCuota": 28,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2028-04-05",
+          "estado": "PENDIENTE"
+        },
+        {
+          "numeroCuota": 29,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2028-05-05",
+          "estado": "PENDIENTE"
+        },
+        {
+          "numeroCuota": 30,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2028-06-05",
+          "estado": "PENDIENTE"
+        },
+        {
+          "numeroCuota": 31,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2028-07-05",
+          "estado": "PENDIENTE"
+        },
+        {
+          "numeroCuota": 32,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2028-08-05",
+          "estado": "PENDIENTE"
+        },
+        {
+          "numeroCuota": 33,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2028-09-05",
+          "estado": "PENDIENTE"
+        },
+        {
+          "numeroCuota": 34,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2028-10-05",
+          "estado": "PENDIENTE"
+        },
+        {
+          "numeroCuota": 35,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2028-11-05",
+          "estado": "PENDIENTE"
+        },
+        {
+          "numeroCuota": 36,
+          "montoSoles": 416.67,
+          "fechaVencimiento": "2028-12-05",
+          "estado": "PENDIENTE"
         }
       ]
     }
@@ -570,36 +1023,53 @@
       "tiempo": "En 1 mes",
       "monto": 13900,
       "porcentaje": "+ 11.6%",
-      "id": "oJsit3jzC2A"
+      "id": "w4Xw1vqS0QQ"
     },
     {
       "tiempo": "En 3 meses",
       "monto": 16750,
       "porcentaje": "+ 34.6%",
-      "id": "zNGHOn_R1Z0"
+      "id": "e4DS8Dv2YMI"
     },
     {
       "tiempo": "En 6 meses",
       "monto": 20450,
       "porcentaje": "+ 64.2%",
-      "id": "dc1ZlLJWYhA"
+      "id": "sJJ3zYkZv8Q"
     },
     {
       "tiempo": "En 1 año",
       "monto": 26500,
       "porcentaje": "+ 112.9%",
-      "id": "LyOWFM4EdeA"
+      "id": "Q8b0Q-dNYkU"
     }
   ],
   "usuarios": [
     {
       "id": "user-1",
       "nombre": "Pepito",
-      "email": "daniel@mibilletera.edu.pe",
+      "email": "pepito@gmail.com",
       "avatarUrl": "",
       "password": "123456",
       "fechaCreacion": "2026-06-01",
       "notificaciones": true
+    }
+  ],
+  "metas": [
+    {
+      "id": "meta-1",
+      "nombre": "Comprar laptop",
+      "montoObjetivo": 3500,
+      "montoActual": 1250,
+      "fechaLimite": "2026-12-15",
+      "completada": false
+    },
+    {
+      "id": "meta-2",
+      "nombre": "Fondo de emergencia",
+      "montoObjetivo": 5000,
+      "montoActual": 5000,
+      "completada": true
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
