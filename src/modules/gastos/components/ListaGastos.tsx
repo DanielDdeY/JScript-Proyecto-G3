@@ -3,6 +3,7 @@ import type { Tarjeta } from '../../../shared/types/tarjeta';
 import { formatCurrencyPen, formatShortDate } from '../../../shared/utils/formatters';
 import { idsIguales } from '../../../shared/utils/ids';
 import { obtenerNombreBanco, obtenerUltimosDigitos } from '../../../shared/utils/tarjetaUtils';
+import { obtenerEtiquetasReincidencia } from '../../../shared/utils/reincidenciaUtils';
 import { obtenerEtiquetaDetalleCuotas, tieneGastoCompartido } from '../domain/services/gastoDisplayService';
 
 interface ListaGastosProps {
@@ -83,6 +84,9 @@ export function ListaGastos({ gastos, tarjetas, onSeleccionarGasto }: ListaGasto
                     {etiquetaCuotas ? <span className="badge bg-warning text-dark">Cuotas</span> : null}
                     {tieneGastoCompartido(gasto) ? <span className="badge bg-primary-subtle text-primary">Compartido</span> : null}
                     {gasto.prestacion ? <span className="badge bg-info-subtle text-info-emphasis">Prestación</span> : null}
+                    {obtenerEtiquetasReincidencia(gasto.reincidencia).map((etiqueta) => (
+                      <span key={etiqueta} className="badge bg-secondary-subtle text-secondary">{etiqueta}</span>
+                    ))}
                   </div>
                 </td>
                 <td className="py-3 text-end fw-bold text-danger font-monospace">

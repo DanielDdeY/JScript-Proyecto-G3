@@ -17,10 +17,10 @@ export const router = createBrowserRouter([
   {
     element: <PublicRoute />,
     children: [
-      { path: '/', element: <Login /> },
+      { path: '/', element: <Home /> },
       { path: '/login', element: <Login /> },
       { path: '/register', element: <Register /> },
-      { path: '/home', element: <Home /> },
+
     ],
   },
   {

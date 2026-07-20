@@ -1,9 +1,10 @@
 import { Navigate, type RouteObject } from 'react-router-dom';
 import { ProyeccionesPage } from './pages/ProyeccionesPage';
 import { AgregarMetasPage } from './pages/agregar-metas-page/AgregarMetasPage';
-import { AnualProyeccionPage } from './pages/anual-proyeccion-page/AnualProyeccionPage';
+import { Inversiones } from './pages/inversiones-page/Inversiones';
 import { ListarMetasPage } from './pages/listar-metas-page/ListarMetasPage';
-import { MensualProyeccionPage } from './pages/mensual-proyeccion-page/MensualProyeccionPage';
+import { Prestamos } from './pages/prestamos-page/Prestamos';
+import { Proyecciones } from './pages/proyecciones-page/Proyecciones';
 
 export const proyeccionesRoutes: RouteObject = {
   path: 'proyecciones',
@@ -11,8 +12,9 @@ export const proyeccionesRoutes: RouteObject = {
   children: [
     { index: true, element: <Navigate to="listar" replace /> },
     { path: 'agregar', element: <AgregarMetasPage /> },
-    { path: 'anual', element: <AnualProyeccionPage /> },
+    { path: 'inversiones', element: <Inversiones /> },
     { path: 'listar', element: <ListarMetasPage /> },
-    { path: 'mensual', element: <MensualProyeccionPage /> },
+    { path: 'prestamos', element: <Prestamos /> },
+    { path: 'proyecciones', element: <Proyecciones /> },
   ],
 };

@@ -1,5 +1,5 @@
 import type { AmigoDeudor, EstadoDeudaAmigo } from '../../../../shared/types/amigoDeudor';
-import type { DetalleCuotas } from '../../../../shared/types/detalleCuotas';
+import type { DetalleCuotas } from '../../../../shared/types/detallecuotas';
 import type { Gasto } from '../../../../shared/types/gasto';
 import { formatCurrencyPen, formatShortDate } from '../../../../shared/utils/formatters';
 

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { EstadoDeudaAmigo } from '../../../shared/types/amigoDeudor';
 import type { Gasto } from '../../../shared/types/gasto';
 import { formatCurrencyPen, formatShortDate } from '../../../shared/utils/formatters';
+import { obtenerEtiquetasReincidencia } from '../../../shared/utils/reincidenciaUtils';
 import {
   esPrestacion,
   obtenerClaseEstadoDeudor,
@@ -77,6 +78,17 @@ export function GastoDetalleModal({ gasto, onClose, onActualizarEstadoDeudor }: 
                 {esPrestacion(gasto) && gasto.prestacion ? (
                   <DetalleItem label="Prestado a" value={gasto.prestacion.nombrePersona} icon="bi bi-person-check" />
                 ) : null}
+              </div>
+
+              <div className="border rounded-4 p-3 bg-light mb-4">
+                <span className="d-block small text-muted fw-semibold text-uppercase mb-2">
+                  <i className="bi bi-arrow-repeat me-2" /> Reincidencia
+                </span>
+                <div className="d-flex flex-wrap gap-2">
+                  {obtenerEtiquetasReincidencia(gasto.reincidencia).map((etiqueta) => (
+                    <span key={etiqueta} className="badge bg-secondary-subtle text-secondary px-3 py-2">{etiqueta}</span>
+                  ))}
+                </div>
               </div>
 
               {etiquetaCuotas ? (

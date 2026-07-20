@@ -1,8 +1,9 @@
-import type { DetalleCuotas } from './detalleCuotas';
+import type { DetalleCuotas } from './detallecuotas';
 import type { GastoCategoria } from './gastoCategoria';
 import type { GastoCompartido } from './gastoCompartido';
 import type { Id } from './id';
 import type { PrestacionGasto } from './prestacionGasto';
+import type { Reincidencia } from './reincidencia';
 
 export type OrigenGasto = 'EFECTIVO' | 'TARJETA';
 
@@ -17,4 +18,5 @@ export interface Gasto {
   detalleCuotas?: DetalleCuotas;
   gastoCompartido?: GastoCompartido;
   prestacion?: PrestacionGasto;
+  reincidencia: Reincidencia;
 }

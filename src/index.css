@@ -516,3 +516,41 @@ a {
 .conversion-card .card-body {
   min-height: 190px;
 }
+
+.meta-progress-circle {
+  --meta-progress: 0%;
+  width: 86px;
+  height: 86px;
+  min-width: 86px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: conic-gradient(#0d6efd var(--meta-progress), #edf1f7 0);
+  position: relative;
+  color: #0d6efd;
+  font-weight: 800;
+}
+
+.meta-progress-circle::before {
+  content: '';
+  position: absolute;
+  inset: 9px;
+  border-radius: 999px;
+  background: #ffffff;
+}
+
+.meta-progress-circle span {
+  position: relative;
+  z-index: 1;
+}
+
+.meta-progress-bar {
+  height: 12px;
+  border-radius: 999px;
+  background: #edf1f7;
+}
+
+.meta-progress-bar .progress-bar {
+  border-radius: 999px;
+}
