@@ -1,34 +1,55 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import type { OrigenIngreso } from '../../../../shared/types/ingreso';
 import { crearReincidencia, type TipoReincidencia } from '../../../../shared/types/reincidencia';
+import type { Tarjeta } from '../../../../shared/types/tarjeta';
+import { formatCurrencyPen } from '../../../../shared/utils/formatters';
+import { idsIguales } from '../../../../shared/utils/ids';
+import { obtenerNombreBanco, obtenerUltimosDigitos } from '../../../../shared/utils/tarjetaUtils';
 import { useWallet } from '../../../wallet/presentation/hooks/useWallet';
 
-const ingresoSchema = z.object({
-  monto: z.coerce.number().positive({ message: 'El monto debe ser un número positivo mayor que cero' }),
-  fecha: z.string().min(1, { message: 'La fecha es requerida' }),
-  fuente: z.enum(['Sueldo', 'Freelance', 'Inversiones', 'Venta', 'Premio', 'Otros']),
-  descripcion: z
-    .string()
-    .min(3, { message: 'La descripción debe tener al menos 3 caracteres' })
-    .max(100, { message: 'La descripción no puede exceder los 100 caracteres' }),
-  tipoReincidencia: z.enum(['esMensual', 'esAnual', 'esRecurrente', 'esProbable', 'esUnico']),
-});
+const ingresoSchema = z
+  .object({
+    monto: z.coerce.number().positive({ message: 'El monto debe ser un número positivo mayor que cero' }),
+    fecha: z.string().min(1, { message: 'La fecha es requerida' }),
+    fuente: z.enum(['Sueldo', 'Freelance', 'Inversiones', 'Venta', 'Premio', 'Otros']),
+    origen: z.enum(['EFECTIVO', 'TARJETA']),
+    tarjetaId: z.string().optional(),
+    descripcion: z
+      .string()
+      .min(3, { message: 'La descripción debe tener al menos 3 caracteres' })
+      .max(100, { message: 'La descripción no puede exceder los 100 caracteres' }),
+    tipoReincidencia: z.enum(['esMensual', 'esAnual', 'esRecurrente', 'esProbable', 'esUnico']),
+  })
+  .superRefine((data, context) => {
+    if (data.origen === 'TARJETA' && !data.tarjetaId) {
+      context.addIssue({
+        code: 'custom',
+        path: ['tarjetaId'],
+        message: 'Debe seleccionar una tarjeta o cuenta cuando el ingreso entra por tarjeta',
+      });
+    }
+  });
 
 type IngresoFormInput = z.input<typeof ingresoSchema>;
 type IngresoFormValues = z.output<typeof ingresoSchema>;
 
 const today = () => new Date().toISOString().substring(0, 10);
 
+const buscarTarjeta = (tarjetas: Tarjeta[], tarjetaId?: string) =>
+  tarjetas.find((tarjeta) => idsIguales(tarjeta.id, tarjetaId));
+
 export function AgregarIngresoPage() {
-  const { agregarIngreso, cargando } = useWallet();
+  const { tarjetas, agregarIngreso, cargando } = useWallet();
   const [success, setSuccess] = useState(false);
 
   const {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<IngresoFormInput, unknown, IngresoFormValues>({
     resolver: zodResolver(ingresoSchema),
@@ -36,16 +57,31 @@ export function AgregarIngresoPage() {
       monto: '' as unknown as number,
       fecha: today(),
       fuente: 'Sueldo',
+      origen: 'EFECTIVO',
+      tarjetaId: '',
       descripcion: '',
       tipoReincidencia: 'esMensual',
     },
   });
 
+  const selectedOrigen = watch('origen');
+  const selectedTarjetaId = watch('tarjetaId');
+
+  const selectedTarjeta = useMemo(
+    () => buscarTarjeta(tarjetas, selectedTarjetaId),
+    [selectedTarjetaId, tarjetas],
+  );
+
   const onSubmit = async (data: IngresoFormValues) => {
+    const origen = data.origen as OrigenIngreso;
+    const tarjeta = origen === 'TARJETA' ? buscarTarjeta(tarjetas, data.tarjetaId) : undefined;
+
     await agregarIngreso({
       monto: data.monto,
       fecha: data.fecha,
       fuente: data.fuente,
+      origen,
+      tarjetaId: tarjeta?.id,
       descripcion: data.descripcion,
       reincidencia: crearReincidencia(data.tipoReincidencia as TipoReincidencia),
     });
@@ -54,6 +90,8 @@ export function AgregarIngresoPage() {
       monto: '' as unknown as number,
       fecha: today(),
       fuente: 'Sueldo',
+      origen: 'EFECTIVO',
+      tarjetaId: '',
       descripcion: '',
       tipoReincidencia: 'esMensual',
     });
@@ -122,6 +160,42 @@ export function AgregarIngresoPage() {
             </select>
             {errors.fuente ? <div className="invalid-feedback fw-semibold">{errors.fuente.message}</div> : null}
           </div>
+
+          <div className="col-12 col-md-6">
+            <label className="form-label fw-semibold">Origen del ingreso</label>
+            <select className={`form-select ${errors.origen ? 'is-invalid' : ''}`} {...register('origen')}>
+              <option value="EFECTIVO">Efectivo</option>
+              <option value="TARJETA">Tarjeta / Cuenta vinculada</option>
+            </select>
+            {errors.origen ? <div className="invalid-feedback fw-semibold">{errors.origen.message}</div> : null}
+            <div className="form-text">Indica dónde entró el dinero para actualizar correctamente el saldo.</div>
+          </div>
+
+          {selectedOrigen === 'TARJETA' ? (
+            <div className="col-12 col-md-6">
+              <label className="form-label fw-semibold">Tarjeta / Cuenta de destino</label>
+              <select className={`form-select ${errors.tarjetaId ? 'is-invalid' : ''}`} {...register('tarjetaId')}>
+                <option value="">-- Seleccione una cuenta --</option>
+                {tarjetas.map((tarjeta) => (
+                  <option key={String(tarjeta.id)} value={String(tarjeta.id)}>
+                    {obtenerNombreBanco(tarjeta)} (**** {obtenerUltimosDigitos(tarjeta.numero)}) - Saldo actual:{' '}
+                    {formatCurrencyPen(tarjeta.saldo)}
+                  </option>
+                ))}
+              </select>
+              {errors.tarjetaId ? (
+                <div className="invalid-feedback fw-semibold">{errors.tarjetaId.message}</div>
+              ) : null}
+              {tarjetas.length === 0 ? (
+                <div className="text-muted small mt-1">No hay tarjetas registradas, cambia el origen a efectivo.</div>
+              ) : null}
+              {selectedTarjeta ? (
+                <div className="text-success small fw-semibold mt-1">
+                  El saldo de esta tarjeta aumentará desde {formatCurrencyPen(selectedTarjeta.saldo)}.
+                </div>
+              ) : null}
+            </div>
+          ) : null}
 
           <div className="col-12 col-md-6">
             <label className="form-label fw-semibold">Descripción / Detalle</label>

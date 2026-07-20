@@ -3,6 +3,7 @@ import { FiltrosIngresosSidebar } from '../../components/FiltrosIngresosSidebar'
 import { ListaIngresos } from '../../components/ListaIngresos';
 import { IngresosProvider } from '../../presentation/context/IngresosProvider';
 import { useIngresos } from '../../presentation/hooks/useIngresos';
+import { useWallet } from '../../../wallet/presentation/hooks/useWallet';
 
 export function ListarIngresoPage() {
   return (
@@ -14,6 +15,7 @@ export function ListarIngresoPage() {
 
 function ListarIngresoContent() {
   const { ingresos, respuesta, filtros, cargando, error, actualizarFiltros, limpiarFiltros, cambiarPagina } = useIngresos();
+  const { tarjetas } = useWallet();
 
   return (
     <div className="row g-4 align-items-start">
@@ -59,7 +61,7 @@ function ListarIngresoContent() {
 
           {!cargando && ingresos.length > 0 ? (
             <>
-              <ListaIngresos ingresos={ingresos} />
+              <ListaIngresos ingresos={ingresos} tarjetas={tarjetas} />
               <Paginacion meta={respuesta.meta} onCambiarPagina={cambiarPagina} />
             </>
           ) : null}

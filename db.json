@@ -2,7 +2,7 @@
   "perfil": {
     "id": "perfil-1",
     "usuarioId": "J4r7_ua3pmw",
-    "saldoTotal": 15992.75,
+    "saldoTotal": 15912.75,
     "nombre": "Luis Sanchez",
     "email": "ls5566@gmail.com"
   },
@@ -52,7 +52,7 @@
       "id": "tj-1",
       "bancoId": "banco-1",
       "numero": "5678",
-      "saldo": 3140,
+      "saldo": 3000,
       "tipo": "DEBITO"
     },
     {
@@ -80,13 +80,6 @@
       "numero": "1234",
       "saldo": 4500,
       "tipo": "DEBITO"
-    },
-    {
-      "bancoId": "banco-2",
-      "numero": "9999",
-      "saldo": 3502,
-      "tipo": "DEBITO",
-      "id": "2zQdoWuRVMo"
     }
   ],
   "gastos": [
@@ -490,6 +483,25 @@
         "esUnico": false
       },
       "id": "E-lndox3B4E"
+    },
+    {
+      "monto": 140,
+      "fecha": "2026-07-20",
+      "categoria": {
+        "nombre": "Transporte",
+        "importancia": "Baja"
+      },
+      "origen": "TARJETA",
+      "tarjetaId": "tj-1",
+      "descripcion": "Me fui a Huancayo",
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": true
+      },
+      "id": "qaoyE8keZlg"
     }
   ],
   "ingresos": [
@@ -688,6 +700,22 @@
         "esUnico": false
       },
       "id": "mP1ea-jIvsQ"
+    },
+    {
+      "monto": 60,
+      "fecha": "2026-07-20",
+      "fuente": "Otros",
+      "origen": "TARJETA",
+      "tarjetaId": "tj-1",
+      "descripcion": "me encontre",
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": true
+      },
+      "id": "fw64oj0Z4Qg"
     }
   ],
   "inversiones": [
@@ -1122,24 +1150,6 @@
       "password": "123456",
       "fechaCreacion": "2026-06-01",
       "notificaciones": true
-    },
-    {
-      "nombre": "sofia",
-      "email": "s999@ss.co",
-      "password": "123asdrr",
-      "id": "KyVMNja3Gt0"
-    },
-    {
-      "nombre": "Mariela",
-      "email": "sdust562@gmail.com",
-      "password": "minp40#rr",
-      "id": "mnd34N-oDrI"
-    },
-    {
-      "nombre": "Juan",
-      "email": "jpp909@gmail.com",
-      "password": "jjkkpp00",
-      "id": "Uyv-IvL59hI"
     },
     {
       "nombre": "Luis Sanchez",
