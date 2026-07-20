@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { Login } from '../../modules/auth/pages/Login';
 import { Register } from '../../modules/auth/pages/Register';
+import { ForgotPassword } from '../../modules/auth/pages/ForgotPassword';
 import { ProtectedRoute } from '../../modules/auth/components/guards/ProtectedRoute';
 import { PublicRoute } from '../../modules/auth/components/guards/PublicRoute';
 import { Dashboard } from '../../modules/dashboard/pages/Dashboard';
@@ -20,7 +21,7 @@ export const router = createBrowserRouter([
       { path: '/', element: <Home /> },
       { path: '/login', element: <Login /> },
       { path: '/register', element: <Register /> },
-
+      { path: '/forgot-password', element: <ForgotPassword /> },
     ],
   },
   {

@@ -86,7 +86,7 @@ export function LoginForm() {
             onClick={() => setShowPassword((current) => !current)}
             aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
           >
-            <span aria-hidden="true">👁️</span>
+            <i className={`bi ${showPassword ? 'bi-eye-slash' : 'bi-eye'}`} aria-hidden="true" />
           </button>
           {errors.password ? <div className="invalid-feedback fw-semibold">{errors.password.message}</div> : null}
         </div>

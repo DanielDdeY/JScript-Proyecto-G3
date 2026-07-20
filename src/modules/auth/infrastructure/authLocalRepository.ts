@@ -2,7 +2,7 @@ import { httpClient } from '../../../core/services/alovaClient';
 import type { Id } from '../../../shared/types/id';
 import type { PerfilPersistido } from '../../../shared/types/perfil';
 import type { Usuario } from '../../../shared/types/usuario';
-import type { AuthRepository, AuthSession, LoginCredentials } from '../domain/authRepository';
+import type { AuthRepository, AuthSession, LoginCredentials, RegisterCredentials } from '../domain/authRepository';
 
 const AUTH_STORAGE_KEY = 'vizcash.auth.session';
 
@@ -67,10 +67,26 @@ export const authLocalRepository: AuthRepository = {
       }
 
       const session = toSession(usuario);
+      
+      // Sincronizar el perfil singleton de db.json con el nuevo usuario logueado
+      try {
+        const perfil = await obtenerOpcional<PerfilPersistido>(ENDPOINTS.perfil);
+        if (perfil) {
+          await httpClient.patch<PerfilPersistido, Partial<PerfilPersistido>>(ENDPOINTS.perfil, {
+            nombre: usuario.nombre,
+            email: usuario.email,
+            usuarioId: usuario.id
+          });
+        }
+      } catch {
+        // Ignorar si el perfil no existe
+      }
+
       guardarSesion(session);
       return session;
     }
 
+    // Por compatibilidad, intentamos iniciar sesión usando el perfil estático
     const perfil = await obtenerOpcional<PerfilPersistido>(ENDPOINTS.perfil);
     if (perfil?.email?.toLowerCase() === email && password.length > 0) {
       const session: AuthSession = {
@@ -86,8 +102,38 @@ export const authLocalRepository: AuthRepository = {
     throw new Error('Correo o contraseña incorrectos.');
   },
 
+  async register(credentials: RegisterCredentials): Promise<void> {
+    const email = credentials.email.trim().toLowerCase();
+    const password = credentials.password.trim();
+    const nombre = credentials.nombre.trim();
+
+    const usuarios = await obtenerListaOpcional<Usuario>(`${ENDPOINTS.usuarios}?email=${encodeURIComponent(email)}`);
+    if (usuarios.length > 0) {
+      throw new Error('El correo electrónico ya está registrado.');
+    }
+
+    await httpClient.post<Usuario, Omit<Usuario, 'id'>>(ENDPOINTS.usuarios, {
+      nombre,
+      email,
+      password,
+    });
+    // No iniciamos sesión automáticamente, solo registramos
+  },
+
   logout(): void {
     limpiarSesion();
+  },
+
+  async resetPassword(email: string, newPassword: string): Promise<void> {
+    const emailLower = email.trim().toLowerCase();
+    const usuarios = await obtenerListaOpcional<Usuario>(`${ENDPOINTS.usuarios}?email=${encodeURIComponent(emailLower)}`);
+    const usuario = usuarios[0];
+    
+    if (!usuario) {
+      throw new Error('No existe ninguna cuenta asociada a este correo.');
+    }
+
+    await httpClient.patch<Usuario, Partial<Usuario>>(ENDPOINTS.usuarioById(usuario.id), { password: newPassword });
   },
 
   async updatePassword(userId: Id, newPassword: string): Promise<void> {

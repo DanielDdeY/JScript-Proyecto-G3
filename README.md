@@ -36,7 +36,7 @@ npm run api
 
 La base de datos local incluye un usuario inicial vinculado al perfil:
 
-- Correo: `daniel@mibilletera.edu.pe`
+- Correo: `pepito@gmail.com`
 - Contraseña: `123456`
 
 ## Cambios principales de esta versión

@@ -24,7 +24,7 @@ export const apiAlova = createAlova({
 
 export const httpClient = {
   get<TResponse>(url: string) {
-    return apiAlova.Get<TResponse>(url).send();
+    return apiAlova.Get<TResponse>(url, { cacheFor: 0 }).send();
   },
   post<TResponse, TBody extends object>(url: string, body: TBody) {
     return apiAlova.Post<TResponse>(url, body).send();

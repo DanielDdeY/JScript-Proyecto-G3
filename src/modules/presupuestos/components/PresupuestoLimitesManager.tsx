@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMemo, useState } from 'react';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { formatCurrencyPen } from '../../../shared/utils/formatters';
@@ -38,6 +39,29 @@ export function PresupuestoLimitesManager({
     () => presupuestoService.obtenerPresupuestoPorMes(presupuestos, mesActual)?.totalAsignado ?? 0,
     [mesActual, presupuestos],
   );
+
+  const totalAsignadoCategorias = useMemo(() => {
+    if (!presupuestoActual) return 0;
+    return presupuestoActual.desgloseCategorias.reduce((sum, detalle) => sum + detalle.limiteSoles, 0);
+  }, [presupuestoActual]);
+
+  const presupuestoDisponible = Math.max(0, totalLimiteMensual - totalAsignadoCategorias);
+
+  const chartData = useMemo(() => {
+    const data = presupuestoActual?.desgloseCategorias.map((d) => ({
+      name: d.categoria.nombre,
+      value: d.limiteSoles,
+    })) ?? [];
+
+    if (presupuestoDisponible > 0 && totalLimiteMensual > 0) {
+      data.push({ name: 'Disponible (Sin Asignar)', value: presupuestoDisponible });
+    }
+    return data;
+  }, [presupuestoActual, presupuestoDisponible, totalLimiteMensual]);
+
+  // Colores fáciles de identificar para el pastel. El último (gris) será para lo "Disponible"
+  const COLORS = ['#4e79a7', '#f28e2b', '#e15759', '#76b7b2', '#59a14f', '#edc948', '#b07aa1', '#ff9da7', '#9c755f', '#bab0ac'];
+
 
   const {
     register,
@@ -158,6 +182,38 @@ export function PresupuestoLimitesManager({
                   Total límite mensual: {totalLimiteMensual > 0 ? formatCurrencyPen(totalLimiteMensual) : 'No definido'}
                 </span>
               </div>
+              
+              {chartData.length > 0 && totalLimiteMensual > 0 && (
+                <div style={{ height: 300, width: '100%', margin: '16px 0' }}>
+                  <ResponsiveContainer>
+                    <PieChart>
+                      <Pie
+                        data={chartData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={60}
+                        outerRadius={90}
+                        paddingAngle={2}
+                        dataKey="value"
+                      >
+                        {chartData.map((entry, index) => {
+                          const isAvailable = entry.name === 'Disponible (Sin Asignar)';
+                          return (
+                            <Cell 
+                              key={`cell-${index}`} 
+                              fill={isAvailable ? '#e9ecef' : COLORS[index % (COLORS.length - 1)]} 
+                              stroke={isAvailable ? '#ced4da' : 'none'}
+                            />
+                          );
+                        })}
+                      </Pie>
+                      <Tooltip formatter={(value: any) => formatCurrencyPen(Number(value))} />
+                      <Legend />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              )}
+
               <div className="table-responsive">
                 <table className="table table-hover align-middle mb-0">
                   <thead className="table-light">

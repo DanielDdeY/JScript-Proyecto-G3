@@ -99,7 +99,7 @@ export function AgregarTarjetaPage() {
     () => ({
       bancoId: '',
       numero: '',
-      saldo: 0,
+      saldo: '' as unknown as number,
       tipo: 'DEBITO',
       limiteTotal: undefined,
       lineaDisponible: undefined,
@@ -107,8 +107,8 @@ export function AgregarTarjetaPage() {
       diaCorte: 15,
       diaPago: 5,
       mesActual: obtenerMesActual(),
-      montoFacturado: 0,
-      pagoMinimo: 0,
+      montoFacturado: '' as unknown as number,
+      pagoMinimo: '' as unknown as number,
     }),
     [],
   );

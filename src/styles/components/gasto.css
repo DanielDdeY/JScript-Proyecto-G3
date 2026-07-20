@@ -1,0 +1,33 @@
+/* ============================================================
+   GASTOS — Tabla de gastos y avatares
+   ============================================================ */
+
+.gasto-row {
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.gasto-row:hover {
+  background: var(--color-primary-light) !important;
+}
+
+/* ── Avatar de amigo/compañero de gasto ───────────────────── */
+.gasto-amigo-avatar {
+  width: 46px;
+  height: 46px;
+  min-width: 46px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-btn));
+  border: 3px solid var(--color-surface);
+  box-shadow: var(--shadow-md);
+}
+
+.gasto-amigo-avatar--placeholder {
+  font-size: var(--font-size-sm);
+}

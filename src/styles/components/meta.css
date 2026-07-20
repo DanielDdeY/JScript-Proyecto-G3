@@ -1,0 +1,55 @@
+/* ============================================================
+   META & PROYECCIONES — Círculo de progreso cónico y barras
+   ============================================================ */
+
+/* ── Círculo de progreso cónico (usa CSS custom property dinámica) ── */
+.meta-progress-circle {
+  --meta-progress: 0%;
+  width: 86px;
+  height: 86px;
+  min-width: 86px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: conic-gradient(var(--color-primary) var(--meta-progress), var(--color-primary-light) 0);
+  position: relative;
+  color: var(--color-primary);
+  font-weight: 800;
+}
+
+.meta-progress-circle::before {
+  content: '';
+  position: absolute;
+  inset: 9px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+}
+
+.meta-progress-circle span {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Barra de progreso de meta ───────────────────────────── */
+.meta-progress-bar {
+  height: 12px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary-light);
+}
+
+.meta-progress-bar .progress-bar {
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary);
+}
+
+/* ── Card de conversión ──────────────────────────────────── */
+.conversion-card {
+  border-radius: var(--radius-lg);
+  border-color: var(--color-border);
+  background-color: var(--color-surface);
+}
+
+.conversion-card .card-body {
+  min-height: 190px;
+}

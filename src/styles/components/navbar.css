@@ -1,0 +1,23 @@
+/* ============================================================
+   NAVBAR — Barra de navegación principal
+   ============================================================ */
+
+.nav-avatar-button {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.nav-avatar-img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--color-border);
+  transition: border-color var(--transition-fast);
+}
+
+.nav-avatar-img:hover {
+  border-color: var(--color-primary);
+}

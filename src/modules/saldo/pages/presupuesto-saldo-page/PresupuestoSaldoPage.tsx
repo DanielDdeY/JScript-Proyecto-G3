@@ -1,8 +1,9 @@
-import { formatCurrencyPen } from '../../../../shared/utils/formatters';
 import { AlertaPresupuestoCard } from '../../components/AlertaPresupuestoCard';
 import { PresupuestoCategoriaProgress } from '../../components/PresupuestoCategoriaProgress';
 import { PresupuestoSaldoProvider } from '../../presentation/context/PresupuestoSaldoProvider';
 import { usePresupuestoSaldo } from '../../presentation/hooks/usePresupuestoSaldo';
+import { CurrencyDisplay } from '../../../../shared/components/CurrencyDisplay/CurrencyDisplay';
+import { EmptyState } from '../../../../shared/components/EmptyState/EmptyState';
 
 function PresupuestoSaldoContent() {
   const { titulo, presupuesto, resumenMensual, detalles, alertas, cargando, error, recargar } = usePresupuestoSaldo();
@@ -28,13 +29,11 @@ function PresupuestoSaldoContent() {
 
   if (!presupuesto) {
     return (
-      <section className="card border-0 shadow-sm p-4 text-center">
-        <i className="bi bi-clipboard2-data fs-1 text-primary" />
-        <h5 className="fw-bold mt-3">No tienes presupuesto configurado</h5>
-        <p className="text-muted mb-0">
-          Configura primero tu límite mensual en Saldo &gt; Separar para que no se use y luego tus límites por categoría en Gastos &gt; Configurar presupuesto.
-        </p>
-      </section>
+      <EmptyState
+        icon="bi-pie-chart"
+        title="Sin Presupuesto Activo"
+        description="Configura primero tu límite mensual en Saldo > Separar para que no se use y luego tus límites por categoría en Gastos > Configurar presupuesto."
+      />
     );
   }
 
@@ -49,9 +48,9 @@ function PresupuestoSaldoContent() {
               El límite general viene de Saldo &gt; Separar para que no se use. Las barras por categoría vienen de Gastos &gt; Configurar presupuesto.
             </p>
           </div>
-          <div className="presupuesto-total-circle">
-            <span className="small text-muted">Límite mensual</span>
-            <strong>{formatCurrencyPen(presupuesto.totalAsignado)}</strong>
+          <div className="presupuesto-total-circle d-flex flex-column align-items-end">
+            <span className="small text-muted mb-1">Límite mensual</span>
+            <CurrencyDisplay amount={presupuesto.totalAsignado} size="md" />
           </div>
         </div>
       </section>
@@ -61,10 +60,13 @@ function PresupuestoSaldoContent() {
           <div className="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
             <div>
               <h5 className="fw-bold mb-1">Uso del límite mensual</h5>
-              <p className="text-muted mb-0">
-                Has gastado {formatCurrencyPen(resumenMensual.gastadoSoles)} de {formatCurrencyPen(resumenMensual.totalAsignado)}. Te queda{' '}
-                <strong>{formatCurrencyPen(resumenMensual.restanteSoles)}</strong>.
-              </p>
+              <div className="d-flex align-items-center gap-2 mt-2">
+                <span className="text-muted small">Gastado:</span>
+                <CurrencyDisplay amount={resumenMensual.gastadoSoles} size="sm" />
+                <span className="text-muted mx-2">|</span>
+                <span className="text-muted small">Restante:</span>
+                <CurrencyDisplay amount={resumenMensual.restanteSoles} size="sm" variant={resumenMensual.enRiesgo ? 'danger' : 'success'} />
+              </div>
             </div>
             <span className={`badge ${resumenMensual.enRiesgo ? 'bg-danger' : 'bg-primary'} fs-6`}>
               {resumenMensual.porcentajeUso.toFixed(0)}%
@@ -103,9 +105,11 @@ function PresupuestoSaldoContent() {
         </div>
 
         {detalles.length === 0 ? (
-          <div className="alert alert-info mb-0">
-            Todavía no tienes límites por categoría para este mes. Configúralos en Gastos &gt; Configurar presupuesto.
-          </div>
+          <EmptyState
+            icon="bi-tags"
+            title="Sin Límites por Categoría"
+            description="Todavía no tienes límites por categoría para este mes. Configúralos en Gastos > Configurar presupuesto."
+          />
         ) : (
           <div className="d-flex flex-column gap-3">
             {detalles.map((detalle) => (

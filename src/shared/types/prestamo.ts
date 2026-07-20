@@ -1,6 +1,6 @@
 import type { Banco } from './banco';
 import type { CuotaPrestamo } from './cuotaPrestamo';
-import type { DetalleCuotas } from './detallecuotas';
+import type { DetalleCuotas } from './detalleCuotas';
 
 export interface Prestamo {
   id: string;

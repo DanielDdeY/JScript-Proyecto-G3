@@ -1,6 +1,6 @@
 import { createContext, useCallback, useMemo, useState, type ReactNode } from 'react';
 import { authLocalRepository } from '../../infrastructure/authLocalRepository';
-import type { AuthRepository, AuthSession, LoginCredentials } from '../../domain/authRepository';
+import type { AuthRepository, AuthSession, LoginCredentials, RegisterCredentials } from '../../domain/authRepository';
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -12,6 +12,8 @@ export interface AuthContextValue {
   autenticado: boolean;
   cargando: boolean;
   login: (credentials: LoginCredentials) => Promise<void>;
+  register: (credentials: RegisterCredentials) => Promise<void>;
+  resetPassword: (email: string, newPassword: string) => Promise<void>;
   logout: () => void;
   actualizarPassword: (newPassword: string) => Promise<void>;
 }
@@ -35,10 +37,34 @@ export function AuthProvider({ children, repository = authLocalRepository }: Aut
     [repository],
   );
 
+  const register = useCallback(
+    async (credentials: RegisterCredentials) => {
+      setCargando(true);
+      try {
+        await repository.register(credentials);
+      } finally {
+        setCargando(false);
+      }
+    },
+    [repository],
+  );
+
   const logout = useCallback(() => {
     repository.logout();
     setUsuario(null);
   }, [repository]);
+
+  const resetPassword = useCallback(
+    async (email: string, newPassword: string) => {
+      setCargando(true);
+      try {
+        await repository.resetPassword(email, newPassword);
+      } finally {
+        setCargando(false);
+      }
+    },
+    [repository],
+  );
 
   const actualizarPassword = useCallback(
     async (newPassword: string) => {
@@ -54,10 +80,12 @@ export function AuthProvider({ children, repository = authLocalRepository }: Aut
       autenticado: Boolean(usuario),
       cargando,
       login,
+      register,
+      resetPassword,
       logout,
       actualizarPassword,
     }),
-    [actualizarPassword, cargando, login, logout, usuario],
+    [actualizarPassword, cargando, login, register, resetPassword, logout, usuario],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

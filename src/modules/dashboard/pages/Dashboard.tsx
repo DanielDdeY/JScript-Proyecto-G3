@@ -2,8 +2,19 @@ import { useMemo } from 'react';
 import { useWallet } from '../../../modules/wallet/presentation/hooks/useWallet';
 import { calcularProyeccionPredictiva } from '../../proyecciones/domain/services/proyeccionPredictivaService';
 import { useProyecciones } from '../../proyecciones/presentation/hooks/useProyecciones';
-import { formatCurrencyPen } from '../../../shared/utils/formatters';
 import { obtenerClaseTarjeta, obtenerNombreBanco, obtenerUltimosDigitos } from '../../../shared/utils/tarjetaUtils';
+import { CurrencyDisplay } from '../../../shared/components/CurrencyDisplay/CurrencyDisplay';
+import { SaldoTrendChart } from '../components/SaldoTrendChart';
+
+const mockTrendData = [
+  { date: 'Lun', amount: 1200 },
+  { date: 'Mar', amount: 1150 },
+  { date: 'Mie', amount: 1300 },
+  { date: 'Jue', amount: 1280 },
+  { date: 'Vie', amount: 1400 },
+  { date: 'Sab', amount: 1350 },
+  { date: 'Dom', amount: 1500 },
+];
 
 const opcionesResumenProyeccion = [
   { etiqueta: 'EN 1 MES', meses: 1 },
@@ -55,7 +66,7 @@ export function Dashboard() {
 
   if (cargando) {
     return (
-      <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '300px' }}>
+      <div className="min-h-loading">
         <div className="spinner-border text-primary" role="status">
           <span className="visually-hidden">Cargando...</span>
         </div>
@@ -78,11 +89,15 @@ export function Dashboard() {
     <div className="d-flex flex-column gap-4">
       <section className="row g-4 align-items-stretch">
         <div className="col-12 col-xl-3">
-          <div className="card h-100 border-0 shadow-sm p-4 text-center text-xl-start justify-content-center">
-            <span className="text-uppercase text-muted fw-bold small mb-2 d-block">Saldo Total</span>
-            <h2 className="fw-bold m-0 text-dark display-6 mb-2">{formatCurrencyPen(perfil?.saldoTotal ?? 0)}</h2>
-            <div>
-              <span className="badge bg-success-subtle text-success py-2 px-3 fw-semibold">↑ + 8.3% vs mes anterior</span>
+          <div className="card h-100 border-0 shadow-sm p-4 text-center text-xl-start justify-content-center" style={{ background: 'var(--color-surface)' }}>
+            <span className="text-uppercase fw-bold small mb-1 d-block" style={{ color: 'var(--color-text-muted)', letterSpacing: '0.06em' }}>Saldo Total</span>
+            <CurrencyDisplay amount={perfil?.saldoTotal ?? 0} size="xl" />
+            <div className="mt-2 mb-3">
+              <span className="badge bg-success-subtle text-success py-1 px-2 fw-semibold" style={{ fontSize: '0.75rem' }}>↑ +2.4% vs mes anterior</span>
+            </div>
+            {/* Sparkline Analítico */}
+            <div style={{ marginLeft: '-16px', marginRight: '-16px' }}>
+              <SaldoTrendChart data={mockTrendData} />
             </div>
           </div>
         </div>
@@ -98,7 +113,7 @@ export function Dashboard() {
                   </div>
                   <div>
                     <span className="small opacity-75 d-block mb-1">Saldo disponible</span>
-                    <span className="fw-bold fs-4 font-monospace">{formatCurrencyPen(tarjeta.saldo)}</span>
+                    <CurrencyDisplay amount={tarjeta.saldo} size="lg" />
                   </div>
                 </article>
               </div>
@@ -107,40 +122,31 @@ export function Dashboard() {
         </div>
       </section>
 
-      <section className="card p-4 border-0 shadow-sm">
+      <section className="card p-4 border-0 shadow-sm" style={{ background: 'var(--color-surface)' }}>
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h5 className="fw-bold text-dark mb-0">Resumen Financiero del Mes</h5>
         </div>
         <div className="row text-center g-4">
           <div className="col-12 col-md-4 border-end-md position-relative">
-            <div
-              className="bg-success-subtle rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
-              style={{ width: '48px', height: '48px' }}
-            >
+            <div className="icon-circle-md bg-success-subtle mb-3">
               <i className="bi bi-arrow-down-left text-success fs-4" />
             </div>
             <span className="text-muted small fw-semibold d-block text-uppercase mb-1">Ingresos Totales</span>
-            <span className="fw-bold text-success fs-3">{formatCurrencyPen(resumenFinanciero.ingresos)}</span>
+            <CurrencyDisplay amount={resumenFinanciero.ingresos} variant="success" size="lg" />
           </div>
           <div className="col-12 col-md-4 border-end-md position-relative">
-            <div
-              className="bg-danger-subtle rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
-              style={{ width: '48px', height: '48px' }}
-            >
+            <div className="icon-circle-md bg-danger-subtle mb-3">
               <i className="bi bi-arrow-up-right text-danger fs-4" />
             </div>
             <span className="text-muted small fw-semibold d-block text-uppercase mb-1">Gastos Totales</span>
-            <span className="fw-bold text-danger fs-3">{formatCurrencyPen(resumenFinanciero.gastos)}</span>
+            <CurrencyDisplay amount={resumenFinanciero.gastos} variant="danger" size="lg" />
           </div>
           <div className="col-12 col-md-4">
-            <div
-              className="bg-primary-subtle rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
-              style={{ width: '48px', height: '48px' }}
-            >
+            <div className="icon-circle-md bg-primary-subtle mb-3">
               <i className="bi bi-piggy-bank text-primary fs-4" />
             </div>
             <span className="text-muted small fw-semibold d-block text-uppercase mb-1">Ahorro Neto</span>
-            <span className="fw-bold text-primary fs-3">{formatCurrencyPen(resumenFinanciero.ahorro)}</span>
+            <CurrencyDisplay amount={resumenFinanciero.ahorro} size="lg" />
           </div>
         </div>
       </section>
@@ -160,9 +166,11 @@ export function Dashboard() {
           ) : null}
           {proyeccionesCalculadas.map((proyeccion) => (
             <div key={proyeccion.tiempo} className="col-12 col-sm-6 col-lg-3">
-              <article className="card p-3 border-0 shadow-sm bg-white h-100 d-flex flex-column justify-content-center">
+              <article className="card p-3 border-0 shadow-sm h-100 d-flex flex-column justify-content-center" style={{ background: 'var(--color-surface)' }}>
                 <span className="text-muted small fw-semibold text-uppercase mb-2">{proyeccion.tiempo}</span>
-                <h4 className="fw-bold text-dark mb-1">{formatCurrencyPen(proyeccion.monto)}</h4>
+                <div className="mb-2">
+                  <CurrencyDisplay amount={proyeccion.monto} size="md" />
+                </div>
                 <div className="d-flex flex-wrap gap-2">
                   <span
                     className={`badge fw-bold align-self-start ${

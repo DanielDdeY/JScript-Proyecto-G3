@@ -33,7 +33,7 @@ export function AgregarIngresoPage() {
   } = useForm<IngresoFormInput, unknown, IngresoFormValues>({
     resolver: zodResolver(ingresoSchema),
     defaultValues: {
-      monto: 0,
+      monto: '' as unknown as number,
       fecha: today(),
       fuente: 'Sueldo',
       descripcion: '',
@@ -51,7 +51,7 @@ export function AgregarIngresoPage() {
     });
     setSuccess(true);
     reset({
-      monto: 0,
+      monto: '' as unknown as number,
       fecha: today(),
       fuente: 'Sueldo',
       descripcion: '',
