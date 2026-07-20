@@ -8,6 +8,7 @@ export function SaldoPage() {
       actions={[
         { to: 'convertir', label: 'Convertir la plata', match: 'convertir' },
         { to: 'separar', label: 'Separar para que no se use', match: 'separar' },
+        { to: 'presupuesto', label: 'Controlar presupuesto', match: 'presupuesto' },
       ]}
     />
   );

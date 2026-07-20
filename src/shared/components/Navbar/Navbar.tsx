@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../modules/auth/presentation/hooks/useAuth';
 import { useWallet } from '../../../modules/wallet/presentation/hooks/useWallet';
+import { BotonNotificaciones } from '../../../modules/notificaciones/components/BotonNotificaciones';
 
 const navItems = [
   { to: '/app/dashboard', label: 'Resumen' },
@@ -44,7 +45,10 @@ export function Navbar() {
           ))}
         </div>
 
-        <div className="dropdown d-flex align-items-center gap-2">
+        <div className="d-flex align-items-center gap-2">
+          <BotonNotificaciones />
+
+          <div className="dropdown d-flex align-items-center gap-2">
           <span className="fw-semibold text-dark d-none d-sm-inline">{cargando ? '...' : nombre}</span>
           <button
             className="nav-avatar-button dropdown-toggle d-flex align-items-center"
@@ -80,6 +84,7 @@ export function Navbar() {
               </button>
             </li>
           </ul>
+          </div>
         </div>
       </div>
     </nav>

@@ -1,66 +1,70 @@
-import { useWallet } from '../../../wallet/presentation/hooks/useWallet';
-import { formatCurrencyPen, formatShortDate } from '../../../../shared/utils/formatters';
+import { Paginacion } from '../../../../shared/components/pagination/Paginacion';
+import { FiltrosIngresosSidebar } from '../../components/FiltrosIngresosSidebar';
+import { ListaIngresos } from '../../components/ListaIngresos';
+import { IngresosProvider } from '../../presentation/context/IngresosProvider';
+import { useIngresos } from '../../presentation/hooks/useIngresos';
 
 export function ListarIngresoPage() {
-  const { ingresos, cargando } = useWallet();
+  return (
+    <IngresosProvider>
+      <ListarIngresoContent />
+    </IngresosProvider>
+  );
+}
 
-  if (cargando) {
-    return (
-      <div className="text-center p-5">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Cargando...</span>
-        </div>
-      </div>
-    );
-  }
+function ListarIngresoContent() {
+  const { ingresos, respuesta, filtros, cargando, error, actualizarFiltros, limpiarFiltros, cambiarPagina } = useIngresos();
 
   return (
-    <div className="card border-0 shadow-sm p-4 bg-white">
-      <div className="d-flex align-items-center justify-content-between mb-4">
-        <h4 className="fw-bold text-dark m-0">Historial de Ingresos</h4>
-        <span className="badge bg-success-subtle text-success py-2 px-3 fw-bold">
-          {ingresos.length} Transacciones
-        </span>
+    <div className="row g-4 align-items-start">
+      <div className="col-12 col-xl-3">
+        <FiltrosIngresosSidebar filtros={filtros} onChange={actualizarFiltros} onLimpiar={limpiarFiltros} />
       </div>
 
-      {ingresos.length === 0 ? (
-        <div className="text-center py-5 text-muted">
-          <i className="bi bi-wallet2 display-1 text-light" />
-          <p className="mt-3 fw-semibold">No se han registrado ingresos aún.</p>
-          <p className="small">Usa el botón Agregar Ingreso para registrar uno nuevo.</p>
+      <div className="col-12 col-xl-9">
+        <div className="card border-0 shadow-sm p-4 bg-white">
+          <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
+            <div>
+              <h4 className="fw-bold text-dark m-0">Historial de Ingresos</h4>
+              <p className="text-muted small mb-0">
+                Carga paginada de 10 ingresos por página, filtrada por rango de fechas y fuente.
+              </p>
+            </div>
+            <span className="badge bg-success-subtle text-success py-2 px-3 fw-bold align-self-start align-self-md-center">
+              {respuesta.meta.totalRegistros} registros
+            </span>
+          </div>
+
+          {error ? (
+            <div className="alert alert-danger border-0 rounded-4 fw-semibold" role="alert">
+              <i className="bi bi-exclamation-triangle-fill me-2" /> {error}
+            </div>
+          ) : null}
+
+          {cargando ? (
+            <div className="text-center p-5">
+              <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Cargando...</span>
+              </div>
+            </div>
+          ) : null}
+
+          {!cargando && ingresos.length === 0 ? (
+            <div className="text-center py-5 text-muted">
+              <i className="bi bi-wallet2 display-1 text-light" />
+              <p className="mt-3 fw-semibold">No se encontraron ingresos con esos filtros.</p>
+              <p className="small">Ajusta el rango de fechas o la fuente de ingreso.</p>
+            </div>
+          ) : null}
+
+          {!cargando && ingresos.length > 0 ? (
+            <>
+              <ListaIngresos ingresos={ingresos} />
+              <Paginacion meta={respuesta.meta} onCambiarPagina={cambiarPagina} />
+            </>
+          ) : null}
         </div>
-      ) : (
-        <div className="table-responsive">
-          <table className="table table-hover align-middle">
-            <thead className="table-light">
-              <tr>
-                <th className="fw-bold text-dark py-3">Descripción</th>
-                <th className="fw-bold text-dark py-3">Fuente</th>
-                <th className="fw-bold text-dark py-3">Fecha</th>
-                <th className="fw-bold text-dark py-3 text-end">Monto</th>
-              </tr>
-            </thead>
-            <tbody>
-              {ingresos.map((ingreso) => (
-                <tr key={String(ingreso.id)}>
-                  <td className="py-3">
-                    <div className="fw-bold text-dark">{ingreso.descripcion}</div>
-                  </td>
-                  <td className="py-3">
-                    <span className="badge bg-success-subtle text-success py-1 px-2 small fw-semibold">
-                      {ingreso.fuente}
-                    </span>
-                  </td>
-                  <td className="py-3 text-muted">{formatShortDate(ingreso.fecha)}</td>
-                  <td className="py-3 text-end fw-bold text-success font-monospace">
-                    + {formatCurrencyPen(ingreso.monto)}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+      </div>
     </div>
   );
 }

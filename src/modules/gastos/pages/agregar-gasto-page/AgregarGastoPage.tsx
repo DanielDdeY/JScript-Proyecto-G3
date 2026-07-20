@@ -16,6 +16,7 @@ const gastoSchema = z
     origen: z.enum(['EFECTIVO', 'TARJETA']),
     tarjetaId: z.string().optional(),
     categoriaNombre: z.string().min(1, { message: 'Debe seleccionar una categoría' }),
+    nombrePrestadoA: z.string().optional(),
     importancia: z.enum(['Alta', 'Media', 'Baja']),
     descripcion: z
       .string()
@@ -28,6 +29,14 @@ const gastoSchema = z
         code: 'custom',
         path: ['tarjetaId'],
         message: 'Debe seleccionar una tarjeta cuando el gasto sale de una tarjeta',
+      });
+    }
+
+    if (data.categoriaNombre === 'Prestaciones' && !data.nombrePrestadoA?.trim()) {
+      context.addIssue({
+        code: 'custom',
+        path: ['nombrePrestadoA'],
+        message: 'Debes ingresar el nombre de la persona a quien prestaste el dinero',
       });
     }
   });
@@ -59,6 +68,7 @@ export function AgregarGastoPage() {
       origen: 'EFECTIVO',
       tarjetaId: '',
       categoriaNombre: 'Alimentación',
+      nombrePrestadoA: '',
       importancia: 'Alta',
       descripcion: '',
     },
@@ -66,6 +76,7 @@ export function AgregarGastoPage() {
 
   const selectedOrigen = watch('origen');
   const selectedTarjetaId = watch('tarjetaId');
+  const selectedCategoria = watch('categoriaNombre');
   const inputMonto = Number(watch('monto') ?? 0);
 
   const selectedTarjeta = useMemo(
@@ -98,6 +109,7 @@ export function AgregarGastoPage() {
       origen,
       tarjetaId: tarjeta?.id,
       descripcion: data.descripcion,
+      prestacion: data.categoriaNombre === 'Prestaciones' ? { nombrePersona: data.nombrePrestadoA?.trim() ?? '' } : undefined,
     });
 
     setSuccess(true);
@@ -107,6 +119,7 @@ export function AgregarGastoPage() {
       origen: 'EFECTIVO',
       tarjetaId: '',
       categoriaNombre: 'Alimentación',
+      nombrePrestadoA: '',
       importancia: 'Alta',
       descripcion: '',
     });
@@ -214,12 +227,29 @@ export function AgregarGastoPage() {
               <option value="Tecnología">Tecnología</option>
               <option value="Entretenimiento">Entretenimiento</option>
               <option value="Salud">Salud</option>
+              <option value="Prestaciones">Prestaciones</option>
               <option value="Otros">Otros</option>
             </select>
             {errors.categoriaNombre ? (
               <div className="invalid-feedback fw-semibold">{errors.categoriaNombre.message}</div>
             ) : null}
           </div>
+
+          {selectedCategoria === 'Prestaciones' ? (
+            <div className="col-12 col-md-6">
+              <label className="form-label fw-semibold">Nombre de la persona a quien prestaste</label>
+              <input
+                type="text"
+                className={`form-control ${errors.nombrePrestadoA ? 'is-invalid' : ''}`}
+                placeholder="Ej. Carlos Ramos"
+                {...register('nombrePrestadoA')}
+              />
+              {errors.nombrePrestadoA ? (
+                <div className="invalid-feedback fw-semibold">{errors.nombrePrestadoA.message}</div>
+              ) : null}
+              <div className="form-text">Solo se guarda el nombre dentro del gasto, no crea un usuario nuevo.</div>
+            </div>
+          ) : null}
 
           <div className="col-12">
             <label className="form-label fw-semibold">Nivel de Prioridad del Gasto</label>

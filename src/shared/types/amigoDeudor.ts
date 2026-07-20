@@ -1,5 +1,8 @@
+export type EstadoDeudaAmigo = 'PENDIENTE' | 'PAGADO';
+
 export interface AmigoDeudor {
-  nombreId: string; // Puede ser el nombre o el ID del contacto
+  nombreId: string; // Puede ser el nombre o el ID del contacto.
   montoDeuda: number;
-  estado: 'PENDIENTE' | 'PAGADO';
+  estado: EstadoDeudaAmigo;
+  avatarUrl?: string;
 }

@@ -1,8 +1,7 @@
-import type { PaginacionMeta } from "./paginacionMeta";
-
+import type { PaginacionMeta } from './paginacionMeta';
 
 export interface PaginatedResponse<T> {
-  data: T[]; 
-  meta: PaginacionMeta; 
+  data: T[];
+  meta: PaginacionMeta;
   estado: number;
 }

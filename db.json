@@ -2,7 +2,7 @@
   "perfil": {
     "id": "perfil-1",
     "usuarioId": "user-1",
-    "saldoTotal": 19150.75
+    "saldoTotal": 12450.75
   },
   "bancos": [
     {
@@ -66,7 +66,7 @@
       },
       "cicloFacturacion": {
         "diaCorte": 15,
-        "diaPago": 5,
+        "diaPago": 15,
         "mesActual": "2026-06",
         "pagoMinimo": 150,
         "montoFacturado": 1249.25
@@ -78,32 +78,6 @@
       "numero": "1234",
       "saldo": 4500,
       "tipo": "DEBITO"
-    },
-    {
-      "bancoId": "banco-1",
-      "numero": "9998",
-      "saldo": 4000,
-      "tipo": "DEBITO",
-      "id": "UxflaQe9l1w"
-    },
-    {
-      "bancoId": "banco-3",
-      "numero": "9876",
-      "saldo": 2700,
-      "tipo": "CREDITO",
-      "lineaCredito": {
-        "limiteTotal": 50000,
-        "lineaDisponible": 3000,
-        "lineaUtilizada": 300
-      },
-      "cicloFacturacion": {
-        "diaCorte": 15,
-        "diaPago": 8,
-        "mesActual": "2026-07",
-        "montoFacturado": 60,
-        "pagoMinimo": 30
-      },
-      "id": "ZgWUKGhRHwM"
     }
   ],
   "gastos": [
@@ -146,6 +120,204 @@
       "tarjetaId": "tj-2",
       "descripcion": "Netflix Familiar",
       "suscripcionId": "sub-1"
+    },
+    {
+      "id": "g-4",
+      "monto": 120,
+      "fecha": "2026-06-18",
+      "categoria": {
+        "nombre": "Alimentación",
+        "importancia": "Media"
+      },
+      "tarjetaId": "tj-2",
+      "origen": "TARJETA",
+      "descripcion": "Cena de Fin de Ciclo",
+      "detalleCuotas": {
+        "cuotasTotales": 6,
+        "cuotasPagadas": 1,
+        "montoPorCuota": 20,
+        "mesesSinIntereses": true
+      },
+      "gastoCompartido": {
+        "esGastoGrupal": true,
+        "miParteSoles": 40,
+        "deudores": [
+          {
+            "nombreId": "Carlos",
+            "montoDeuda": 40,
+            "estado": "PAGADO",
+            "avatarUrl": "https://i.pravatar.cc/100?img=12"
+          },
+          {
+            "nombreId": "María",
+            "montoDeuda": 40,
+            "estado": "PENDIENTE",
+            "avatarUrl": "https://i.pravatar.cc/100?img=47"
+          }
+        ]
+      }
+    },
+    {
+      "id": "g-5",
+      "monto": 80,
+      "fecha": "2026-06-20",
+      "categoria": {
+        "nombre": "Prestaciones",
+        "importancia": "Media"
+      },
+      "origen": "EFECTIVO",
+      "descripcion": "Préstamo personal",
+      "prestacion": {
+        "nombrePersona": "Andrea"
+      }
+    },
+    {
+      "id": "g-6",
+      "monto": 200,
+      "fecha": "2026-06-22",
+      "categoria": {
+        "nombre": "Transporte",
+        "importancia": "Alta"
+      },
+      "origen": "EFECTIVO",
+      "descripcion": "Pasajes y movilidad del mes"
+    },
+    {
+      "id": "g-7",
+      "monto": 460,
+      "fecha": "2026-07-05",
+      "categoria": {
+        "nombre": "Alimentación",
+        "importancia": "Alta"
+      },
+      "origen": "EFECTIVO",
+      "descripcion": "Compras de comida del mes"
+    },
+    {
+      "id": "g-8",
+      "monto": 150,
+      "fecha": "2026-07-07",
+      "categoria": {
+        "nombre": "Transporte",
+        "importancia": "Alta"
+      },
+      "origen": "EFECTIVO",
+      "descripcion": "Movilidad semanal"
+    },
+    {
+      "id": "g-9",
+      "monto": 65.3,
+      "fecha": "2026-07-09",
+      "categoria": {
+        "nombre": "Servicios",
+        "importancia": "Alta"
+      },
+      "origen": "EFECTIVO",
+      "descripcion": "Pago de internet"
+    },
+    {
+      "id": "g-10",
+      "monto": 34.8,
+      "fecha": "2026-07-10",
+      "categoria": {
+        "nombre": "Alimentación",
+        "importancia": "Alta"
+      },
+      "origen": "EFECTIVO",
+      "descripcion": "Almuerzo universidad"
+    },
+    {
+      "id": "g-11",
+      "monto": 18.5,
+      "fecha": "2026-07-11",
+      "categoria": {
+        "nombre": "Transporte",
+        "importancia": "Alta"
+      },
+      "origen": "EFECTIVO",
+      "descripcion": "Taxi retorno"
+    },
+    {
+      "id": "g-12",
+      "monto": 220,
+      "fecha": "2026-07-12",
+      "categoria": {
+        "nombre": "Salud",
+        "importancia": "Alta"
+      },
+      "origen": "TARJETA",
+      "descripcion": "Consulta médica",
+      "tarjetaId": "tj-2"
+    },
+    {
+      "id": "g-13",
+      "monto": 75,
+      "fecha": "2026-07-13",
+      "categoria": {
+        "nombre": "Entretenimiento",
+        "importancia": "Baja"
+      },
+      "origen": "EFECTIVO",
+      "descripcion": "Cine con amigos"
+    },
+    {
+      "id": "g-14",
+      "monto": 42,
+      "fecha": "2026-07-14",
+      "categoria": {
+        "nombre": "Servicios",
+        "importancia": "Alta"
+      },
+      "origen": "EFECTIVO",
+      "descripcion": "Recarga celular"
+    },
+    {
+      "id": "g-15",
+      "monto": 110,
+      "fecha": "2026-07-15",
+      "categoria": {
+        "nombre": "Tecnología",
+        "importancia": "Media"
+      },
+      "origen": "TARJETA",
+      "descripcion": "Accesorios laptop",
+      "tarjetaId": "tj-2"
+    },
+    {
+      "id": "g-16",
+      "monto": 25,
+      "fecha": "2026-07-16",
+      "categoria": {
+        "nombre": "Alimentación",
+        "importancia": "Alta"
+      },
+      "origen": "EFECTIVO",
+      "descripcion": "Desayuno"
+    },
+    {
+      "id": "g-17",
+      "monto": 60,
+      "fecha": "2026-07-17",
+      "categoria": {
+        "nombre": "Otros",
+        "importancia": "Baja"
+      },
+      "origen": "EFECTIVO",
+      "descripcion": "Compra eventual"
+    },
+    {
+      "id": "g-18",
+      "monto": 90,
+      "fecha": "2026-07-18",
+      "categoria": {
+        "nombre": "Prestaciones",
+        "importancia": "Media"
+      },
+      "origen": "EFECTIVO",
+      "descripcion": "Préstamo a compañero",
+      "prestacion": {
+        "nombrePersona": "Luis"
+      }
     }
   ],
   "ingresos": [
@@ -162,6 +334,83 @@
       "fuente": "Freelance",
       "fecha": "2026-06-12",
       "descripcion": "Proyecto web React"
+    },
+    {
+      "id": "ing-3",
+      "monto": 1200,
+      "fuente": "Sueldo",
+      "fecha": "2026-07-01",
+      "descripcion": "Adelanto mensual"
+    },
+    {
+      "id": "ing-4",
+      "monto": 700,
+      "fuente": "Freelance",
+      "fecha": "2026-07-03",
+      "descripcion": "Landing page cliente"
+    },
+    {
+      "id": "ing-5",
+      "monto": 150,
+      "fuente": "Inversiones",
+      "fecha": "2026-07-04",
+      "descripcion": "Rendimiento fondo mutuo"
+    },
+    {
+      "id": "ing-6",
+      "monto": 300,
+      "fuente": "Venta",
+      "fecha": "2026-07-06",
+      "descripcion": "Venta de equipo usado"
+    },
+    {
+      "id": "ing-7",
+      "monto": 3800,
+      "fuente": "Sueldo",
+      "fecha": "2026-07-15",
+      "descripcion": "Pago mensual de empresa"
+    },
+    {
+      "id": "ing-8",
+      "monto": 450,
+      "fuente": "Freelance",
+      "fecha": "2026-07-16",
+      "descripcion": "Correcciones sitio web"
+    },
+    {
+      "id": "ing-9",
+      "monto": 200,
+      "fuente": "Premio",
+      "fecha": "2026-07-18",
+      "descripcion": "Bono académico"
+    },
+    {
+      "id": "ing-10",
+      "monto": 90,
+      "fuente": "Otros",
+      "fecha": "2026-07-20",
+      "descripcion": "Devolución de dinero"
+    },
+    {
+      "id": "ing-11",
+      "monto": 180,
+      "fuente": "Inversiones",
+      "fecha": "2026-07-22",
+      "descripcion": "Intereses acumulados"
+    },
+    {
+      "id": "ing-12",
+      "monto": 550,
+      "fuente": "Freelance",
+      "fecha": "2026-07-24",
+      "descripcion": "Mantenimiento mensual"
+    },
+    {
+      "id": "ing-13",
+      "monto": 3800,
+      "fuente": "Sueldo",
+      "fecha": "2026-08-01",
+      "descripcion": "Pago mensual de agosto"
     }
   ],
   "inversiones": [
@@ -186,12 +435,52 @@
           ]
         }
       ],
-      "id": "6tO5iqqwGtw"
+      "id": "Cpco6k2_clo"
     }
   ],
   "presupuestos": [
     {
-      "id": "pres-1",
+      "id": "pres-2026-07",
+      "mes": "2026-07",
+      "totalAsignado": 1800,
+      "desgloseCategorias": [
+        {
+          "categoria": {
+            "nombre": "Alimentación",
+            "importancia": "Alta"
+          },
+          "limiteSoles": 400,
+          "gastadoSoles": 0
+        },
+        {
+          "categoria": {
+            "nombre": "Transporte",
+            "importancia": "Alta"
+          },
+          "limiteSoles": 300,
+          "gastadoSoles": 0
+        },
+        {
+          "categoria": {
+            "nombre": "Entretenimiento",
+            "importancia": "Baja"
+          },
+          "limiteSoles": 200,
+          "gastadoSoles": 0
+        },
+        {
+          "categoria": {
+            "nombre": "Prestaciones",
+            "importancia": "Media"
+          },
+          "limiteSoles": 250,
+          "gastadoSoles": 0
+        }
+      ],
+      "alertasActivas": []
+    },
+    {
+      "id": "pres-2026-06",
       "mes": "2026-06",
       "totalAsignado": 1500,
       "desgloseCategorias": [
@@ -200,8 +489,8 @@
             "nombre": "Alimentación",
             "importancia": "Alta"
           },
-          "limiteSoles": 650,
-          "gastadoSoles": 320.5
+          "limiteSoles": 130,
+          "gastadoSoles": 0
         },
         {
           "categoria": {
@@ -209,7 +498,31 @@
             "importancia": "Alta"
           },
           "limiteSoles": 400,
-          "gastadoSoles": 150
+          "gastadoSoles": 0
+        },
+        {
+          "categoria": {
+            "nombre": "Entretenimiento",
+            "importancia": "Baja"
+          },
+          "limiteSoles": 250,
+          "gastadoSoles": 0
+        },
+        {
+          "categoria": {
+            "nombre": "Prestaciones",
+            "importancia": "Media"
+          },
+          "limiteSoles": 200,
+          "gastadoSoles": 0
+        },
+        {
+          "categoria": {
+            "nombre": "Otros",
+            "importancia": "Baja"
+          },
+          "limiteSoles": 520,
+          "gastadoSoles": 0
         }
       ],
       "alertasActivas": []
@@ -257,34 +570,34 @@
       "tiempo": "En 1 mes",
       "monto": 13900,
       "porcentaje": "+ 11.6%",
-      "id": "_QC6GrnJ9x0"
+      "id": "oJsit3jzC2A"
     },
     {
       "tiempo": "En 3 meses",
       "monto": 16750,
       "porcentaje": "+ 34.6%",
-      "id": "81TZvLoAm4U"
+      "id": "zNGHOn_R1Z0"
     },
     {
       "tiempo": "En 6 meses",
       "monto": 20450,
       "porcentaje": "+ 64.2%",
-      "id": "Zguz6JSPFG4"
+      "id": "dc1ZlLJWYhA"
     },
     {
       "tiempo": "En 1 año",
       "monto": 26500,
       "porcentaje": "+ 112.9%",
-      "id": "R9tgcsnVGAc"
+      "id": "LyOWFM4EdeA"
     }
   ],
   "usuarios": [
     {
       "id": "user-1",
       "nombre": "Pepito",
-      "email": "pepito@mibilletera.edu.pe",
+      "email": "daniel@mibilletera.edu.pe",
       "avatarUrl": "",
-      "password": "contra123",
+      "password": "123456",
       "fechaCreacion": "2026-06-01",
       "notificaciones": true
     }

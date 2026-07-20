@@ -7,7 +7,7 @@ import { useWallet } from '../../../wallet/presentation/hooks/useWallet';
 const ingresoSchema = z.object({
   monto: z.coerce.number().positive({ message: 'El monto debe ser un número positivo mayor que cero' }),
   fecha: z.string().min(1, { message: 'La fecha es requerida' }),
-  fuente: z.string().min(1, { message: 'La fuente de ingreso es requerida' }),
+  fuente: z.enum(['Sueldo', 'Freelance', 'Inversiones', 'Venta', 'Premio', 'Otros']),
   descripcion: z
     .string()
     .min(3, { message: 'La descripción debe tener al menos 3 caracteres' })
@@ -100,7 +100,7 @@ export function AgregarIngresoPage() {
             <select className={`form-select ${errors.fuente ? 'is-invalid' : ''}`} {...register('fuente')}>
               <option value="Sueldo">Sueldo / Planilla</option>
               <option value="Freelance">Trabajo Freelance / Consultoría</option>
-              <option value="Inversión">Inversiones / Rendimiento</option>
+              <option value="Inversiones">Inversiones / Rendimiento</option>
               <option value="Venta">Venta de Productos / Servicios</option>
               <option value="Premio">Premios / Sorteos</option>
               <option value="Otros">Otros</option>

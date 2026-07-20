@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useState } from 'react';
 import { InfoCard } from '../../../../shared/components/InfoCard/InfoCard';
 import { useTarjetas } from '../../../tarjetas/presentation/hooks/useTarjetas';
@@ -90,5 +91,15 @@ export function SeparacionSaldoPage() {
     <TarjetasProvider>
       <SeparacionSaldoView />
     </TarjetasProvider>
+=======
+import { PresupuestoMensualManager } from '../../../presupuestos/components/PresupuestoMensualManager';
+import { PresupuestosProvider } from '../../../presupuestos/presentation/context/PresupuestosProvider';
+
+export function SeparacionSaldoPage() {
+  return (
+    <PresupuestosProvider>
+      <PresupuestoMensualManager />
+    </PresupuestosProvider>
+>>>>>>> cbe00a051a48a3f0c83350899174606aa401e611
   );
 }
