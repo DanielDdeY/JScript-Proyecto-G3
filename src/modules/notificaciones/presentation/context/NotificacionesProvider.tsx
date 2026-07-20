@@ -18,8 +18,8 @@ export interface NotificacionesContextValue {
 }
 
 interface NotificacionesProviderProps {
-  children: ReactNode;
-  repository?: NotificacionesRepository;
+  readonly children: ReactNode;
+  readonly repository?: NotificacionesRepository;
 }
 
 interface NotificacionesState {

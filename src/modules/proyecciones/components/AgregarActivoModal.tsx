@@ -17,9 +17,9 @@ type ActivoFormInput = z.input<typeof activoSchema>;
 type ActivoFormValues = z.output<typeof activoSchema>;
 
 interface AgregarActivoModalProps {
-  abierto: boolean;
-  onClose: () => void;
-  onGuardar: (activo: NuevoActivoInversion) => Promise<void>;
+  readonly abierto: boolean;
+  readonly onClose: () => void;
+  readonly onGuardar: (activo: NuevoActivoInversion) => Promise<void>;
 }
 
 const today = () => new Date().toISOString().substring(0, 10);
@@ -73,7 +73,7 @@ export function AgregarActivoModal({ abierto, onClose, onGuardar }: AgregarActiv
 
   return (
     <>
-      <div className="modal fade show d-block" tabIndex={-1} role="dialog" aria-modal="true">
+      <dialog open className="modal fade show d-block" aria-modal="true">
         <div className="modal-dialog modal-lg modal-dialog-centered">
           <div className="modal-content border-0 shadow-lg rounded-4">
             <div className="modal-header bg-success text-white border-0 rounded-top-4">
@@ -88,9 +88,10 @@ export function AgregarActivoModal({ abierto, onClose, onGuardar }: AgregarActiv
               <div className="modal-body p-4">
                 <div className="row g-3">
                   <div className="col-12 col-md-6">
-                    <label className="form-label fw-semibold">Nombre del activo</label>
+                    <label className="form-label fw-semibold" htmlFor="activo-nombre">Nombre del activo</label>
                     <input
-                      type="text"
+                      id="activo-nombre"
+                        type="text"
                       className={`form-control ${errors.nombreSimbolo ? 'is-invalid' : ''}`}
                       placeholder="Ej. Fondo Mutuo BCP"
                       {...register('nombreSimbolo')}
@@ -99,9 +100,10 @@ export function AgregarActivoModal({ abierto, onClose, onGuardar }: AgregarActiv
                   </div>
 
                   <div className="col-12 col-md-6">
-                    <label className="form-label fw-semibold">Fecha del rendimiento</label>
+                    <label className="form-label fw-semibold" htmlFor="activo-fecha-rendimiento">Fecha del rendimiento</label>
                     <input
-                      type="date"
+                      id="activo-fecha-rendimiento"
+                        type="date"
                       className={`form-control ${errors.fechaRendimiento ? 'is-invalid' : ''}`}
                       {...register('fechaRendimiento')}
                     />
@@ -109,10 +111,11 @@ export function AgregarActivoModal({ abierto, onClose, onGuardar }: AgregarActiv
                   </div>
 
                   <div className="col-12 col-md-4">
-                    <label className="form-label fw-semibold">Capital invertido</label>
+                    <label className="form-label fw-semibold" htmlFor="activo-capital-invertido">Capital invertido</label>
                     <div className="input-group">
                       <span className="input-group-text fw-bold">S/.</span>
                       <input
+                        id="activo-capital-invertido"
                         type="number"
                         step="0.01"
                         className={`form-control ${errors.capitalInvertido ? 'is-invalid' : ''}`}
@@ -123,10 +126,11 @@ export function AgregarActivoModal({ abierto, onClose, onGuardar }: AgregarActiv
                   </div>
 
                   <div className="col-12 col-md-4">
-                    <label className="form-label fw-semibold">Valor actual estático</label>
+                    <label className="form-label fw-semibold" htmlFor="activo-valor-actual">Valor actual estático</label>
                     <div className="input-group">
                       <span className="input-group-text fw-bold">S/.</span>
                       <input
+                        id="activo-valor-actual"
                         type="number"
                         step="0.01"
                         className={`form-control ${errors.valorActual ? 'is-invalid' : ''}`}
@@ -138,9 +142,10 @@ export function AgregarActivoModal({ abierto, onClose, onGuardar }: AgregarActiv
                   </div>
 
                   <div className="col-12 col-md-4">
-                    <label className="form-label fw-semibold">% de ganancia histórica</label>
+                    <label className="form-label fw-semibold" htmlFor="activo-porcentaje-ganancia">% de ganancia histórica</label>
                     <div className="input-group">
                       <input
+                        id="activo-porcentaje-ganancia"
                         type="number"
                         step="0.01"
                         className={`form-control ${errors.porcentajeGanancia ? 'is-invalid' : ''}`}
@@ -164,7 +169,7 @@ export function AgregarActivoModal({ abierto, onClose, onGuardar }: AgregarActiv
             </form>
           </div>
         </div>
-      </div>
+      </dialog>
       <div className="modal-backdrop fade show" />
     </>
   );

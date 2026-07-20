@@ -1,9 +1,9 @@
 import type { FiltrosWallet } from '../../../shared/types/filtros';
 
 interface FiltrosGastosSidebarProps {
-  filtros: FiltrosWallet;
-  onChange: (filtros: FiltrosWallet) => void;
-  onLimpiar: () => void;
+  readonly filtros: FiltrosWallet;
+  readonly onChange: (filtros: FiltrosWallet) => void;
+  readonly onLimpiar: () => void;
 }
 
 export function FiltrosGastosSidebar({ filtros, onChange, onLimpiar }: FiltrosGastosSidebarProps) {
@@ -25,8 +25,9 @@ export function FiltrosGastosSidebar({ filtros, onChange, onLimpiar }: FiltrosGa
       </div>
 
       <div className="mb-3">
-        <label className="form-label small fw-semibold">Fecha desde</label>
+        <label className="form-label small fw-semibold" htmlFor="gastos-fecha-desde">Fecha desde</label>
         <input
+          id="gastos-fecha-desde"
           type="date"
           className="form-control form-control-sm"
           value={filtros.rangoFecha.inicio}
@@ -35,8 +36,9 @@ export function FiltrosGastosSidebar({ filtros, onChange, onLimpiar }: FiltrosGa
       </div>
 
       <div className="mb-3">
-        <label className="form-label small fw-semibold">Fecha hasta</label>
+        <label className="form-label small fw-semibold" htmlFor="gastos-fecha-hasta">Fecha hasta</label>
         <input
+          id="gastos-fecha-hasta"
           type="date"
           className="form-control form-control-sm"
           value={filtros.rangoFecha.fin}
@@ -45,8 +47,9 @@ export function FiltrosGastosSidebar({ filtros, onChange, onLimpiar }: FiltrosGa
       </div>
 
       <div className="mb-4">
-        <label className="form-label small fw-semibold">Importancia</label>
+        <label className="form-label small fw-semibold" htmlFor="gastos-importancia">Importancia</label>
         <select
+          id="gastos-importancia"
           className="form-select form-select-sm"
           value={filtros.importancia ?? 'TODAS'}
           onChange={(event) => onChange({ ...filtros, importancia: event.target.value as FiltrosWallet['importancia'] })}
@@ -59,7 +62,7 @@ export function FiltrosGastosSidebar({ filtros, onChange, onLimpiar }: FiltrosGa
       </div>
 
       <button className="btn btn-outline-secondary btn-sm w-100 fw-semibold" type="button" onClick={onLimpiar}>
-        <i className="bi bi-arrow-counterclockwise me-1" /> Limpiar filtros
+        <i className="bi bi-arrow-counterclockwise me-1" />{' '}Limpiar filtros
       </button>
     </aside>
   );

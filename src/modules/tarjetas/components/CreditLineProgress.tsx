@@ -3,7 +3,7 @@ import { formatCurrencyPen } from '../../../shared/utils/formatters';
 import { calcularDistribucionLineaCredito } from '../domain/services/tarjetaDisplayService';
 
 interface CreditLineProgressProps {
-  lineaCredito?: LineaCredito;
+  readonly lineaCredito?: LineaCredito;
 }
 
 export function CreditLineProgress({ lineaCredito }: CreditLineProgressProps) {

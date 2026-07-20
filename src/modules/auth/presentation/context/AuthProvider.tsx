@@ -3,8 +3,8 @@ import { authLocalRepository } from '../../infrastructure/authLocalRepository';
 import type { AuthRepository, AuthSession, LoginCredentials, RegisterCredentials } from '../../domain/authRepository';
 
 interface AuthProviderProps {
-  children: ReactNode;
-  repository?: AuthRepository;
+  readonly children: ReactNode;
+  readonly repository?: AuthRepository;
 }
 
 export interface AuthContextValue {

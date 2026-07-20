@@ -3,6 +3,7 @@ import { FiltrosIngresosSidebar } from '../../components/FiltrosIngresosSidebar'
 import { ListaIngresos } from '../../components/ListaIngresos';
 import { IngresosProvider } from '../../presentation/context/IngresosProvider';
 import { useIngresos } from '../../presentation/hooks/useIngresos';
+import { useWallet } from '../../../wallet/presentation/hooks/useWallet';
 
 export function ListarIngresoPage() {
   return (
@@ -14,6 +15,7 @@ export function ListarIngresoPage() {
 
 function ListarIngresoContent() {
   const { ingresos, respuesta, filtros, cargando, error, actualizarFiltros, limpiarFiltros, cambiarPagina } = useIngresos();
+  const { tarjetas } = useWallet();
 
   return (
     <div className="row g-4 align-items-start">
@@ -37,15 +39,15 @@ function ListarIngresoContent() {
 
           {error ? (
             <div className="alert alert-danger border-0 rounded-4 fw-semibold" role="alert">
-              <i className="bi bi-exclamation-triangle-fill me-2" /> {error}
+              <i className="bi bi-exclamation-triangle-fill me-2" />{' '}{error}
             </div>
           ) : null}
 
           {cargando ? (
             <div className="text-center p-5">
-              <div className="spinner-border text-primary" role="status">
-                <span className="visually-hidden">Cargando...</span>
-              </div>
+              <output className="spinner-border text-primary">
+          <span className="visually-hidden">Cargando...</span>
+        </output>
             </div>
           ) : null}
 
@@ -59,7 +61,7 @@ function ListarIngresoContent() {
 
           {!cargando && ingresos.length > 0 ? (
             <>
-              <ListaIngresos ingresos={ingresos} />
+              <ListaIngresos ingresos={ingresos} tarjetas={tarjetas} />
               <Paginacion meta={respuesta.meta} onCambiarPagina={cambiarPagina} />
             </>
           ) : null}

@@ -98,14 +98,17 @@ export const notificacionService = {
         const nombreBanco = obtenerNombreBanco(tarjeta);
         const pagoMinimo = tarjeta.cicloFacturacion?.pagoMinimo ?? 0;
         const fecha = fechaPago.toISOString().slice(0, 10);
+        const nivel = dias <= 2 ? 'PELIGRO' : 'ADVERTENCIA';
+        const unidadDias = dias === 1 ? 'día' : 'días';
+        const textoVencimiento = dias === 0 ? 'hoy' : `en ${dias} ${unidadDias}`;
 
         return [
           {
             id: `tarjeta-${tarjeta.id}-${fecha}`,
             tipo: 'TARJETA',
-            nivel: dias <= 2 ? 'PELIGRO' : 'ADVERTENCIA',
+            nivel,
             titulo: 'Pago de tarjeta próximo',
-            mensaje: `${nombreBanco} termina en ${tarjeta.numero}: pago mínimo ${formatCurrencyPen(pagoMinimo)} vence ${dias === 0 ? 'hoy' : `en ${dias} día${dias === 1 ? '' : 's'}`}.`,
+            mensaje: `${nombreBanco} termina en ${tarjeta.numero}: pago mínimo ${formatCurrencyPen(pagoMinimo)} vence ${textoVencimiento}.`,
             fecha,
             enlace: '/app/tarjetas/listar',
           },

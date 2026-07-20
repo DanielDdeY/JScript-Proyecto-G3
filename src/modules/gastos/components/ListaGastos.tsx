@@ -7,10 +7,17 @@ import { obtenerEtiquetasReincidencia } from '../../../shared/utils/reincidencia
 import { obtenerEtiquetaDetalleCuotas, tieneGastoCompartido } from '../domain/services/gastoDisplayService';
 
 interface ListaGastosProps {
-  gastos: Gasto[];
-  tarjetas: Tarjeta[];
-  onSeleccionarGasto: (gasto: Gasto) => void;
+  readonly gastos: Gasto[];
+  readonly tarjetas: Tarjeta[];
+  readonly onSeleccionarGasto: (gasto: Gasto) => void;
 }
+
+const obtenerClaseImportancia = (importancia: Gasto['categoria']['importancia']) => {
+  if (importancia === 'Alta') return 'bg-danger-subtle text-danger';
+  if (importancia === 'Media') return 'bg-warning-subtle text-warning-emphasis';
+
+  return 'bg-success-subtle text-success';
+};
 
 export function ListaGastos({ gastos, tarjetas, onSeleccionarGasto }: ListaGastosProps) {
   return (
@@ -29,33 +36,23 @@ export function ListaGastos({ gastos, tarjetas, onSeleccionarGasto }: ListaGasto
         <tbody>
           {gastos.map((gasto) => {
             const tarjeta = gasto.tarjetaId ? tarjetas.find((item) => idsIguales(item.id, gasto.tarjetaId)) : undefined;
-            const priorityClass =
-              gasto.categoria.importancia === 'Alta'
-                ? 'bg-danger-subtle text-danger'
-                : gasto.categoria.importancia === 'Media'
-                  ? 'bg-warning-subtle text-warning-emphasis'
-                  : 'bg-success-subtle text-success';
+            const priorityClass = obtenerClaseImportancia(gasto.categoria.importancia);
             const etiquetaCuotas = obtenerEtiquetaDetalleCuotas(gasto.detalleCuotas);
 
             return (
-              <tr
-                key={String(gasto.id)}
-                role="button"
-                tabIndex={0}
-                className="gasto-row"
-                onClick={() => onSeleccionarGasto(gasto)}
-                onKeyDown={(event) => {
-                  if (event.key === 'Enter' || event.key === ' ') {
-                    event.preventDefault();
-                    onSeleccionarGasto(gasto);
-                  }
-                }}
-              >
+              <tr key={String(gasto.id)} className="gasto-row">
                 <td className="py-3">
-                  <div className="fw-bold text-dark">{gasto.descripcion}</div>
-                  {gasto.prestacion ? (
-                    <div className="small text-muted">Prestado a: {gasto.prestacion.nombrePersona}</div>
-                  ) : null}
+                  <button
+                    type="button"
+                    className="btn btn-link p-0 text-start text-decoration-none"
+                    onClick={() => onSeleccionarGasto(gasto)}
+                  >
+                    <span className="d-block fw-bold text-dark">{gasto.descripcion}</span>
+                    {gasto.prestacion ? (
+                      <span className="d-block small text-muted">Prestado a: {gasto.prestacion.nombrePersona}</span>
+                    ) : null}
+                    <span className="visually-hidden">Ver detalle del gasto</span>
+                  </button>
                 </td>
                 <td className="py-3">
                   <span className="badge bg-light text-dark border me-2 py-1 px-2 small fw-semibold">
@@ -68,15 +65,15 @@ export function ListaGastos({ gastos, tarjetas, onSeleccionarGasto }: ListaGasto
                 <td className="py-3 text-muted">{formatShortDate(gasto.fecha)}</td>
                 <td className="py-3 text-secondary small">
                   {tarjeta ? (
-                    <>
-                      <i className="bi bi-credit-card me-1" />
-                      {obtenerNombreBanco(tarjeta)} (**** {obtenerUltimosDigitos(tarjeta.numero)})
-                    </>
+                    <span className="d-inline-flex align-items-center gap-1">
+                      <i className="bi bi-credit-card" aria-hidden="true" />
+                      <span>{obtenerNombreBanco(tarjeta)} (**** {obtenerUltimosDigitos(tarjeta.numero)})</span>
+                    </span>
                   ) : (
-                    <>
-                      <i className="bi bi-cash-stack me-1" />
-                      Efectivo
-                    </>
+                    <span className="d-inline-flex align-items-center gap-1">
+                      <i className="bi bi-cash-stack" aria-hidden="true" />
+                      <span>Efectivo</span>
+                    </span>
                   )}
                 </td>
                 <td className="py-3">

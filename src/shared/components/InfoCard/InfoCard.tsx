@@ -1,7 +1,7 @@
 interface InfoCardProps {
-  title: string;
-  message?: string;
-  detail?: string;
+  readonly title: string;
+  readonly message?: string;
+  readonly detail?: string;
 }
 
 export function InfoCard({ title, message = '¡Funciona correctamente!', detail }: InfoCardProps) {

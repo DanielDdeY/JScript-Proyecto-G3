@@ -9,7 +9,7 @@ export function Home() {
       <nav className="py-3 border-bottom" style={{ backgroundColor: 'var(--color-surface)', borderBottomColor: 'var(--color-border)' }}>
         <div className="container px-4 d-flex align-items-center justify-content-between">
           <span className="fw-bold fs-4 d-flex align-items-center gap-2" style={{ color: 'var(--color-primary)', fontFamily: 'var(--font-sans)' }}>
-            <i className="bi bi-wallet2" /> Vizcash
+            <i className="bi bi-wallet2" />{' '}Vizcash
           </span>
           <div className="d-flex gap-2">
             <Link to="/login" className="btn btn-outline-primary fw-semibold">

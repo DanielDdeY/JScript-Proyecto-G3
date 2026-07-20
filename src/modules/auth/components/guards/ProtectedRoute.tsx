@@ -8,9 +8,9 @@ export function ProtectedRoute() {
   if (cargando) {
     return (
       <div className="d-flex min-vh-100 align-items-center justify-content-center">
-        <div className="spinner-border text-primary" role="status">
+        <output className="spinner-border text-primary">
           <span className="visually-hidden">Cargando...</span>
-        </div>
+        </output>
       </div>
     );
   }

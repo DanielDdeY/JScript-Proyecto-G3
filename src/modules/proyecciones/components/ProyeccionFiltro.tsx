@@ -2,10 +2,10 @@ import type { FormEvent } from 'react';
 import type { ProyeccionFiltros } from '../domain/models/proyeccionPredictiva';
 
 interface ProyeccionFiltroProps {
-  filtros: ProyeccionFiltros;
-  onChange: (filtros: ProyeccionFiltros) => void;
-  onSubmit: () => void;
-  cargando?: boolean;
+  readonly filtros: ProyeccionFiltros;
+  readonly onChange: (filtros: ProyeccionFiltros) => void;
+  readonly onSubmit: () => void;
+  readonly cargando?: boolean;
 }
 
 const MESES = [
@@ -46,8 +46,9 @@ export function ProyeccionFiltro({ filtros, onChange, onSubmit, cargando = false
 
       <div className="row g-3 align-items-end">
         <div className="col-12 col-md-5">
-          <label className="form-label fw-semibold">Mes</label>
+          <label className="form-label fw-semibold" htmlFor="proyeccion-mes">Mes</label>
           <select
+            id="proyeccion-mes"
             className="form-select"
             value={filtros.mes}
             onChange={(event) => onChange({ ...filtros, mes: Number(event.target.value) })}
@@ -61,8 +62,9 @@ export function ProyeccionFiltro({ filtros, onChange, onSubmit, cargando = false
         </div>
 
         <div className="col-12 col-md-4">
-          <label className="form-label fw-semibold">Año</label>
+          <label className="form-label fw-semibold" htmlFor="proyeccion-anio">Año</label>
           <select
+            id="proyeccion-anio"
             className="form-select"
             value={filtros.anio}
             onChange={(event) => onChange({ ...filtros, anio: Number(event.target.value) })}
@@ -77,7 +79,7 @@ export function ProyeccionFiltro({ filtros, onChange, onSubmit, cargando = false
 
         <div className="col-12 col-md-3 d-grid">
           <button type="submit" className="btn btn-primary fw-bold" disabled={cargando}>
-            <i className="bi bi-magic me-2" /> Calcular
+            <i className="bi bi-magic me-2" />{' '}Calcular
           </button>
         </div>
       </div>

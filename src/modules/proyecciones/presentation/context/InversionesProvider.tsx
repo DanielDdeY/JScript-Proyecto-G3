@@ -14,8 +14,8 @@ export interface InversionesContextValue {
 }
 
 interface InversionesProviderProps {
-  children: ReactNode;
-  repository?: InversionesRepository;
+  readonly children: ReactNode;
+  readonly repository?: InversionesRepository;
 }
 
 interface InversionesState {

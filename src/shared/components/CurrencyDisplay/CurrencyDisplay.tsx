@@ -1,14 +1,14 @@
 interface CurrencyDisplayProps {
-  amount: number;
-  currency?: string;
-  variant?: 'normal' | 'success' | 'danger' | 'neutral' | 'light';
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  readonly amount: number;
+  readonly currency?: string;
+  readonly variant?: 'normal' | 'success' | 'danger' | 'neutral' | 'light';
+  readonly size?: 'sm' | 'md' | 'lg' | 'xl';
 }
 
 export function CurrencyDisplay({ amount, currency = 'S/', variant = 'normal', size = 'md' }: CurrencyDisplayProps) {
   const isNegative = amount < 0;
   const absAmount = Math.abs(amount);
-  
+
   const [integers, decimals] = absAmount.toFixed(2).split('.');
   const formattedIntegers = parseInt(integers, 10).toLocaleString('en-US');
 

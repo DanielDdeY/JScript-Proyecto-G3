@@ -23,8 +23,8 @@ export interface GastosContextValue {
 }
 
 interface GastosProviderProps {
-  children: ReactNode;
-  repository?: GastosRepository;
+  readonly children: ReactNode;
+  readonly repository?: GastosRepository;
 }
 
 interface GastosState {

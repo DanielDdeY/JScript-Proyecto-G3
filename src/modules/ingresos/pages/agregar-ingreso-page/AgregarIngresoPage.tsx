@@ -1,34 +1,55 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import type { OrigenIngreso } from '../../../../shared/types/ingreso';
 import { crearReincidencia, type TipoReincidencia } from '../../../../shared/types/reincidencia';
+import type { Tarjeta } from '../../../../shared/types/tarjeta';
+import { formatCurrencyPen } from '../../../../shared/utils/formatters';
+import { idsIguales } from '../../../../shared/utils/ids';
+import { obtenerNombreBanco, obtenerUltimosDigitos } from '../../../../shared/utils/tarjetaUtils';
 import { useWallet } from '../../../wallet/presentation/hooks/useWallet';
 
-const ingresoSchema = z.object({
-  monto: z.coerce.number().positive({ message: 'El monto debe ser un número positivo mayor que cero' }),
-  fecha: z.string().min(1, { message: 'La fecha es requerida' }),
-  fuente: z.enum(['Sueldo', 'Freelance', 'Inversiones', 'Venta', 'Premio', 'Otros']),
-  descripcion: z
-    .string()
-    .min(3, { message: 'La descripción debe tener al menos 3 caracteres' })
-    .max(100, { message: 'La descripción no puede exceder los 100 caracteres' }),
-  tipoReincidencia: z.enum(['esMensual', 'esAnual', 'esRecurrente', 'esProbable', 'esUnico']),
-});
+const ingresoSchema = z
+  .object({
+    monto: z.coerce.number().positive({ message: 'El monto debe ser un número positivo mayor que cero' }),
+    fecha: z.string().min(1, { message: 'La fecha es requerida' }),
+    fuente: z.enum(['Sueldo', 'Freelance', 'Inversiones', 'Venta', 'Premio', 'Otros']),
+    origen: z.enum(['EFECTIVO', 'TARJETA']),
+    tarjetaId: z.string().optional(),
+    descripcion: z
+      .string()
+      .min(3, { message: 'La descripción debe tener al menos 3 caracteres' })
+      .max(100, { message: 'La descripción no puede exceder los 100 caracteres' }),
+    tipoReincidencia: z.enum(['esMensual', 'esAnual', 'esRecurrente', 'esProbable', 'esUnico']),
+  })
+  .superRefine((data, context) => {
+    if (data.origen === 'TARJETA' && !data.tarjetaId) {
+      context.addIssue({
+        code: 'custom',
+        path: ['tarjetaId'],
+        message: 'Debe seleccionar una tarjeta o cuenta cuando el ingreso entra por tarjeta',
+      });
+    }
+  });
 
 type IngresoFormInput = z.input<typeof ingresoSchema>;
 type IngresoFormValues = z.output<typeof ingresoSchema>;
 
 const today = () => new Date().toISOString().substring(0, 10);
 
+const buscarTarjeta = (tarjetas: Tarjeta[], tarjetaId?: string) =>
+  tarjetas.find((tarjeta) => idsIguales(tarjeta.id, tarjetaId));
+
 export function AgregarIngresoPage() {
-  const { agregarIngreso, cargando } = useWallet();
+  const { tarjetas, agregarIngreso, cargando } = useWallet();
   const [success, setSuccess] = useState(false);
 
   const {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<IngresoFormInput, unknown, IngresoFormValues>({
     resolver: zodResolver(ingresoSchema),
@@ -36,16 +57,31 @@ export function AgregarIngresoPage() {
       monto: '' as unknown as number,
       fecha: today(),
       fuente: 'Sueldo',
+      origen: 'EFECTIVO',
+      tarjetaId: '',
       descripcion: '',
       tipoReincidencia: 'esMensual',
     },
   });
 
+  const selectedOrigen = watch('origen');
+  const selectedTarjetaId = watch('tarjetaId');
+
+  const selectedTarjeta = useMemo(
+    () => buscarTarjeta(tarjetas, selectedTarjetaId),
+    [selectedTarjetaId, tarjetas],
+  );
+
   const onSubmit = async (data: IngresoFormValues) => {
+    const origen = data.origen as OrigenIngreso;
+    const tarjeta = origen === 'TARJETA' ? buscarTarjeta(tarjetas, data.tarjetaId) : undefined;
+
     await agregarIngreso({
       monto: data.monto,
       fecha: data.fecha,
       fuente: data.fuente,
+      origen,
+      tarjetaId: tarjeta?.id,
       descripcion: data.descripcion,
       reincidencia: crearReincidencia(data.tipoReincidencia as TipoReincidencia),
     });
@@ -54,6 +90,8 @@ export function AgregarIngresoPage() {
       monto: '' as unknown as number,
       fecha: today(),
       fuente: 'Sueldo',
+      origen: 'EFECTIVO',
+      tarjetaId: '',
       descripcion: '',
       tipoReincidencia: 'esMensual',
     });
@@ -63,9 +101,9 @@ export function AgregarIngresoPage() {
   if (cargando) {
     return (
       <div className="text-center p-5">
-        <div className="spinner-border text-primary" role="status">
+        <output className="spinner-border text-primary">
           <span className="visually-hidden">Cargando...</span>
-        </div>
+        </output>
       </div>
     );
   }
@@ -79,17 +117,18 @@ export function AgregarIngresoPage() {
 
       {success ? (
         <div className="alert alert-success border-0 shadow-sm" role="alert">
-          <i className="bi bi-check-circle-fill me-2" /> ¡Ingreso registrado con éxito! Tu saldo total se actualizó.
+          <i className="bi bi-check-circle-fill me-2" />{' '}¡Ingreso registrado con éxito! Tu saldo total se actualizó.
         </div>
       ) : null}
 
       <form onSubmit={(event) => void handleSubmit(onSubmit)(event)}>
         <div className="row g-3">
           <div className="col-12 col-md-6">
-            <label className="form-label fw-semibold">Monto</label>
+            <label className="form-label fw-semibold" htmlFor="ingreso-monto">Monto</label>
             <div className="input-group">
               <span className="input-group-text fw-bold">S/.</span>
               <input
+                id="ingreso-monto"
                 type="number"
                 step="0.01"
                 className={`form-control form-control-lg fw-bold ${errors.monto ? 'is-invalid' : ''}`}
@@ -101,9 +140,10 @@ export function AgregarIngresoPage() {
           </div>
 
           <div className="col-12 col-md-6">
-            <label className="form-label fw-semibold">Fecha de Recepción</label>
+            <label className="form-label fw-semibold" htmlFor="ingreso-fecha">Fecha de Recepción</label>
             <input
-              type="date"
+              id="ingreso-fecha"
+                type="date"
               className={`form-control form-control-lg ${errors.fecha ? 'is-invalid' : ''}`}
               {...register('fecha')}
             />
@@ -111,8 +151,9 @@ export function AgregarIngresoPage() {
           </div>
 
           <div className="col-12 col-md-6">
-            <label className="form-label fw-semibold">Fuente del Ingreso</label>
-            <select className={`form-select ${errors.fuente ? 'is-invalid' : ''}`} {...register('fuente')}>
+            <label className="form-label fw-semibold" htmlFor="ingreso-fuente">Fuente del Ingreso</label>
+            <select id="ingreso-fuente"
+              className={`form-select ${errors.fuente ? 'is-invalid' : ''}`} {...register('fuente')}>
               <option value="Sueldo">Sueldo / Planilla</option>
               <option value="Freelance">Trabajo Freelance / Consultoría</option>
               <option value="Inversiones">Inversiones / Rendimiento</option>
@@ -124,9 +165,48 @@ export function AgregarIngresoPage() {
           </div>
 
           <div className="col-12 col-md-6">
-            <label className="form-label fw-semibold">Descripción / Detalle</label>
+            <label className="form-label fw-semibold" htmlFor="ingreso-origen">Origen del ingreso</label>
+            <select id="ingreso-origen"
+              className={`form-select ${errors.origen ? 'is-invalid' : ''}`} {...register('origen')}>
+              <option value="EFECTIVO">Efectivo</option>
+              <option value="TARJETA">Tarjeta / Cuenta vinculada</option>
+            </select>
+            {errors.origen ? <div className="invalid-feedback fw-semibold">{errors.origen.message}</div> : null}
+            <div className="form-text">Indica dónde entró el dinero para actualizar correctamente el saldo.</div>
+          </div>
+
+          {selectedOrigen === 'TARJETA' ? (
+            <div className="col-12 col-md-6">
+              <label className="form-label fw-semibold" htmlFor="ingreso-tarjeta">Tarjeta / Cuenta de destino</label>
+              <select id="ingreso-tarjeta"
+              className={`form-select ${errors.tarjetaId ? 'is-invalid' : ''}`} {...register('tarjetaId')}>
+                <option value="">-- Seleccione una cuenta --</option>
+                {tarjetas.map((tarjeta) => (
+                  <option key={String(tarjeta.id)} value={String(tarjeta.id)}>
+                    {obtenerNombreBanco(tarjeta)} (**** {obtenerUltimosDigitos(tarjeta.numero)}) - Saldo actual:{' '}
+                    {formatCurrencyPen(tarjeta.saldo)}
+                  </option>
+                ))}
+              </select>
+              {errors.tarjetaId ? (
+                <div className="invalid-feedback fw-semibold">{errors.tarjetaId.message}</div>
+              ) : null}
+              {tarjetas.length === 0 ? (
+                <div className="text-muted small mt-1">No hay tarjetas registradas, cambia el origen a efectivo.</div>
+              ) : null}
+              {selectedTarjeta ? (
+                <div className="text-success small fw-semibold mt-1">
+                  El saldo de esta tarjeta aumentará desde {formatCurrencyPen(selectedTarjeta.saldo)}.
+                </div>
+              ) : null}
+            </div>
+          ) : null}
+
+          <div className="col-12 col-md-6">
+            <label className="form-label fw-semibold" htmlFor="ingreso-descripcion">Descripción / Detalle</label>
             <input
-              type="text"
+              id="ingreso-descripcion"
+                type="text"
               className={`form-control ${errors.descripcion ? 'is-invalid' : ''}`}
               placeholder="Ej. Pago quincenal, proyecto web, etc."
               {...register('descripcion')}
@@ -138,7 +218,7 @@ export function AgregarIngresoPage() {
             <div className="border rounded-4 p-3 bg-light">
               <div className="d-flex align-items-center gap-2 mb-2">
                 <i className="bi bi-arrow-repeat text-success" />
-                <label className="form-label fw-bold m-0">Reincidencia del ingreso</label>
+                <span className="form-label fw-bold m-0">Reincidencia del ingreso</span>
               </div>
               <p className="text-muted small mb-3">
                 Esta marca ayudará a proyectar ingresos mensuales, anuales, recurrentes, probables o únicos.
@@ -181,12 +261,12 @@ export function AgregarIngresoPage() {
         >
           {isSubmitting ? (
             <>
-              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+              <output className="spinner-border spinner-border-sm" aria-hidden="true" />
               Registrando...
             </>
           ) : (
             <>
-              <i className="bi bi-wallet2" /> Guardar Ingreso
+              <i className="bi bi-wallet2" />{' '}Guardar Ingreso
             </>
           )}
         </button>

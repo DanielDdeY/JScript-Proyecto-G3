@@ -6,7 +6,7 @@ interface ChartDataPoint {
 }
 
 interface SaldoTrendChartProps {
-  data: ChartDataPoint[];
+  readonly data: ChartDataPoint[];
 }
 
 export function SaldoTrendChart({ data }: SaldoTrendChartProps) {
@@ -33,7 +33,7 @@ export function SaldoTrendChart({ data }: SaldoTrendChartProps) {
               fontWeight: 600,
             }}
             itemStyle={{ color: 'var(--color-text)' }}
-            formatter={(value: any) => [`S/ ${Number(value).toLocaleString()}`, 'Saldo']}
+            formatter={(value: any) => [`S/ ${Number(value ?? 0).toLocaleString()}`, 'Saldo']}
             labelStyle={{ color: 'var(--color-text-muted)', marginBottom: 4 }}
           />
           <Area

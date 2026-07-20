@@ -2,7 +2,7 @@ import type { DetalleCategoriaConPorcentaje } from '../domain/services/presupues
 import { formatCurrencyPen } from '../../../shared/utils/formatters';
 
 interface PresupuestoCategoriaProgressProps {
-  detalle: DetalleCategoriaConPorcentaje;
+  readonly detalle: DetalleCategoriaConPorcentaje;
 }
 
 const obtenerColorBarra = (detalle: DetalleCategoriaConPorcentaje) => {

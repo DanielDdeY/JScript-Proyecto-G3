@@ -20,8 +20,8 @@ export interface IngresosContextValue {
 }
 
 interface IngresosProviderProps {
-  children: ReactNode;
-  repository?: IngresosRepository;
+  readonly children: ReactNode;
+  readonly repository?: IngresosRepository;
 }
 
 const obtenerAnioActual = () => String(new Date().getFullYear());

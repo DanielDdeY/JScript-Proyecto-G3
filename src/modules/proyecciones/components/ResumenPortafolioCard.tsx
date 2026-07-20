@@ -3,7 +3,7 @@ import { formatCurrencyPen } from '../../../shared/utils/formatters';
 import { calcularRiesgoPortafolio, calcularTotalesPortafolio, obtenerUltimoRendimiento } from '../domain/services/inversionService';
 
 interface ResumenPortafolioCardProps {
-  portafolio: PortafolioInversiones;
+  readonly portafolio: PortafolioInversiones;
 }
 
 const riesgoClassName = {

@@ -1,7 +1,7 @@
 import type { AlertaPresupuesto } from '../../../shared/types/alertaPresupuesto';
 
 interface AlertaPresupuestoCardProps {
-  alerta: AlertaPresupuesto;
+  readonly alerta: AlertaPresupuesto;
 }
 
 export function AlertaPresupuestoCard({ alerta }: AlertaPresupuestoCardProps) {

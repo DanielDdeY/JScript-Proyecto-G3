@@ -13,8 +13,8 @@ import {
 import { TarjetaInfoModal, type TarjetaInfoModalData } from './TarjetaInfoModal';
 
 interface TarjetaDetalleModalProps {
-  tarjeta: Tarjeta | null;
-  onClose: () => void;
+  readonly tarjeta: Tarjeta | null;
+  readonly onClose: () => void;
 }
 
 export function TarjetaDetalleModal({ tarjeta, onClose }: TarjetaDetalleModalProps) {
@@ -28,7 +28,7 @@ export function TarjetaDetalleModal({ tarjeta, onClose }: TarjetaDetalleModalPro
 
   return (
     <>
-      <div className="modal fade show d-block" tabIndex={-1} role="dialog" aria-modal="true">
+      <dialog open className="modal fade show d-block" aria-modal="true">
         <div className="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
           <div className="modal-content border-0 shadow-lg rounded-4">
             <div className="modal-header border-0 pb-0">
@@ -50,27 +50,27 @@ export function TarjetaDetalleModal({ tarjeta, onClose }: TarjetaDetalleModalPro
                 <h6 className="fw-bold mb-3">Tipos vinculados</h6>
                 <div className="d-flex flex-wrap gap-2">
                   <button type="button" className="btn btn-outline-primary fw-semibold" onClick={() => setInfoModal({ tipo: 'banco', data: banco })}>
-                    <i className="bi bi-bank me-2" /> Banco
+                    <i className="bi bi-bank me-2" />{' '}Banco
                   </button>
                   <button
                     type="button"
                     className="btn btn-outline-danger fw-semibold"
                     onClick={() => setInfoModal({ tipo: 'cicloFacturacion', data: cicloFacturacion })}
                   >
-                    <i className="bi bi-calendar-event me-2" /> CicloFacturacion
+                    <i className="bi bi-calendar-event me-2" />{' '}CicloFacturacion
                   </button>
                   <button
                     type="button"
                     className="btn btn-outline-success fw-semibold"
                     onClick={() => setInfoModal({ tipo: 'lineaCredito', data: lineaCredito })}
                   >
-                    <i className="bi bi-bar-chart-line me-2" /> LineaCredito
+                    <i className="bi bi-bar-chart-line me-2" />{' '}LineaCredito
                   </button>
                 </div>
               </div>
 
               <div className="alert alert-danger-subtle border-0 rounded-4 mb-0">
-                <i className="bi bi-calendar-event me-2" /> {obtenerTextoCicloFacturacion(cicloFacturacion)}
+                <i className="bi bi-calendar-event me-2" />{' '}{obtenerTextoCicloFacturacion(cicloFacturacion)}
               </div>
             </div>
             <div className="modal-footer border-0 pt-0">
@@ -80,14 +80,14 @@ export function TarjetaDetalleModal({ tarjeta, onClose }: TarjetaDetalleModalPro
             </div>
           </div>
         </div>
-      </div>
+      </dialog>
       <div className="modal-backdrop fade show" />
       <TarjetaInfoModal modal={infoModal} onClose={() => setInfoModal(null)} />
     </>
   );
 }
 
-function DetalleResumen({ label, value }: { label: string; value: string }) {
+function DetalleResumen({ label, value }: Readonly<{ label: string; value: string }>) {
   return (
     <div className="col-12 col-md-6">
       <div className="border rounded-4 p-3 h-100 bg-white">

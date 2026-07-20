@@ -7,11 +7,11 @@ export interface FeatureAction {
 }
 
 interface FeatureShellProps {
-  title: string;
-  description?: string;
-  icon?: string;
-  iconClassName?: string;
-  actions: FeatureAction[];
+  readonly title: string;
+  readonly description?: string;
+  readonly icon?: string;
+  readonly iconClassName?: string;
+  readonly actions: FeatureAction[];
 }
 
 export function FeatureShell({ title, description, icon, actions }: FeatureShellProps) {

@@ -4,8 +4,8 @@ import { formatCurrencyPen, formatShortDate } from '../../../shared/utils/format
 import { calcularPorcentajeAvancePrestamo, obtenerCuotaActual } from '../domain/services/prestamoService';
 
 interface PrestamoCardProps {
-  prestamo: Prestamo;
-  onCambiarEstadoCuota: (prestamoId: string, cuota: CuotaPrestamo) => Promise<void>;
+  readonly prestamo: Prestamo;
+  readonly onCambiarEstadoCuota: (prestamoId: string, cuota: CuotaPrestamo) => Promise<void>;
 }
 
 const estadoClassName: Record<CuotaPrestamo['estado'], string> = {

@@ -1,10 +1,10 @@
 {
   "perfil": {
     "id": "perfil-1",
-    "usuarioId": "J4r7_ua3pmw",
-    "saldoTotal": 15992.75,
-    "nombre": "Luis Sanchez",
-    "email": "ls5566@gmail.com"
+    "usuarioId": "user-1",
+    "saldoTotal": 18412.75,
+    "nombre": "Pepito",
+    "email": "pepito@gmail.com"
   },
   "bancos": [
     {
@@ -52,14 +52,14 @@
       "id": "tj-1",
       "bancoId": "banco-1",
       "numero": "5678",
-      "saldo": 3140,
+      "saldo": 3000,
       "tipo": "DEBITO"
     },
     {
       "id": "tj-2",
       "bancoId": "banco-2",
       "numero": "7890",
-      "saldo": 4750.75,
+      "saldo": 4250.75,
       "tipo": "CREDITO",
       "lineaCredito": {
         "limiteTotal": 10000,
@@ -80,13 +80,6 @@
       "numero": "1234",
       "saldo": 4500,
       "tipo": "DEBITO"
-    },
-    {
-      "bancoId": "banco-2",
-      "numero": "9999",
-      "saldo": 3502,
-      "tipo": "DEBITO",
-      "id": "2zQdoWuRVMo"
     }
   ],
   "gastos": [
@@ -490,6 +483,44 @@
         "esUnico": false
       },
       "id": "E-lndox3B4E"
+    },
+    {
+      "monto": 140,
+      "fecha": "2026-07-20",
+      "categoria": {
+        "nombre": "Transporte",
+        "importancia": "Baja"
+      },
+      "origen": "TARJETA",
+      "tarjetaId": "tj-1",
+      "descripcion": "Me fui a Huancayo",
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": true
+      },
+      "id": "qaoyE8keZlg"
+    },
+    {
+      "monto": 500,
+      "fecha": "2026-07-20",
+      "categoria": {
+        "nombre": "Salud",
+        "importancia": "Alta"
+      },
+      "origen": "TARJETA",
+      "tarjetaId": "tj-2",
+      "descripcion": "Dentista",
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": true,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": false
+      },
+      "id": "Gi4tw74ceaA"
     }
   ],
   "ingresos": [
@@ -688,6 +719,38 @@
         "esUnico": false
       },
       "id": "mP1ea-jIvsQ"
+    },
+    {
+      "monto": 60,
+      "fecha": "2026-07-20",
+      "fuente": "Otros",
+      "origen": "TARJETA",
+      "tarjetaId": "tj-1",
+      "descripcion": "me encontre",
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": true
+      },
+      "id": "fw64oj0Z4Qg"
+    },
+    {
+      "monto": 3000,
+      "fecha": "2026-07-20",
+      "fuente": "Inversiones",
+      "origen": "TARJETA",
+      "tarjetaId": "tj-1",
+      "descripcion": "regalo",
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": true
+      },
+      "id": "lBOhuIsbR_c"
     }
   ],
   "inversiones": [
@@ -856,13 +919,13 @@
         "seguroDesgravamen": "A"
       },
       "montoAprobado": 15000,
-      "deudaRestante": 12499.98,
+      "deudaRestante": 12083.31,
       "fechaDesembolso": "2025-12-01",
-      "cuotasPagadas": 6,
+      "cuotasPagadas": 7,
       "cuotasTotales": 36,
       "detalleCuotas": {
         "cuotasTotales": 36,
-        "cuotasPagadas": 6,
+        "cuotasPagadas": 7,
         "montoPorCuota": 416.67,
         "mesesSinIntereses": false,
         "tasaInteresAplicada": 85.5
@@ -908,13 +971,13 @@
           "numeroCuota": 7,
           "montoSoles": 416.67,
           "fechaVencimiento": "2026-07-05",
-          "estado": "ATRASADA"
+          "estado": "PAGADA"
         },
         {
           "numeroCuota": 8,
           "montoSoles": 416.67,
           "fechaVencimiento": "2026-08-05",
-          "estado": "PENDIENTE"
+          "estado": "ATRASADA"
         },
         {
           "numeroCuota": 9,
@@ -1124,28 +1187,16 @@
       "notificaciones": true
     },
     {
-      "nombre": "sofia",
-      "email": "s999@ss.co",
-      "password": "123asdrr",
-      "id": "KyVMNja3Gt0"
-    },
-    {
-      "nombre": "Mariela",
-      "email": "sdust562@gmail.com",
-      "password": "minp40#rr",
-      "id": "mnd34N-oDrI"
-    },
-    {
-      "nombre": "Juan",
-      "email": "jpp909@gmail.com",
-      "password": "jjkkpp00",
-      "id": "Uyv-IvL59hI"
-    },
-    {
       "nombre": "Luis Sanchez",
       "email": "ls5566@gmail.com",
       "password": "asdqwert",
       "id": "J4r7_ua3pmw"
+    },
+    {
+      "nombre": "Manuel",
+      "email": "m1e23@hotmail.com",
+      "password": "asdxcv33",
+      "id": "1OMEhpsQ4eo"
     }
   ],
   "metas": [

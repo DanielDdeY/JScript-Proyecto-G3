@@ -20,8 +20,8 @@ export interface PrestamosContextValue {
 }
 
 interface PrestamosProviderProps {
-  children: ReactNode;
-  repository?: PrestamosRepository;
+  readonly children: ReactNode;
+  readonly repository?: PrestamosRepository;
 }
 
 interface PrestamosState {

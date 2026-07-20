@@ -100,7 +100,7 @@ function PresupuestoSaldoContent() {
             <p className="text-muted mb-0">Cada barra compara tus gastos reales contra los límites por categoría que configuraste.</p>
           </div>
           <button className="btn btn-outline-primary btn-sm" type="button" onClick={() => void recargar()}>
-            <i className="bi bi-arrow-clockwise me-1" /> Actualizar
+            <i className="bi bi-arrow-clockwise me-1" />{' '}Actualizar
           </button>
         </div>
 

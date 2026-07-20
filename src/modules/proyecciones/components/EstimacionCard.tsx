@@ -1,6 +1,6 @@
 interface EstimacionCardProps {
-  titulo?: string;
-  valor?: string;
+  readonly titulo?: string;
+  readonly valor?: string;
 }
 
 export function EstimacionCard({ titulo = 'Estimación', valor = 'Pendiente' }: EstimacionCardProps) {

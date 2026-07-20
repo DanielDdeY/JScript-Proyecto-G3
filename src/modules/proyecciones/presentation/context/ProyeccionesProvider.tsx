@@ -15,8 +15,8 @@ export interface ProyeccionesContextValue {
 }
 
 interface ProyeccionesProviderProps {
-  children: ReactNode;
-  repository?: ProyeccionesRepository;
+  readonly children: ReactNode;
+  readonly repository?: ProyeccionesRepository;
 }
 
 interface ProyeccionesState {

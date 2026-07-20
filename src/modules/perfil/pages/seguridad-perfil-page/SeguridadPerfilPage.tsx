@@ -57,21 +57,22 @@ export function SeguridadPerfilPage() {
 
       {formError ? (
         <div className="alert alert-danger border-0 shadow-sm mb-4" role="alert">
-          <i className="bi bi-exclamation-triangle-fill me-2" /> {formError}
+          <i className="bi bi-exclamation-triangle-fill me-2" />{' '}{formError}
         </div>
       ) : null}
 
       {success ? (
         <div className="alert alert-success border-0 shadow-sm mb-4" role="alert">
-          <i className="bi bi-check-circle-fill me-2" /> ¡Contraseña modificada exitosamente!
+          <i className="bi bi-check-circle-fill me-2" />{' '}¡Contraseña modificada exitosamente!
         </div>
       ) : null}
 
       <form onSubmit={(event) => void handleSubmit(onSubmit)(event)}>
         <div className="row g-3">
           <div className="col-12">
-            <label className="form-label fw-semibold">Contraseña Actual</label>
+            <label className="form-label fw-semibold" htmlFor="seguridad-current-password">Contraseña Actual</label>
             <input
+              id="seguridad-current-password"
               type="password"
               className={`form-control ${errors.currentPassword ? 'is-invalid' : ''}`}
               placeholder="••••••••"
@@ -83,8 +84,9 @@ export function SeguridadPerfilPage() {
           </div>
 
           <div className="col-12 col-md-6">
-            <label className="form-label fw-semibold">Nueva Contraseña</label>
+            <label className="form-label fw-semibold" htmlFor="seguridad-new-password">Nueva Contraseña</label>
             <input
+              id="seguridad-new-password"
               type="password"
               className={`form-control ${errors.newPassword ? 'is-invalid' : ''}`}
               placeholder="••••••••"
@@ -94,8 +96,9 @@ export function SeguridadPerfilPage() {
           </div>
 
           <div className="col-12 col-md-6">
-            <label className="form-label fw-semibold">Confirmar Nueva Contraseña</label>
+            <label className="form-label fw-semibold" htmlFor="seguridad-confirm-password">Confirmar Nueva Contraseña</label>
             <input
+              id="seguridad-confirm-password"
               type="password"
               className={`form-control ${errors.confirmPassword ? 'is-invalid' : ''}`}
               placeholder="••••••••"
@@ -114,12 +117,12 @@ export function SeguridadPerfilPage() {
         >
           {isSubmitting ? (
             <>
-              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+              <output className="spinner-border spinner-border-sm" aria-hidden="true" />
               Actualizando Contraseña...
             </>
           ) : (
             <>
-              <i className="bi bi-key" /> Cambiar Contraseña
+              <i className="bi bi-key" />{' '}Cambiar Contraseña
             </>
           )}
         </button>

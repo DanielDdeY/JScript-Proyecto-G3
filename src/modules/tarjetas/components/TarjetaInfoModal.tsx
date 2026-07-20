@@ -10,8 +10,8 @@ export type TarjetaInfoModalData =
   | { tipo: 'lineaCredito'; data?: LineaCredito };
 
 interface TarjetaInfoModalProps {
-  modal: TarjetaInfoModalData | null;
-  onClose: () => void;
+  readonly modal: TarjetaInfoModalData | null;
+  readonly onClose: () => void;
 }
 
 const renderValor = (valor: string | number | undefined) => {
@@ -30,7 +30,7 @@ export function TarjetaInfoModal({ modal, onClose }: TarjetaInfoModalProps) {
 
   return (
     <>
-      <div className="modal fade show d-block tarjeta-info-modal" tabIndex={-1} role="dialog" aria-modal="true">
+      <dialog open className="modal fade show d-block tarjeta-info-modal" aria-modal="true">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content border-0 shadow-lg rounded-4">
             <div className="modal-header border-0 pb-0">
@@ -44,13 +44,13 @@ export function TarjetaInfoModal({ modal, onClose }: TarjetaInfoModalProps) {
             </div>
           </div>
         </div>
-      </div>
+      </dialog>
       <div className="modal-backdrop fade show tarjeta-info-backdrop" />
     </>
   );
 }
 
-function BancoDetalle({ banco }: { banco?: Banco | string }) {
+function BancoDetalle({ banco }: Readonly<{ banco?: Banco | string }>) {
   if (!banco) return <p className="text-muted mb-0">No hay información del banco vinculada a esta tarjeta.</p>;
 
   if (typeof banco === 'string') {
@@ -73,7 +73,7 @@ function BancoDetalle({ banco }: { banco?: Banco | string }) {
   );
 }
 
-function CicloFacturacionDetalle({ ciclo }: { ciclo?: CicloFacturacion }) {
+function CicloFacturacionDetalle({ ciclo }: Readonly<{ ciclo?: CicloFacturacion }>) {
   if (!ciclo) return <p className="text-muted mb-0">Esta tarjeta no tiene ciclo de facturación registrado.</p>;
 
   return (
@@ -87,7 +87,7 @@ function CicloFacturacionDetalle({ ciclo }: { ciclo?: CicloFacturacion }) {
   );
 }
 
-function LineaCreditoDetalle({ linea }: { linea?: LineaCredito }) {
+function LineaCreditoDetalle({ linea }: Readonly<{ linea?: LineaCredito }>) {
   const distribucion = calcularDistribucionLineaCredito(linea);
 
   if (!linea || !distribucion) {
@@ -105,7 +105,7 @@ function LineaCreditoDetalle({ linea }: { linea?: LineaCredito }) {
   );
 }
 
-function DetalleItem({ label, value }: { label: string; value: string | number }) {
+function DetalleItem({ label, value }: Readonly<{ label: string; value: string | number }>) {
   return (
     <div className="list-group-item px-0 d-flex justify-content-between gap-3">
       <span className="text-muted fw-semibold">{label}</span>
