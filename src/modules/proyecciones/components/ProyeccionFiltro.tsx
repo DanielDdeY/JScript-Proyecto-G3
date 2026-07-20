@@ -35,7 +35,7 @@ export function ProyeccionFiltro({ filtros, onChange, onSubmit, cargando = false
   return (
     <form className="card border-0 shadow-sm p-4 bg-white" onSubmit={handleSubmit}>
       <div className="d-flex align-items-start gap-3 mb-3">
-        <div className="bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center" style={{ width: 46, height: 46 }}>
+        <div className="icon-circle-md bg-primary-subtle text-primary">
           <i className="bi bi-funnel-fill fs-5" />
         </div>
         <div>

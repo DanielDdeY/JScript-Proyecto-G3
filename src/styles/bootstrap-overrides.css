@@ -1,0 +1,433 @@
+/* ============================================================
+   BOOTSTRAP OVERRIDES
+   Reemplaza las variables de Bootstrap 5 con la paleta Vizcash.
+   Debe importarse DESPUÉS de bootstrap.css y ANTES de los
+   demás módulos de la app.
+   ============================================================ */
+
+:root {
+  /* ── Color primario → Naranja EC6426 ─────────────────────── */
+  --bs-primary:           #EC6426;
+  --bs-primary-rgb:       236, 100, 38;
+  --bs-link-color:        #EC6426;
+  --bs-link-hover-color:  #D4551D;
+
+  /* ── Fondo y superficie ──────────────────────────────────── */
+  --bs-body-bg:           #FDE3CF;
+  --bs-body-color:        #632713;
+  --bs-secondary-bg:      #FFF5EC;
+  --bs-light-rgb:         255, 248, 242;
+
+  /* ── Tipografía ──────────────────────────────────────────── */
+  --bs-font-sans-serif:   'Poppins', system-ui, -apple-system, sans-serif;
+  --bs-body-font-family:  var(--bs-font-sans-serif);
+
+  /* ── Bordes ──────────────────────────────────────────────── */
+  --bs-border-color:      #E8C4A0;
+  --bs-border-radius:     12px;
+  --bs-border-radius-sm:  8px;
+  --bs-border-radius-lg:  16px;
+  --bs-border-radius-xl:  24px;
+  --bs-border-radius-pill: 9999px;
+
+  /* ── Colores semánticos ──────────────────────────────────── */
+  --bs-success:           #2D9147;
+  --bs-success-rgb:       45, 145, 71;
+  --bs-danger:            #C0392B;
+  --bs-danger-rgb:        192, 57, 43;
+  --bs-warning:           #E67E22;
+  --bs-warning-rgb:       230, 126, 34;
+  --bs-info:              #1A6B8C;
+  --bs-info-rgb:          26, 107, 140;
+  --bs-secondary:         #9B6B50;
+  --bs-secondary-rgb:     155, 107, 80;
+
+  /* ── Sombras ─────────────────────────────────────────────── */
+  --bs-box-shadow-sm:     0 2px 6px rgba(99, 39, 19, 0.10);
+  --bs-box-shadow:        0 6px 16px rgba(99, 39, 19, 0.12);
+  --bs-box-shadow-lg:     0 12px 28px rgba(99, 39, 19, 0.14);
+}
+
+/* ── Botón primario → Amarillo F8A91F con texto FDE3CF ─────── */
+.btn-primary {
+  --bs-btn-bg:              #F8A91F;
+  --bs-btn-border-color:    #F8A91F;
+  --bs-btn-color:           #FDE3CF;
+  --bs-btn-hover-bg:        #E09A10;
+  --bs-btn-hover-border-color: #E09A10;
+  --bs-btn-hover-color:     #FDE3CF;
+  --bs-btn-active-bg:       #CA8A00;
+  --bs-btn-active-border-color: #CA8A00;
+  --bs-btn-active-color:    #FDE3CF;
+  --bs-btn-disabled-bg:     #F8A91F;
+  --bs-btn-disabled-color:  #FDE3CF;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  transition: all var(--transition-base);
+}
+
+/* ── Botón outline-primary → borde naranja ───────────────────── */
+.btn-outline-primary {
+  --bs-btn-color:           #EC6426;
+  --bs-btn-border-color:    #EC6426;
+  --bs-btn-hover-bg:        #EC6426;
+  --bs-btn-hover-border-color: #EC6426;
+  --bs-btn-hover-color:     #FDE3CF;
+  --bs-btn-active-bg:       #D4551D;
+  --bs-btn-active-color:    #FDE3CF;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  transition: all var(--transition-base);
+}
+
+/* ── Botón light ─────────────────────────────────────────────── */
+.btn-light {
+  --bs-btn-bg:            #FFF5EC;
+  --bs-btn-border-color:  #E8C4A0;
+  --bs-btn-color:         #632713;
+  --bs-btn-hover-bg:      #FDE3CF;
+  --bs-btn-hover-border-color: #D4A47A;
+  --bs-btn-hover-color:   #632713;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  transition: all var(--transition-base);
+}
+
+/* ── Botón outline-secondary ─────────────────────────────────── */
+.btn-outline-secondary {
+  --bs-btn-color:           #9B6B50;
+  --bs-btn-border-color:    #E8C4A0;
+  --bs-btn-hover-bg:        #FDE3CF;
+  --bs-btn-hover-border-color: #D4A47A;
+  --bs-btn-hover-color:     #632713;
+  --bs-btn-active-bg:       #FDE3CF;
+  --bs-btn-active-color:    #632713;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  transition: all var(--transition-base);
+}
+
+/* ── Botón peligro ───────────────────────────────────────────── */
+.btn-outline-danger {
+  --bs-btn-color:           #C0392B;
+  --bs-btn-border-color:    #C0392B;
+  --bs-btn-hover-bg:        #C0392B;
+  --bs-btn-hover-color:     #ffffff;
+  --bs-btn-active-bg:       #922B21;
+  --bs-btn-active-color:    #ffffff;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  transition: all var(--transition-base);
+}
+
+/* ── Botón link ──────────────────────────────────────────────── */
+.btn-link {
+  color: var(--color-primary);
+  transition: color var(--transition-fast);
+}
+.btn-link:hover {
+  color: var(--color-primary-hover);
+}
+
+/* ── Card ────────────────────────────────────────────────────── */
+.card {
+  --bs-card-bg:           var(--color-surface);
+  --bs-card-border-color: var(--color-border);
+  --bs-card-border-radius: var(--radius-lg);
+  color: var(--color-text);
+}
+
+/* ── Badge primario ──────────────────────────────────────────── */
+.badge.bg-primary,
+.badge.text-bg-primary {
+  background-color: var(--color-primary) !important;
+  color: var(--color-btn-text) !important;
+}
+
+/* ── Badges sutiles (subtle) ─────────────────────────────────── */
+.bg-primary-subtle   { background-color: #F9D3BE !important; }
+.bg-success-subtle   { background-color: #E8F5ED !important; }
+.bg-danger-subtle    { background-color: #FBEAEA !important; }
+.bg-warning-subtle   { background-color: #FEF5E7 !important; }
+.bg-info-subtle      { background-color: #E4F2F8 !important; }
+.bg-secondary-subtle { background-color: #F5EDE7 !important; }
+.bg-light            { background-color: #FFF5EC !important; }
+
+.text-primary-emphasis { color: #D4551D !important; }
+.text-success-emphasis { color: #1E6B33 !important; }
+.text-danger-emphasis  { color: #922B21 !important; }
+.text-warning-emphasis { color: #A04000 !important; }
+.text-info-emphasis    { color: #145E7B !important; }
+
+/* ── Navbar ──────────────────────────────────────────────────── */
+.navbar {
+  background-color: var(--color-surface) !important;
+  border-bottom-color: var(--color-border) !important;
+}
+
+.navbar-brand {
+  color: var(--color-primary) !important;
+  font-weight: 700;
+}
+
+.nav-link {
+  color: var(--color-text-muted) !important;
+  font-weight: 500;
+  transition: color var(--transition-fast);
+}
+.nav-link:hover,
+.nav-link.active,
+.nav-link.text-primary {
+  color: var(--color-primary) !important;
+  font-weight: 700;
+}
+
+/* ── Alert ───────────────────────────────────────────────────── */
+.alert-danger {
+  background-color: #FBEAEA;
+  border-color: #EDB8B3;
+  color: #922B21;
+}
+.alert-warning {
+  background-color: #FEF5E7;
+  border-color: #F4C87A;
+  color: #A04000;
+}
+.alert-info {
+  background-color: #E4F2F8;
+  border-color: #93C9E0;
+  color: #145E7B;
+}
+.alert-success {
+  background-color: #E8F5ED;
+  border-color: #A3D4B2;
+  color: #1E6B33;
+}
+
+/* ── Form controls ───────────────────────────────────────────── */
+.form-control,
+.form-select {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-text);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 0.18rem rgba(236, 100, 38, 0.18);
+  color: var(--color-text);
+  background-color: var(--color-surface);
+}
+
+.form-control::placeholder {
+  color: var(--color-text-soft);
+}
+
+.form-label {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+/* ── Dropdown ────────────────────────────────────────────────── */
+.dropdown-menu {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+}
+
+.dropdown-item {
+  color: var(--color-text);
+  font-weight: 500;
+  transition: background-color var(--transition-fast);
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background-color: var(--color-primary-light);
+  color: var(--color-text);
+}
+
+.dropdown-item.text-danger {
+  color: var(--color-danger) !important;
+}
+
+.dropdown-item.text-danger:hover {
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger-text) !important;
+}
+
+/* ── Progress bar ────────────────────────────────────────────── */
+.progress {
+  background-color: var(--color-primary-light);
+  border-radius: var(--radius-full);
+}
+
+.progress-bar {
+  background-color: var(--color-primary);
+  border-radius: var(--radius-full);
+}
+
+/* ── Spinner ─────────────────────────────────────────────────── */
+.spinner-border.text-primary {
+  color: var(--color-primary) !important;
+}
+
+/* ── Table ───────────────────────────────────────────────────── */
+.table {
+  color: var(--color-text);
+  --bs-table-bg: transparent;
+}
+
+.table-hover > tbody > tr:hover > * {
+  background-color: var(--color-primary-light);
+}
+
+.table-light {
+  --bs-table-bg: #FFF5EC;
+  color: var(--color-text);
+}
+
+/* ── Text colors ─────────────────────────────────────────────── */
+.text-primary { color: var(--color-primary) !important; }
+.text-muted   { color: var(--color-text-muted) !important; }
+.text-dark    { color: var(--color-text) !important; }
+.text-success { color: var(--color-success) !important; }
+.text-danger  { color: var(--color-danger) !important; }
+.text-warning { color: var(--color-warning) !important; }
+.text-info    { color: var(--color-info) !important; }
+.text-secondary { color: var(--color-text-muted) !important; }
+
+/* ── Background colors ───────────────────────────────────────── */
+.bg-white  { background-color: var(--color-surface) !important; }
+.bg-light  { background-color: #FFF5EC !important; }
+.min-vh-100 { min-height: 100vh; }
+
+/* ── Footer ──────────────────────────────────────────────────── */
+footer {
+  background-color: var(--color-surface) !important;
+  border-top-color: var(--color-border) !important;
+  color: var(--color-text-muted);
+}
+
+footer a {
+  color: var(--color-text-muted) !important;
+  transition: color var(--transition-fast);
+}
+
+/* ── Pagination ──────────────────────────────────────────────── */
+.pagination .page-link {
+  color: var(--color-primary);
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+  font-weight: 500;
+  transition: all var(--transition-fast);
+  font-family: var(--font-sans);
+}
+
+.pagination .page-link:hover {
+  background-color: var(--color-primary-light);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.pagination .page-item.active .page-link {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-btn-text);
+}
+
+.pagination .page-item.disabled .page-link {
+  color: var(--color-text-soft);
+  background-color: var(--color-bg-alt);
+  border-color: var(--color-border);
+}
+
+/* ── Input group addon ───────────────────────────────────────── */
+.input-group-text {
+  background-color: var(--color-bg-alt);
+  border-color: var(--color-border);
+  color: var(--color-text-muted);
+  font-family: var(--font-sans);
+}
+
+/* ── Modal ───────────────────────────────────────────────────── */
+.modal-content {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  color: var(--color-text);
+}
+
+.modal-header {
+  border-bottom-color: var(--color-border);
+  padding: 1.25rem 1.5rem;
+}
+
+.modal-footer {
+  border-top-color: var(--color-border);
+}
+
+.modal-backdrop {
+  background-color: rgba(99, 39, 19, 0.4);
+}
+
+/* ── Close button ────────────────────────────────────────────── */
+.btn-close {
+  filter: none;
+  opacity: 0.5;
+  transition: opacity var(--transition-fast);
+}
+
+.btn-close:hover {
+  opacity: 1;
+}
+
+/* ── Breadcrumb ──────────────────────────────────────────────── */
+.breadcrumb-item a {
+  color: var(--color-primary);
+}
+
+.breadcrumb-item.active {
+  color: var(--color-text-muted);
+}
+
+/* ── Tab / Pills ─────────────────────────────────────────────── */
+.nav-pills .nav-link {
+  color: var(--color-text-muted);
+  background: transparent;
+  border-radius: var(--radius-full);
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.nav-pills .nav-link:hover {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.nav-pills .nav-link.active {
+  background: var(--color-primary);
+  color: var(--color-btn-text);
+  font-weight: 700;
+}
+
+/* ── Footer ──────────────────────────────────────────────────── */
+footer {
+  background-color: var(--color-surface) !important;
+  border-top-color: var(--color-border) !important;
+  color: var(--color-text-muted);
+}
+
+footer a {
+  color: var(--color-text-muted) !important;
+  transition: color var(--transition-fast);
+}
+
+footer a:hover {
+  color: var(--color-primary) !important;
+}

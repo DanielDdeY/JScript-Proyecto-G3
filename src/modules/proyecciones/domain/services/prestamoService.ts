@@ -1,5 +1,5 @@
 import type { CuotaPrestamo } from '../../../../shared/types/cuotaPrestamo';
-import type { DetalleCuotas } from '../../../../shared/types/detallecuotas';
+import type { DetalleCuotas } from '../../../../shared/types/detalleCuotas';
 import type { Prestamo } from '../../../../shared/types/prestamo';
 
 export interface GenerarCuotasParams {

@@ -1,8 +1,10 @@
 {
   "perfil": {
     "id": "perfil-1",
-    "usuarioId": "user-1",
-    "saldoTotal": 15952.75
+    "usuarioId": "J4r7_ua3pmw",
+    "saldoTotal": 15992.75,
+    "nombre": "Luis Sanchez",
+    "email": "ls5566@gmail.com"
   },
   "bancos": [
     {
@@ -50,7 +52,7 @@
       "id": "tj-1",
       "bancoId": "banco-1",
       "numero": "5678",
-      "saldo": 3200,
+      "saldo": 3140,
       "tipo": "DEBITO"
     },
     {
@@ -450,6 +452,44 @@
         "esProbable": true,
         "esUnico": false
       }
+    },
+    {
+      "monto": 50,
+      "fecha": "2026-07-20",
+      "categoria": {
+        "nombre": "Entretenimiento",
+        "importancia": "Baja"
+      },
+      "origen": "TARJETA",
+      "tarjetaId": "tj-1",
+      "descripcion": "Compra Temu",
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": true
+      },
+      "id": "rvBTMFNtva8"
+    },
+    {
+      "monto": 10,
+      "fecha": "2026-07-20",
+      "categoria": {
+        "nombre": "Alimentación",
+        "importancia": "Alta"
+      },
+      "origen": "TARJETA",
+      "tarjetaId": "tj-1",
+      "descripcion": "Almuerzo rápido",
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": true,
+        "esProbable": false,
+        "esUnico": false
+      },
+      "id": "E-lndox3B4E"
     }
   ],
   "ingresos": [
@@ -634,6 +674,20 @@
         "esProbable": false,
         "esUnico": false
       }
+    },
+    {
+      "monto": 100,
+      "fecha": "2026-07-20",
+      "fuente": "Freelance",
+      "descripcion": "Proyecto simple",
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": true,
+        "esProbable": false,
+        "esUnico": false
+      },
+      "id": "mP1ea-jIvsQ"
     }
   ],
   "inversiones": [
@@ -718,6 +772,14 @@
           },
           "limiteSoles": 250,
           "gastadoSoles": 0
+        },
+        {
+          "categoria": {
+            "nombre": "Tecnología",
+            "importancia": "Media"
+          },
+          "limiteSoles": 20,
+          "gastadoSoles": 0
         }
       ],
       "alertasActivas": []
@@ -768,6 +830,13 @@
           "gastadoSoles": 0
         }
       ],
+      "alertasActivas": []
+    },
+    {
+      "id": "9k7-cjRYktQ",
+      "mes": "2026-08",
+      "totalAsignado": 1800,
+      "desgloseCategorias": [],
       "alertasActivas": []
     }
   ],
@@ -1053,6 +1122,30 @@
       "password": "123456",
       "fechaCreacion": "2026-06-01",
       "notificaciones": true
+    },
+    {
+      "nombre": "sofia",
+      "email": "s999@ss.co",
+      "password": "123asdrr",
+      "id": "KyVMNja3Gt0"
+    },
+    {
+      "nombre": "Mariela",
+      "email": "sdust562@gmail.com",
+      "password": "minp40#rr",
+      "id": "mnd34N-oDrI"
+    },
+    {
+      "nombre": "Juan",
+      "email": "jpp909@gmail.com",
+      "password": "jjkkpp00",
+      "id": "Uyv-IvL59hI"
+    },
+    {
+      "nombre": "Luis Sanchez",
+      "email": "ls5566@gmail.com",
+      "password": "asdqwert",
+      "id": "J4r7_ua3pmw"
     }
   ],
   "metas": [

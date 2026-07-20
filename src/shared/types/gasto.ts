@@ -1,4 +1,4 @@
-import type { DetalleCuotas } from './detallecuotas';
+import type { DetalleCuotas } from './detalleCuotas';
 import type { GastoCategoria } from './gastoCategoria';
 import type { GastoCompartido } from './gastoCompartido';
 import type { Id } from './id';

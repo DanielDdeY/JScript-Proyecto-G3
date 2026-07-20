@@ -103,7 +103,7 @@ export function TarjetaCarousel() {
 
           <div className="d-flex flex-wrap justify-content-between align-items-end gap-4 mt-4 tarjeta-carousel-footer">
             <div>
-              <span className="small opacity-75 d-block text-uppercase" style={{ fontSize: '0.72rem' }}>
+              <span className="small opacity-75 d-block text-uppercase text-xs">
                 Saldo actual
               </span>
               <span className="fw-bold fs-3 font-monospace">{formatCurrencyPen(tarjetaActiva.saldo)}</span>

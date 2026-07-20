@@ -1,0 +1,129 @@
+/* ============================================================
+   GLOBAL — Estilos modernos y micro-detalles de UI premium
+   ============================================================ */
+
+/* ── List Group (modales y tarjetas de detalle) ───────────── */
+.list-group-item {
+  background-color: var(--color-surface);
+  border-color:     var(--color-border);
+  color:            var(--color-text);
+  font-family:      var(--font-sans);
+  padding:          10px 0;
+}
+
+.list-group-item:first-child { border-top: none; }
+.list-group-item:last-child  { border-bottom: none; }
+
+.list-group-flush .list-group-item {
+  border-left:  0;
+  border-right: 0;
+}
+
+/* ── Form text (subtítulos de input) ──────────────────────── */
+.form-text {
+  color: var(--color-text-soft) !important;
+  font-family: var(--font-sans);
+}
+
+/* ── Invalid feedback ─────────────────────────────────────── */
+.invalid-feedback {
+  color: var(--color-danger) !important;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}
+
+.form-control.is-invalid,
+.form-select.is-invalid {
+  border-color: var(--color-danger) !important;
+  box-shadow: none;
+}
+
+.form-control.is-invalid:focus,
+.form-select.is-invalid:focus {
+  box-shadow: 0 0 0 0.18rem rgba(192, 57, 43, 0.18);
+}
+
+/* ── Badge mejoras ────────────────────────────────────────── */
+.badge {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* ── Heading global ───────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  color:       var(--color-text);
+  line-height: 1.2;
+}
+
+/* ── Texto por defecto ────────────────────────────────────── */
+p, span, label, li, td, th {
+  font-family: var(--font-sans);
+}
+
+/* ── Monospace override ───────────────────────────────────── */
+.font-monospace {
+  font-family: var(--font-mono) !important;
+}
+
+/* ── Border por defecto ───────────────────────────────────── */
+.border {
+  border-color: var(--color-border) !important;
+}
+.border-bottom { border-bottom-color: var(--color-border) !important; }
+.border-top    { border-top-color:    var(--color-border) !important; }
+.border-end    { border-right-color:  var(--color-border) !important; }
+
+/* ── Rounded sobreescrito ─────────────────────────────────── */
+.rounded-4  { border-radius: var(--radius-xl)  !important; }
+.rounded-3  { border-radius: var(--radius-lg)  !important; }
+.rounded-2  { border-radius: var(--radius-md)  !important; }
+.rounded    { border-radius: var(--radius-sm)  !important; }
+.rounded-circle { border-radius: var(--radius-full) !important; }
+.rounded-pill   { border-radius: var(--radius-full) !important; }
+
+/* ── Shadow overrides ─────────────────────────────────────── */
+.shadow-sm { box-shadow: var(--shadow-sm) !important; }
+.shadow    { box-shadow: var(--shadow-md) !important; }
+.shadow-lg { box-shadow: var(--shadow-lg) !important; }
+
+/* ── Animación de entrada suave para cards ────────────────── */
+.card {
+  animation: cardFadeIn 0.25s ease both;
+}
+
+@keyframes cardFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Spinner primario ─────────────────────────────────────── */
+.spinner-border.text-primary {
+  color: var(--color-primary) !important;
+}
+
+/* ── Visually hidden ──────────────────────────────────────── */
+.visually-hidden {
+  position: absolute !important;
+  width:    1px !important;
+  height:   1px !important;
+  padding:  0 !important;
+  margin:   -1px !important;
+  overflow: hidden !important;
+  clip:     rect(0,0,0,0) !important;
+  white-space: nowrap !important;
+  border:   0 !important;
+}
+
+/* ── Focus visible global ─────────────────────────────────── */
+:focus-visible {
+  outline: 2.5px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ── Selección de texto ───────────────────────────────────── */
+::selection {
+  background: var(--color-primary-light);
+  color:      var(--color-primary);
+}

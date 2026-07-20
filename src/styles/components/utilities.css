@@ -1,0 +1,105 @@
+/* ============================================================
+   UTILITIES — Clases utilitarias custom que Bootstrap no provee
+   ============================================================ */
+
+/* ── Spacing custom (valores intermedios) ─────────────────── */
+.py-2\.5 {
+  padding-top:    0.65rem !important;
+  padding-bottom: 0.65rem !important;
+}
+
+.px-2\.5 {
+  padding-left:  0.65rem !important;
+  padding-right: 0.65rem !important;
+}
+
+/* ── Border responsive ────────────────────────────────────── */
+.border-end-md {
+  border-right: 0;
+}
+
+@media (min-width: 768px) {
+  .border-end-md {
+    border-right: 1px solid var(--color-border);
+  }
+}
+
+/* ── Iconos circulares ────────────────────────────────────── */
+.icon-circle-sm {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.icon-circle-md {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.icon-circle-lg {
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ── Avatares de usuario ──────────────────────────────────── */
+.avatar-sm {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.avatar-md {
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.avatar-lg {
+  width: 76px;
+  height: 76px;
+  min-width: 76px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+/* ── Loading placeholder ──────────────────────────────────── */
+.min-h-loading {
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Texto extra pequeño ──────────────────────────────────── */
+.text-xs {
+  font-size: var(--font-size-xs) !important;
+}
+
+/* ── Sidebar de filtros ───────────────────────────────────── */
+.filtros-wallet-sidebar {
+  border-color: var(--color-border) !important;
+}

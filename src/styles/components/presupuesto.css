@@ -1,0 +1,37 @@
+/* ============================================================
+   PRESUPUESTO — Cards y círculos de progreso de presupuesto
+   ============================================================ */
+
+.presupuesto-header-card {
+  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-bg-alt) 100%);
+  border-color: var(--color-border);
+}
+
+.presupuesto-total-circle {
+  width: 128px;
+  height: 128px;
+  border-radius: var(--radius-full);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-lg);
+  border: 8px solid var(--color-primary-light);
+}
+
+.presupuesto-total-circle strong {
+  font-size: 1.05rem;
+  color: var(--color-text);
+}
+
+.presupuesto-progress {
+  height: 14px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary-light);
+}
+
+.presupuesto-progress .progress-bar {
+  border-radius: var(--radius-full);
+  background-color: var(--color-primary);
+}

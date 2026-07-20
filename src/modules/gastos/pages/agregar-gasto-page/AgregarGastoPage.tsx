@@ -65,7 +65,7 @@ export function AgregarGastoPage() {
   } = useForm<GastoFormInput, unknown, GastoFormValues>({
     resolver: zodResolver(gastoSchema),
     defaultValues: {
-      monto: 0,
+      monto: '' as unknown as number,
       fecha: today(),
       origen: 'EFECTIVO',
       tarjetaId: '',
@@ -118,7 +118,7 @@ export function AgregarGastoPage() {
 
     setSuccess(true);
     reset({
-      monto: 0,
+      monto: '' as unknown as number,
       fecha: today(),
       origen: 'EFECTIVO',
       tarjetaId: '',

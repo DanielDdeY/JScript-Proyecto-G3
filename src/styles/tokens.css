@@ -1,0 +1,91 @@
+/* ============================================================
+   TOKENS — Design System Vizcash
+   Todas las variables CSS de la marca.
+   Importar PRIMERO en index.css
+   ============================================================ */
+
+:root {
+  /* ── Paleta de marca ─────────────────────────────────────── */
+  --color-bg:          #FDE3CF;   /* Fondo general */
+  --color-bg-alt:      #FFF5EC;   /* Fondo alternativo / secciones */
+  --color-surface:     #FFFFFF;   /* Cards, inputs, modales */
+  --color-surface-warm:#FFF8F2;   /* Superficies con tono cálido */
+
+  --color-primary:     #EC6426;   /* Naranja principal */
+  --color-primary-hover: #D4551D; /* Naranja oscurecido (hover) */
+  --color-primary-light: #F9D3BE; /* Naranja muy claro (fondos sutiles) */
+
+  --color-btn:         #F8A91F;   /* Amarillo dorado — botones primarios */
+  --color-btn-hover:   #E09A10;   /* Dorado oscurecido (hover) */
+  --color-btn-text:    #FDE3CF;   /* Texto dentro de botones */
+
+  --color-text:        #632713;   /* Texto principal — marrón oscuro */
+  --color-text-muted:  #9B6B50;   /* Texto secundario — marrón medio */
+  --color-text-soft:   #BF8C72;   /* Texto muy suave / placeholders */
+
+  --color-border:      #E8C4A0;   /* Bordes sutiles */
+  --color-border-strong: #D4A47A; /* Bordes con énfasis */
+
+  /* ── Estados semánticos ──────────────────────────────────── */
+  --color-success:     #2D9147;   /* Verde positivo / ingresos */
+  --color-success-bg:  #E8F5ED;
+  --color-success-text:#1E6B33;
+
+  --color-danger:      #C0392B;   /* Rojo — gastos / errores */
+  --color-danger-bg:   #FBEAEA;
+  --color-danger-text: #922B21;
+
+  --color-warning:     #E67E22;   /* Naranja advertencia */
+  --color-warning-bg:  #FEF5E7;
+  --color-warning-text:#A04000;
+
+  --color-info:        #1A6B8C;   /* Azul frío informativo */
+  --color-info-bg:     #E4F2F8;
+  --color-info-text:   #145E7B;
+
+  /* ── Tipografía ──────────────────────────────────────────── */
+  --font-sans: 'Poppins', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+
+  --font-size-xs:   0.72rem;   /* 11.5px */
+  --font-size-sm:   0.85rem;   /* 13.6px */
+  --font-size-base: 1rem;      /* 16px */
+  --font-size-md:   1.08rem;
+  --font-size-lg:   1.25rem;
+  --font-size-xl:   1.5rem;
+  --font-size-2xl:  1.875rem;
+  --font-size-3xl:  2.25rem;
+
+  /* ── Espaciado ───────────────────────────────────────────── */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* ── Radios (Minimalistas) ───────────────────────────────── */
+  --radius-xs:   2px;
+  --radius-sm:   4px;
+  --radius-md:   6px;
+  --radius-lg:   8px;
+  --radius-xl:   12px;
+  --radius-2xl:  16px;
+  --radius-full: 9999px;
+
+  /* ── Sombras (Minimalistas y Planas) ─────────────────────── */
+  --shadow-xs:  0 1px 2px rgba(99, 39, 19, 0.04);
+  --shadow-sm:  0 2px 4px rgba(99, 39, 19, 0.06);
+  --shadow-md:  0 4px 8px rgba(99, 39, 19, 0.08);
+  --shadow-lg:  0 8px 16px rgba(99, 39, 19, 0.10);
+  --shadow-xl:  0 12px 24px rgba(99, 39, 19, 0.12);
+
+  /* ── Transiciones ────────────────────────────────────────── */
+  --transition-fast:   150ms ease;
+  --transition-base:   250ms ease;
+  --transition-slow:   400ms ease;
+}
