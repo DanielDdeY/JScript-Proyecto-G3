@@ -13,7 +13,7 @@ export function ListarTarjetaPage() {
     <div className="card border-0 shadow-sm p-4 bg-white">
       {message ? (
         <div className="alert alert-success border-0 shadow-sm" role="alert">
-          <i className="bi bi-check-circle-fill me-2" /> {message}
+          <i className="bi bi-check-circle-fill me-2" />{' '}{message}
         </div>
       ) : null}
 

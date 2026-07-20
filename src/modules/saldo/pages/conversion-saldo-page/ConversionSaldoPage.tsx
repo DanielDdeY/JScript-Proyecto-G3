@@ -80,8 +80,8 @@ export function ConversionSaldoPage() {
         <div className="row g-4 align-items-stretch">
           <div className="col-12 col-lg-5">
             <div className="border rounded-3 p-4 bg-light h-100">
-              <label className="form-label fw-semibold">Dinero disponible en tarjeta</label>
-              <select className="form-select mb-4" value={tarjetaId} onChange={(event) => setTarjetaId(event.target.value)}>
+              <label className="form-label fw-semibold" htmlFor="conversion-tarjeta">Dinero disponible en tarjeta</label>
+              <select id="conversion-tarjeta" className="form-select mb-4" value={tarjetaId} onChange={(event) => setTarjetaId(event.target.value)}>
                 {tarjetas.map((tarjeta) => (
                   <option key={tarjeta.id} value={String(tarjeta.id)}>
                     {conversionMonedaService.obtenerEtiquetaTarjeta(tarjeta)}

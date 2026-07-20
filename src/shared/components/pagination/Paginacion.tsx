@@ -1,8 +1,8 @@
 import type { PaginacionMeta } from '../../types/paginacionMeta';
 
 interface PaginacionProps {
-  meta: PaginacionMeta;
-  onCambiarPagina: (pagina: number) => void;
+  readonly meta: PaginacionMeta;
+  readonly onCambiarPagina: (pagina: number) => void;
 }
 
 const crearPaginasVisibles = (totalPaginas: number, paginaActual: number) => {

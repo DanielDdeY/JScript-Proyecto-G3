@@ -168,9 +168,9 @@ export function AgregarTarjetaPage() {
   if (cargando) {
     return (
       <div className="text-center p-5">
-        <div className="spinner-border text-primary" role="status">
+        <output className="spinner-border text-primary">
           <span className="visually-hidden">Cargando...</span>
-        </div>
+        </output>
       </div>
     );
   }
@@ -184,7 +184,7 @@ export function AgregarTarjetaPage() {
 
       {success ? (
         <div className="alert alert-success border-0 shadow-sm" role="alert">
-          <i className="bi bi-check-circle-fill me-2" /> ¡Tarjeta vinculada con éxito! Ahora puedes revisarla en el carrusel.
+          <i className="bi bi-check-circle-fill me-2" />{' '}¡Tarjeta vinculada con éxito! Ahora puedes revisarla en el carrusel.
         </div>
       ) : null}
 
@@ -197,8 +197,8 @@ export function AgregarTarjetaPage() {
       <form onSubmit={(event) => void handleSubmit(onSubmit)(event)}>
         <div className="row g-3">
           <div className="col-12 col-md-6">
-            <label className="form-label fw-semibold">Banco Emisor</label>
-            <select className={`form-select ${errors.bancoId ? 'is-invalid' : ''}`} {...register('bancoId')}>
+            <label className="form-label fw-semibold" htmlFor="tarjeta-banco">Banco Emisor</label>
+            <select id="tarjeta-banco" className={`form-select ${errors.bancoId ? 'is-invalid' : ''}`} {...register('bancoId')}>
               <option value="">-- Seleccione un banco --</option>
               {bancos.map((banco) => (
                 <option key={String(banco.id)} value={String(banco.id)}>
@@ -210,8 +210,8 @@ export function AgregarTarjetaPage() {
           </div>
 
           <div className="col-12 col-md-6">
-            <label className="form-label fw-semibold">Tipo de Cuenta</label>
-            <select className={`form-select ${errors.tipo ? 'is-invalid' : ''}`} {...register('tipo')}>
+            <label className="form-label fw-semibold" htmlFor="tarjeta-tipo">Tipo de Cuenta</label>
+            <select id="tarjeta-tipo" className={`form-select ${errors.tipo ? 'is-invalid' : ''}`} {...register('tipo')}>
               <option value="DEBITO">Débito / Cuenta de Ahorros</option>
               <option value="CREDITO">Crédito / Línea de Crédito</option>
             </select>
@@ -219,9 +219,10 @@ export function AgregarTarjetaPage() {
           </div>
 
           <div className="col-12 col-md-6">
-            <label className="form-label fw-semibold">Últimos 4 Dígitos de la Tarjeta</label>
+            <label className="form-label fw-semibold" htmlFor="tarjeta-numero">Últimos 4 Dígitos de la Tarjeta</label>
             <input
-              type="text"
+              id="tarjeta-numero"
+                type="text"
               maxLength={4}
               className={`form-control ${errors.numero ? 'is-invalid' : ''}`}
               placeholder="Ej. 1234"
@@ -231,10 +232,11 @@ export function AgregarTarjetaPage() {
           </div>
 
           <div className="col-12 col-md-6">
-            <label className="form-label fw-semibold">Saldo Inicial / Disponible</label>
+            <label className="form-label fw-semibold" htmlFor="tarjeta-saldo">Saldo Inicial / Disponible</label>
             <div className="input-group">
               <span className="input-group-text fw-bold">S/.</span>
               <input
+                id="tarjeta-saldo"
                 type="number"
                 step="0.01"
                 className={`form-control fw-bold ${errors.saldo ? 'is-invalid' : ''}`}
@@ -255,43 +257,43 @@ export function AgregarTarjetaPage() {
 
             <div className="row g-3">
               <div className="col-12 col-md-4">
-                <label className="form-label fw-semibold">Límite total</label>
-                <input type="number" step="0.01" className={`form-control ${errors.limiteTotal ? 'is-invalid' : ''}`} {...register('limiteTotal')} />
+                <label className="form-label fw-semibold" htmlFor="tarjeta-limite-total">Límite total</label>
+                <input id="tarjeta-limite-total" type="number" step="0.01" className={`form-control ${errors.limiteTotal ? 'is-invalid' : ''}`} {...register('limiteTotal')} />
                 {errors.limiteTotal ? <div className="invalid-feedback fw-semibold">{errors.limiteTotal.message}</div> : null}
               </div>
               <div className="col-12 col-md-4">
-                <label className="form-label fw-semibold">Línea disponible</label>
-                <input type="number" step="0.01" className={`form-control ${errors.lineaDisponible ? 'is-invalid' : ''}`} {...register('lineaDisponible')} />
+                <label className="form-label fw-semibold" htmlFor="tarjeta-linea-disponible">Línea disponible</label>
+                <input id="tarjeta-linea-disponible" type="number" step="0.01" className={`form-control ${errors.lineaDisponible ? 'is-invalid' : ''}`} {...register('lineaDisponible')} />
                 {errors.lineaDisponible ? <div className="invalid-feedback fw-semibold">{errors.lineaDisponible.message}</div> : null}
               </div>
               <div className="col-12 col-md-4">
-                <label className="form-label fw-semibold">Línea utilizada</label>
-                <input type="number" step="0.01" className={`form-control ${errors.lineaUtilizada ? 'is-invalid' : ''}`} {...register('lineaUtilizada')} />
+                <label className="form-label fw-semibold" htmlFor="tarjeta-linea-utilizada">Línea utilizada</label>
+                <input id="tarjeta-linea-utilizada" type="number" step="0.01" className={`form-control ${errors.lineaUtilizada ? 'is-invalid' : ''}`} {...register('lineaUtilizada')} />
                 {errors.lineaUtilizada ? <div className="invalid-feedback fw-semibold">{errors.lineaUtilizada.message}</div> : null}
               </div>
 
               <div className="col-12 col-md-3">
-                <label className="form-label fw-semibold">Día de corte</label>
-                <input type="number" className={`form-control ${errors.diaCorte ? 'is-invalid' : ''}`} {...register('diaCorte')} />
+                <label className="form-label fw-semibold" htmlFor="tarjeta-dia-corte">Día de corte</label>
+                <input id="tarjeta-dia-corte" type="number" className={`form-control ${errors.diaCorte ? 'is-invalid' : ''}`} {...register('diaCorte')} />
                 {errors.diaCorte ? <div className="invalid-feedback fw-semibold">{errors.diaCorte.message}</div> : null}
               </div>
               <div className="col-12 col-md-3">
-                <label className="form-label fw-semibold">Día de pago</label>
-                <input type="number" className={`form-control ${errors.diaPago ? 'is-invalid' : ''}`} {...register('diaPago')} />
+                <label className="form-label fw-semibold" htmlFor="tarjeta-dia-pago">Día de pago</label>
+                <input id="tarjeta-dia-pago" type="number" className={`form-control ${errors.diaPago ? 'is-invalid' : ''}`} {...register('diaPago')} />
                 {errors.diaPago ? <div className="invalid-feedback fw-semibold">{errors.diaPago.message}</div> : null}
               </div>
               <div className="col-12 col-md-3">
-                <label className="form-label fw-semibold">Mes actual</label>
-                <input type="month" className="form-control" {...register('mesActual')} />
+                <label className="form-label fw-semibold" htmlFor="tarjeta-mes-actual">Mes actual</label>
+                <input id="tarjeta-mes-actual" type="month" className="form-control" {...register('mesActual')} />
               </div>
               <div className="col-12 col-md-3">
-                <label className="form-label fw-semibold">Pago mínimo</label>
-                <input type="number" step="0.01" className={`form-control ${errors.pagoMinimo ? 'is-invalid' : ''}`} {...register('pagoMinimo')} />
+                <label className="form-label fw-semibold" htmlFor="tarjeta-pago-minimo">Pago mínimo</label>
+                <input id="tarjeta-pago-minimo" type="number" step="0.01" className={`form-control ${errors.pagoMinimo ? 'is-invalid' : ''}`} {...register('pagoMinimo')} />
                 {errors.pagoMinimo ? <div className="invalid-feedback fw-semibold">{errors.pagoMinimo.message}</div> : null}
               </div>
               <div className="col-12 col-md-4">
-                <label className="form-label fw-semibold">Monto facturado</label>
-                <input type="number" step="0.01" className={`form-control ${errors.montoFacturado ? 'is-invalid' : ''}`} {...register('montoFacturado')} />
+                <label className="form-label fw-semibold" htmlFor="tarjeta-monto-facturado">Monto facturado</label>
+                <input id="tarjeta-monto-facturado" type="number" step="0.01" className={`form-control ${errors.montoFacturado ? 'is-invalid' : ''}`} {...register('montoFacturado')} />
                 {errors.montoFacturado ? <div className="invalid-feedback fw-semibold">{errors.montoFacturado.message}</div> : null}
               </div>
             </div>
@@ -305,12 +307,12 @@ export function AgregarTarjetaPage() {
         >
           {isSubmitting ? (
             <>
-              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+              <output className="spinner-border spinner-border-sm" aria-hidden="true" />
               Vinculando Cuenta...
             </>
           ) : (
             <>
-              <i className="bi bi-link-45deg" /> Vincular Tarjeta
+              <i className="bi bi-link-45deg" />{' '}Vincular Tarjeta
             </>
           )}
         </button>

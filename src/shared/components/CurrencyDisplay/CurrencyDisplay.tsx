@@ -1,8 +1,8 @@
 interface CurrencyDisplayProps {
-  amount: number;
-  currency?: string;
-  variant?: 'normal' | 'success' | 'danger' | 'neutral';
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  readonly amount: number;
+  readonly currency?: string;
+  readonly variant?: 'normal' | 'success' | 'danger' | 'neutral';
+  readonly size?: 'sm' | 'md' | 'lg' | 'xl';
 }
 
 export function CurrencyDisplay({ amount, currency = 'S/', variant = 'normal', size = 'md' }: CurrencyDisplayProps) {

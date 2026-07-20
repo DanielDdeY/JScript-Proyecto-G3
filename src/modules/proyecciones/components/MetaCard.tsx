@@ -4,10 +4,10 @@ import { calcularMontoRestanteMeta, calcularPorcentajeMeta } from '../domain/ser
 import { MetaForm } from './MetaForm';
 
 interface MetaCardProps {
-  meta: MetaAhorro;
-  cargando?: boolean;
-  onActualizar: (meta: MetaAhorro) => Promise<void>;
-  onEliminar: (id: string) => Promise<void>;
+  readonly meta: MetaAhorro;
+  readonly cargando?: boolean;
+  readonly onActualizar: (meta: MetaAhorro) => Promise<void>;
+  readonly onEliminar: (id: string) => Promise<void>;
 }
 
 const formatoSoles = new Intl.NumberFormat('es-PE', {
@@ -52,7 +52,7 @@ export function MetaCard({ meta, cargando = false, onActualizar, onEliminar }: M
             </span>
             <h5 className="fw-bold text-dark mb-1">{meta.nombre}</h5>
             <p className="text-muted small mb-0">
-              <i className="bi bi-calendar-event me-1" /> {formatearFecha(meta.fechaLimite)}
+              <i className="bi bi-calendar-event me-1" />{' '}{formatearFecha(meta.fechaLimite)}
             </p>
           </div>
           <div className="meta-progress-circle" style={{ '--meta-progress': `${porcentaje}%` } as CSSProperties}>
@@ -87,7 +87,7 @@ export function MetaCard({ meta, cargando = false, onActualizar, onEliminar }: M
 
         <div className="d-flex flex-wrap gap-2 mt-auto">
           <button type="button" className="btn btn-outline-primary btn-sm fw-semibold" onClick={() => setEditando(true)}>
-            <i className="bi bi-pencil-square me-1" /> Modificar
+            <i className="bi bi-pencil-square me-1" />{' '}Modificar
           </button>
           <button
             type="button"
@@ -95,7 +95,7 @@ export function MetaCard({ meta, cargando = false, onActualizar, onEliminar }: M
             onClick={() => void onEliminar(meta.id)}
             disabled={cargando}
           >
-            <i className="bi bi-trash me-1" /> Eliminar
+            <i className="bi bi-trash me-1" />{' '}Eliminar
           </button>
         </div>
       </div>

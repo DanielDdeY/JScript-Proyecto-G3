@@ -10,9 +10,9 @@ export function Prestamos() {
   if (cargando) {
     return (
       <div className="text-center p-5">
-        <div className="spinner-border text-danger" role="status">
+        <output className="spinner-border text-danger">
           <span className="visually-hidden">Cargando...</span>
-        </div>
+        </output>
       </div>
     );
   }
@@ -25,13 +25,13 @@ export function Prestamos() {
           <p className="text-muted mb-0">Controla tus deudas actuales, cuotas pagadas y próximos vencimientos.</p>
         </div>
         <button type="button" className="btn btn-danger fw-bold rounded-pill px-4" onClick={() => setModalAbierto(true)}>
-          <i className="bi bi-plus-circle me-2" /> Agregar Préstamo
+          <i className="bi bi-plus-circle me-2" />{' '}Agregar Préstamo
         </button>
       </div>
 
       {error ? (
         <div className="alert alert-danger border-0 shadow-sm" role="alert">
-          <i className="bi bi-exclamation-triangle-fill me-2" /> {error}
+          <i className="bi bi-exclamation-triangle-fill me-2" />{' '}{error}
         </div>
       ) : null}
 

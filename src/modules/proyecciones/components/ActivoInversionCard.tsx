@@ -7,7 +7,7 @@ import {
 } from '../domain/services/inversionService';
 
 interface ActivoInversionCardProps {
-  activo: ActivoInversion;
+  readonly activo: ActivoInversion;
 }
 
 export function ActivoInversionCard({ activo }: ActivoInversionCardProps) {

@@ -16,8 +16,8 @@ export interface PresupuestosContextValue {
 }
 
 interface PresupuestosProviderProps {
-  children: ReactNode;
-  repository?: PresupuestosRepository;
+  readonly children: ReactNode;
+  readonly repository?: PresupuestosRepository;
 }
 
 interface PresupuestosState {

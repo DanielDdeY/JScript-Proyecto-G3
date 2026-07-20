@@ -19,6 +19,13 @@ export interface LineaCreditoDistribucion {
 
 const clampPorcentaje = (valor: number) => Math.max(0, Math.min(100, valor));
 
+
+const obtenerMontoFacturado = (cicloApi: CicloFacturacionApi): number => {
+  if (typeof cicloApi.montoFacturado === 'number') return cicloApi.montoFacturado;
+
+  return cicloApi.Facturado ?? 0;
+};
+
 export const normalizarCicloFacturacion = (
   cicloFacturacion?: CicloFacturacion | CicloFacturacionApi,
 ): CicloFacturacion | undefined => {
@@ -30,7 +37,7 @@ export const normalizarCicloFacturacion = (
     diaCorte: cicloApi.diaCorte,
     diaPago: cicloApi.diaPago,
     mesActual: cicloApi.mesActual,
-    montoFacturado: typeof cicloApi.montoFacturado === 'number' ? cicloApi.montoFacturado : cicloApi.Facturado ?? 0,
+    montoFacturado: obtenerMontoFacturado(cicloApi),
     pagoMinimo: cicloApi.pagoMinimo,
   };
 };

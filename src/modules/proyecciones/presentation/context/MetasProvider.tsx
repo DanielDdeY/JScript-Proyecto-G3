@@ -18,8 +18,8 @@ export interface MetasContextValue {
 }
 
 interface MetasProviderProps {
-  children: ReactNode;
-  repository?: MetasRepository;
+  readonly children: ReactNode;
+  readonly repository?: MetasRepository;
 }
 
 interface MetasState {

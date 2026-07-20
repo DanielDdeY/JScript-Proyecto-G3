@@ -1,9 +1,9 @@
 import type { FiltrosIngresos } from '../../../shared/types/filtros';
 
 interface FiltrosIngresosSidebarProps {
-  filtros: FiltrosIngresos;
-  onChange: (filtros: FiltrosIngresos) => void;
-  onLimpiar: () => void;
+  readonly filtros: FiltrosIngresos;
+  readonly onChange: (filtros: FiltrosIngresos) => void;
+  readonly onLimpiar: () => void;
 }
 
 export function FiltrosIngresosSidebar({ filtros, onChange, onLimpiar }: FiltrosIngresosSidebarProps) {
@@ -25,8 +25,9 @@ export function FiltrosIngresosSidebar({ filtros, onChange, onLimpiar }: Filtros
       </div>
 
       <div className="mb-3">
-        <label className="form-label small fw-semibold">Fecha desde</label>
+        <label className="form-label small fw-semibold" htmlFor="ingresos-fecha-desde">Fecha desde</label>
         <input
+          id="ingresos-fecha-desde"
           type="date"
           className="form-control form-control-sm"
           value={filtros.rangoFecha.inicio}
@@ -35,8 +36,9 @@ export function FiltrosIngresosSidebar({ filtros, onChange, onLimpiar }: Filtros
       </div>
 
       <div className="mb-3">
-        <label className="form-label small fw-semibold">Fecha hasta</label>
+        <label className="form-label small fw-semibold" htmlFor="ingresos-fecha-hasta">Fecha hasta</label>
         <input
+          id="ingresos-fecha-hasta"
           type="date"
           className="form-control form-control-sm"
           value={filtros.rangoFecha.fin}
@@ -45,8 +47,9 @@ export function FiltrosIngresosSidebar({ filtros, onChange, onLimpiar }: Filtros
       </div>
 
       <div className="mb-4">
-        <label className="form-label small fw-semibold">Fuente de ingreso</label>
+        <label className="form-label small fw-semibold" htmlFor="ingresos-fuente">Fuente de ingreso</label>
         <select
+          id="ingresos-fuente"
           className="form-select form-select-sm"
           value={filtros.fuente ?? 'TODAS'}
           onChange={(event) => onChange({ ...filtros, fuente: event.target.value as FiltrosIngresos['fuente'] })}
@@ -62,7 +65,7 @@ export function FiltrosIngresosSidebar({ filtros, onChange, onLimpiar }: Filtros
       </div>
 
       <button className="btn btn-outline-secondary btn-sm w-100 fw-semibold" type="button" onClick={onLimpiar}>
-        <i className="bi bi-arrow-counterclockwise me-1" /> Limpiar filtros
+        <i className="bi bi-arrow-counterclockwise me-1" />{' '}Limpiar filtros
       </button>
     </aside>
   );

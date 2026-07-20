@@ -2,7 +2,7 @@
   "perfil": {
     "id": "perfil-1",
     "usuarioId": "J4r7_ua3pmw",
-    "saldoTotal": 15912.75,
+    "saldoTotal": 18912.75,
     "nombre": "Luis Sanchez",
     "email": "ls5566@gmail.com"
   },
@@ -716,6 +716,22 @@
         "esUnico": true
       },
       "id": "fw64oj0Z4Qg"
+    },
+    {
+      "monto": 3000,
+      "fecha": "2026-07-20",
+      "fuente": "Inversiones",
+      "origen": "TARJETA",
+      "tarjetaId": "tj-1",
+      "descripcion": "regalo",
+      "reincidencia": {
+        "esMensual": false,
+        "esAnual": false,
+        "esRecurrente": false,
+        "esProbable": false,
+        "esUnico": true
+      },
+      "id": "lBOhuIsbR_c"
     }
   ],
   "inversiones": [

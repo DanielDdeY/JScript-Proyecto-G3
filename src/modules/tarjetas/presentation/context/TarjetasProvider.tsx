@@ -21,8 +21,8 @@ export interface TarjetasContextValue extends TarjetasState {
 }
 
 interface TarjetasProviderProps {
-  children: ReactNode;
-  repository?: TarjetasRepository;
+  readonly children: ReactNode;
+  readonly repository?: TarjetasRepository;
 }
 
 export const TarjetasContext = createContext<TarjetasContextValue | undefined>(undefined);

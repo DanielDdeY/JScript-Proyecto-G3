@@ -23,8 +23,8 @@ export interface PresupuestoSaldoContextValue {
 }
 
 interface PresupuestoSaldoProviderProps {
-  children: ReactNode;
-  repository?: PresupuestoSaldoRepository;
+  readonly children: ReactNode;
+  readonly repository?: PresupuestoSaldoRepository;
 }
 
 interface PresupuestoSaldoState {

@@ -8,9 +8,9 @@ export function ListarMetasPage() {
   if (cargando && metas.length === 0) {
     return (
       <div className="text-center p-5">
-        <div className="spinner-border text-primary" role="status">
+        <output className="spinner-border text-primary">
           <span className="visually-hidden">Cargando...</span>
-        </div>
+        </output>
       </div>
     );
   }
@@ -25,13 +25,13 @@ export function ListarMetasPage() {
           </p>
         </div>
         <Link className="btn btn-primary fw-bold rounded-pill px-4" to="/app/proyecciones/agregar">
-          <i className="bi bi-plus-circle me-2" /> Agregar meta
+          <i className="bi bi-plus-circle me-2" />{' '}Agregar meta
         </Link>
       </div>
 
       {error ? (
         <div className="alert alert-danger border-0 shadow-sm" role="alert">
-          <i className="bi bi-exclamation-triangle-fill me-2" /> {error}
+          <i className="bi bi-exclamation-triangle-fill me-2" />{' '}{error}
         </div>
       ) : null}
 

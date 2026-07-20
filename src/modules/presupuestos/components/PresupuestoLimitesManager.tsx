@@ -16,9 +16,9 @@ type PresupuestoFormInput = z.input<typeof presupuestoSchema>;
 type PresupuestoFormValues = z.output<typeof presupuestoSchema>;
 
 interface PresupuestoLimitesManagerProps {
-  titulo?: string;
-  descripcion?: string;
-  textoBoton?: string;
+  readonly titulo?: string;
+  readonly descripcion?: string;
+  readonly textoBoton?: string;
 }
 
 export function PresupuestoLimitesManager({
@@ -121,8 +121,8 @@ export function PresupuestoLimitesManager({
 
             <form onSubmit={(event) => void handleSubmit(onSubmit)(event)}>
               <div className="mb-3">
-                <label className="form-label fw-semibold small">Categoría de gasto</label>
-                <select className={`form-select ${errors.categoriaNombre ? 'is-invalid' : ''}`} {...register('categoriaNombre')}>
+                <label className="form-label fw-semibold small" htmlFor="presupuesto-categoria">Categoría de gasto</label>
+                <select id="presupuesto-categoria" className={`form-select ${errors.categoriaNombre ? 'is-invalid' : ''}`} {...register('categoriaNombre')}>
                   {CATEGORIAS_PRESUPUESTO.map((categoria) => (
                     <option key={categoria.nombre} value={categoria.nombre}>
                       {categoria.nombre}
@@ -135,10 +135,11 @@ export function PresupuestoLimitesManager({
               </div>
 
               <div className="mb-4">
-                <label className="form-label fw-semibold small">Monto límite permitido</label>
+                <label className="form-label fw-semibold small" htmlFor="presupuesto-limite-soles">Monto límite permitido</label>
                 <div className="input-group">
                   <span className="input-group-text fw-bold">S/.</span>
                   <input
+                    id="presupuesto-limite-soles"
                     type="number"
                     step="0.01"
                     className={`form-control fw-bold ${errors.limiteSoles ? 'is-invalid' : ''}`}
@@ -207,7 +208,12 @@ export function PresupuestoLimitesManager({
                           );
                         })}
                       </Pie>
-                      <Tooltip formatter={(value: any) => formatCurrencyPen(Number(value))} />
+                      <Tooltip
+                         formatter={(value) => {
+                          const numericValue = Number(value ?? 0);
+                          return formatCurrencyPen(Number.isFinite(numericValue) ? numericValue : 0);
+                        }}
+                      />
                       <Legend />
                     </PieChart>
                   </ResponsiveContainer>

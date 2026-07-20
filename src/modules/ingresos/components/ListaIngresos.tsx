@@ -6,8 +6,8 @@ import { obtenerEtiquetasReincidencia } from '../../../shared/utils/reincidencia
 import { obtenerNombreBanco, obtenerUltimosDigitos } from '../../../shared/utils/tarjetaUtils';
 
 interface ListaIngresosProps {
-  ingresos: Ingreso[];
-  tarjetas: Tarjeta[];
+  readonly ingresos: Ingreso[];
+  readonly tarjetas: Tarjeta[];
 }
 
 const obtenerEtiquetaOrigenIngreso = (ingreso: Ingreso, tarjetas: Tarjeta[]) => {

@@ -54,3 +54,12 @@ a:hover {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-primary);
 }
+
+/* Reset para usar <dialog> con estilos de modal de Bootstrap sin bordes del navegador. */
+dialog.modal {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  max-width: none;
+  width: auto;
+}

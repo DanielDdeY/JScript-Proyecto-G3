@@ -210,7 +210,7 @@ export function Navbar() {
                     onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = 'var(--color-bg-alt)'; }}
                     onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = 'transparent'; }}
                   >
-                    <i className="bi bi-person" style={{ fontSize: '1rem' }} /> Ver perfil
+                    <i className="bi bi-person" style={{ fontSize: '1rem' }} />{' '}Ver perfil
                   </Link>
                   <hr style={{ margin: '4px 0', borderColor: 'var(--color-border)' }} />
                   <button
@@ -234,7 +234,7 @@ export function Navbar() {
                     onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = 'var(--color-danger-bg)'; }}
                     onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = 'transparent'; }}
                   >
-                    <i className="bi bi-box-arrow-right" style={{ fontSize: '1rem' }} /> Cerrar sesión
+                    <i className="bi bi-box-arrow-right" style={{ fontSize: '1rem' }} />{' '}Cerrar sesión
                   </button>
                 </div>
               )}

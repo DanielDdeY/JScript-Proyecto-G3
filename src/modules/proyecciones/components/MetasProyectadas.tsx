@@ -2,7 +2,7 @@ import type { ResultadoProyeccion } from '../domain/models/proyeccionPredictiva'
 import { formatCurrencyPen } from '../../../shared/utils/formatters';
 
 interface MetasProyectadasProps {
-  resultado: ResultadoProyeccion;
+  readonly resultado: ResultadoProyeccion;
 }
 
 export function MetasProyectadas({ resultado }: MetasProyectadasProps) {

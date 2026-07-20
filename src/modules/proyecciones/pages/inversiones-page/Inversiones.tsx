@@ -21,9 +21,9 @@ export function Inversiones() {
   if (cargando) {
     return (
       <div className="text-center p-5">
-        <div className="spinner-border text-primary" role="status">
+        <output className="spinner-border text-primary">
           <span className="visually-hidden">Cargando...</span>
-        </div>
+        </output>
       </div>
     );
   }
@@ -38,13 +38,13 @@ export function Inversiones() {
           </p>
         </div>
         <button type="button" className="btn btn-success fw-bold rounded-pill px-4" onClick={() => setModalAbierto(true)}>
-          <i className="bi bi-plus-circle me-2" /> Añadir activo
+          <i className="bi bi-plus-circle me-2" />{' '}Añadir activo
         </button>
       </div>
 
       {error ? (
         <div className="alert alert-danger border-0 shadow-sm" role="alert">
-          <i className="bi bi-exclamation-triangle-fill me-2" /> {error}
+          <i className="bi bi-exclamation-triangle-fill me-2" />{' '}{error}
         </div>
       ) : null}
 

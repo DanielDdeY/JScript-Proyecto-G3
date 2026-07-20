@@ -35,9 +35,9 @@ export function Proyecciones() {
   if (cargando && !datos) {
     return (
       <div className="text-center p-5">
-        <div className="spinner-border text-primary" role="status">
+        <output className="spinner-border text-primary">
           <span className="visually-hidden">Cargando...</span>
-        </div>
+        </output>
       </div>
     );
   }
@@ -55,7 +55,7 @@ export function Proyecciones() {
 
       {error ? (
         <div className="alert alert-danger border-0 shadow-sm" role="alert">
-          <i className="bi bi-exclamation-triangle-fill me-2" /> {error}
+          <i className="bi bi-exclamation-triangle-fill me-2" />{' '}{error}
         </div>
       ) : null}
 

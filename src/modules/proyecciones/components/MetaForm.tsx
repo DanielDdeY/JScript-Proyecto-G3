@@ -3,11 +3,11 @@ import type { MetaAhorro } from '../../../shared/types/meta';
 import type { NuevaMetaAhorro } from '../domain/repositories/metasRepository';
 
 interface MetaFormProps {
-  metaInicial?: MetaAhorro;
-  cargando?: boolean;
-  textoBoton?: string;
-  onGuardar: (meta: NuevaMetaAhorro | MetaAhorro) => Promise<void>;
-  onCancelar?: () => void;
+  readonly metaInicial?: MetaAhorro;
+  readonly cargando?: boolean;
+  readonly textoBoton?: string;
+  readonly onGuardar: (meta: NuevaMetaAhorro | MetaAhorro) => Promise<void>;
+  readonly onCancelar?: () => void;
 }
 
 interface MetaFormState {
@@ -105,7 +105,7 @@ export function MetaForm({
 
       {error ? (
         <div className="alert alert-danger border-0" role="alert">
-          <i className="bi bi-exclamation-triangle-fill me-2" /> {error}
+          <i className="bi bi-exclamation-triangle-fill me-2" />{' '}{error}
         </div>
       ) : null}
 

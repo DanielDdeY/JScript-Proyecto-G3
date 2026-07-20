@@ -67,9 +67,9 @@ export function Dashboard() {
   if (cargando) {
     return (
       <div className="min-h-loading">
-        <div className="spinner-border text-primary" role="status">
+        <output className="spinner-border text-primary">
           <span className="visually-hidden">Cargando...</span>
-        </div>
+        </output>
       </div>
     );
   }

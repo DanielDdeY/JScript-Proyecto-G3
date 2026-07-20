@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useEffect, type FormEvent, type ReactNode } from 'react';
+import { useForm, type FieldErrors, type UseFormRegister } from 'react-hook-form';
 import { z } from 'zod';
 import type { Banco } from '../../../shared/types/banco';
 import type { Prestamo } from '../../../shared/types/prestamo';
@@ -37,15 +37,181 @@ const prestamoSchema = z
 
 type PrestamoFormInput = z.input<typeof prestamoSchema>;
 type PrestamoFormValues = z.output<typeof prestamoSchema>;
+type RegistroPrestamo = UseFormRegister<PrestamoFormInput>;
+type ErroresPrestamo = FieldErrors<PrestamoFormInput>;
 
 interface AgregarPrestamoModalProps {
-  abierto: boolean;
-  bancos: Banco[];
-  onClose: () => void;
-  onGuardar: (prestamo: Omit<Prestamo, 'id'>) => Promise<void>;
+  readonly abierto: boolean;
+  readonly bancos: Banco[];
+  readonly onClose: () => void;
+  readonly onGuardar: (prestamo: Omit<Prestamo, 'id'>) => Promise<void>;
+}
+
+interface PrestamoFormProps {
+  readonly bancos: Banco[];
+  readonly register: RegistroPrestamo;
+  readonly errors: ErroresPrestamo;
+  readonly isSubmitting: boolean;
+  readonly onClose: () => void;
+  readonly onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+}
+
+interface PrestamoCampoProps {
+  readonly register: RegistroPrestamo;
+  readonly errors: ErroresPrestamo;
 }
 
 const today = () => new Date().toISOString().substring(0, 10);
+
+const valoresInicialesPrestamo = (): PrestamoFormInput => ({
+  bancoId: '',
+  montoAprobado: 0,
+  deudaRestante: 0,
+  fechaDesembolso: today(),
+  fechaPrimerVencimiento: today(),
+  cuotasTotales: 12,
+  cuotasPagadas: 0,
+  montoPorCuota: 0,
+});
+
+const crearPrestamoDesdeFormulario = (data: PrestamoFormValues, banco: Banco): Omit<Prestamo, 'id'> => ({
+  banco,
+  montoAprobado: data.montoAprobado,
+  deudaRestante: data.deudaRestante,
+  fechaDesembolso: data.fechaDesembolso,
+  cuotasPagadas: data.cuotasPagadas,
+  cuotasTotales: data.cuotasTotales,
+  detalleCuotas: crearDetalleCuotasPrestamo(data.cuotasTotales, data.cuotasPagadas, data.montoPorCuota, banco.tcea),
+  cuotas: generarCuotasPrestamo({
+    cuotasTotales: data.cuotasTotales,
+    cuotasPagadas: data.cuotasPagadas,
+    montoPorCuota: data.montoPorCuota,
+    fechaPrimerVencimiento: data.fechaPrimerVencimiento,
+  }),
+});
+
+function CampoBancoPrestamo({ bancos, register, errors }: PrestamoCampoProps & Readonly<{ bancos: Banco[] }>) {
+  return (
+    <div className="col-12 col-md-6">
+      <label className="form-label fw-semibold" htmlFor="prestamo-banco">Banco</label>
+      <select id="prestamo-banco" className={`form-select ${errors.bancoId ? 'is-invalid' : ''}`} {...register('bancoId')}>
+        <option value="">-- Selecciona --</option>
+        {bancos.map((banco) => (
+          <option key={String(banco.id)} value={String(banco.id)}>
+            {banco.nombre} · TCEA {banco.tcea}% · Seguro {banco.seguroDesgravamen}
+          </option>
+        ))}
+      </select>
+      {errors.bancoId ? <div className="invalid-feedback fw-semibold">{errors.bancoId.message}</div> : null}
+    </div>
+  );
+}
+
+function CampoFechaDesembolso({ register, errors }: PrestamoCampoProps) {
+  return (
+    <div className="col-12 col-md-6">
+      <label className="form-label fw-semibold" htmlFor="prestamo-fecha-desembolso">Fecha de desembolso</label>
+      <input id="prestamo-fecha-desembolso" type="date" className={`form-control ${errors.fechaDesembolso ? 'is-invalid' : ''}`} {...register('fechaDesembolso')} />
+      {errors.fechaDesembolso ? <div className="invalid-feedback fw-semibold">{errors.fechaDesembolso.message}</div> : null}
+    </div>
+  );
+}
+
+function CampoDineroPrestamo({ id, label, error, children }: Readonly<{ id: string; label: string; error?: string; children: ReactNode }>) {
+  return (
+    <div className="col-12 col-md-6">
+      <label className="form-label fw-semibold" htmlFor={id}>{label}</label>
+      <div className="input-group">
+        <span className="input-group-text fw-bold">S/.</span>
+        {children}
+        {error ? <div className="invalid-feedback fw-semibold">{error}</div> : null}
+      </div>
+    </div>
+  );
+}
+
+function CampoMontoAprobado({ register, errors }: PrestamoCampoProps) {
+  return (
+    <CampoDineroPrestamo id="prestamo-monto-aprobado" label="Monto aprobado" error={errors.montoAprobado?.message}>
+      <input id="prestamo-monto-aprobado" type="number" step="0.01" className={`form-control ${errors.montoAprobado ? 'is-invalid' : ''}`} {...register('montoAprobado')} />
+    </CampoDineroPrestamo>
+  );
+}
+
+function CampoDeudaRestante({ register, errors }: PrestamoCampoProps) {
+  return (
+    <CampoDineroPrestamo id="prestamo-deuda-restante" label="Deuda restante" error={errors.deudaRestante?.message}>
+      <input id="prestamo-deuda-restante" type="number" step="0.01" className={`form-control ${errors.deudaRestante ? 'is-invalid' : ''}`} {...register('deudaRestante')} />
+    </CampoDineroPrestamo>
+  );
+}
+
+function CampoCuotaNumero({ id, label, name, error, register }: Readonly<{ id: string; label: string; name: 'cuotasTotales' | 'cuotasPagadas'; error?: string; register: RegistroPrestamo }>) {
+  return (
+    <div className="col-12 col-md-4">
+      <label className="form-label fw-semibold" htmlFor={id}>{label}</label>
+      <input id={id} type="number" className={`form-control ${error ? 'is-invalid' : ''}`} {...register(name)} />
+      {error ? <div className="invalid-feedback fw-semibold">{error}</div> : null}
+    </div>
+  );
+}
+
+function CampoMontoPorCuota({ register, errors }: PrestamoCampoProps) {
+  return (
+    <div className="col-12 col-md-4">
+      <label className="form-label fw-semibold" htmlFor="prestamo-monto-cuota">Monto por cuota</label>
+      <div className="input-group">
+        <span className="input-group-text fw-bold">S/.</span>
+        <input id="prestamo-monto-cuota" type="number" step="0.01" className={`form-control ${errors.montoPorCuota ? 'is-invalid' : ''}`} {...register('montoPorCuota')} />
+        {errors.montoPorCuota ? <div className="invalid-feedback fw-semibold">{errors.montoPorCuota.message}</div> : null}
+      </div>
+    </div>
+  );
+}
+
+function CampoPrimerVencimiento({ register, errors }: PrestamoCampoProps) {
+  return (
+    <div className="col-12 col-md-6">
+      <label className="form-label fw-semibold" htmlFor="prestamo-primer-vencimiento">Primer vencimiento</label>
+      <input id="prestamo-primer-vencimiento" type="date" className={`form-control ${errors.fechaPrimerVencimiento ? 'is-invalid' : ''}`} {...register('fechaPrimerVencimiento')} />
+      {errors.fechaPrimerVencimiento ? <div className="invalid-feedback fw-semibold">{errors.fechaPrimerVencimiento.message}</div> : null}
+    </div>
+  );
+}
+
+function CamposPrestamo({ bancos, register, errors }: Readonly<PrestamoCampoProps & { bancos: Banco[] }>) {
+  return (
+    <div className="row g-3">
+      <CampoBancoPrestamo bancos={bancos} register={register} errors={errors} />
+      <CampoFechaDesembolso register={register} errors={errors} />
+      <CampoMontoAprobado register={register} errors={errors} />
+      <CampoDeudaRestante register={register} errors={errors} />
+      <CampoCuotaNumero id="prestamo-cuotas-totales" label="Cuotas totales" name="cuotasTotales" error={errors.cuotasTotales?.message} register={register} />
+      <CampoCuotaNumero id="prestamo-cuotas-pagadas" label="Cuotas pagadas" name="cuotasPagadas" error={errors.cuotasPagadas?.message} register={register} />
+      <CampoMontoPorCuota register={register} errors={errors} />
+      <CampoPrimerVencimiento register={register} errors={errors} />
+    </div>
+  );
+}
+
+function PrestamoForm({ bancos, register, errors, isSubmitting, onClose, onSubmit }: PrestamoFormProps) {
+  return (
+    <form onSubmit={onSubmit}>
+      <div className="modal-body p-4">
+        <CamposPrestamo bancos={bancos} register={register} errors={errors} />
+      </div>
+
+      <div className="modal-footer border-0 p-4 pt-0">
+        <button type="button" className="btn btn-outline-secondary fw-bold" onClick={onClose}>
+          Cancelar
+        </button>
+        <button type="submit" className="btn btn-danger fw-bold" disabled={isSubmitting}>
+          {isSubmitting ? 'Guardando...' : 'Guardar préstamo'}
+        </button>
+      </div>
+    </form>
+  );
+}
 
 export function AgregarPrestamoModal({ abierto, bancos, onClose, onGuardar }: AgregarPrestamoModalProps) {
   const {
@@ -55,53 +221,18 @@ export function AgregarPrestamoModal({ abierto, bancos, onClose, onGuardar }: Ag
     formState: { errors, isSubmitting },
   } = useForm<PrestamoFormInput, unknown, PrestamoFormValues>({
     resolver: zodResolver(prestamoSchema),
-    defaultValues: {
-      bancoId: '',
-      montoAprobado: 0,
-      deudaRestante: 0,
-      fechaDesembolso: today(),
-      fechaPrimerVencimiento: today(),
-      cuotasTotales: 12,
-      cuotasPagadas: 0,
-      montoPorCuota: 0,
-    },
+    defaultValues: valoresInicialesPrestamo(),
   });
 
   useEffect(() => {
-    if (!abierto) {
-      reset({
-        bancoId: '',
-        montoAprobado: 0,
-        deudaRestante: 0,
-        fechaDesembolso: today(),
-        fechaPrimerVencimiento: today(),
-        cuotasTotales: 12,
-        cuotasPagadas: 0,
-        montoPorCuota: 0,
-      });
-    }
+    if (!abierto) reset(valoresInicialesPrestamo());
   }, [abierto, reset]);
 
   const onSubmit = async (data: PrestamoFormValues) => {
     const banco = bancos.find((item) => String(item.id) === data.bancoId);
     if (!banco) return;
 
-    await onGuardar({
-      banco,
-      montoAprobado: data.montoAprobado,
-      deudaRestante: data.deudaRestante,
-      fechaDesembolso: data.fechaDesembolso,
-      cuotasPagadas: data.cuotasPagadas,
-      cuotasTotales: data.cuotasTotales,
-      detalleCuotas: crearDetalleCuotasPrestamo(data.cuotasTotales, data.cuotasPagadas, data.montoPorCuota, banco.tcea),
-      cuotas: generarCuotasPrestamo({
-        cuotasTotales: data.cuotasTotales,
-        cuotasPagadas: data.cuotasPagadas,
-        montoPorCuota: data.montoPorCuota,
-        fechaPrimerVencimiento: data.fechaPrimerVencimiento,
-      }),
-    });
-
+    await onGuardar(crearPrestamoDesdeFormulario(data, banco));
     onClose();
   };
 
@@ -109,7 +240,7 @@ export function AgregarPrestamoModal({ abierto, bancos, onClose, onGuardar }: Ag
 
   return (
     <>
-      <div className="modal fade show d-block" tabIndex={-1} role="dialog" aria-modal="true">
+      <dialog open className="modal fade show d-block" aria-modal="true">
         <div className="modal-dialog modal-lg modal-dialog-centered">
           <div className="modal-content border-0 shadow-lg rounded-4">
             <div className="modal-header bg-danger text-white border-0 rounded-top-4">
@@ -120,87 +251,17 @@ export function AgregarPrestamoModal({ abierto, bancos, onClose, onGuardar }: Ag
               <button type="button" className="btn-close btn-close-white" aria-label="Cerrar" onClick={onClose} />
             </div>
 
-            <form onSubmit={(event) => void handleSubmit(onSubmit)(event)}>
-              <div className="modal-body p-4">
-                <div className="row g-3">
-                  <div className="col-12 col-md-6">
-                    <label className="form-label fw-semibold">Banco</label>
-                    <select className={`form-select ${errors.bancoId ? 'is-invalid' : ''}`} {...register('bancoId')}>
-                      <option value="">-- Selecciona --</option>
-                      {bancos.map((banco) => (
-                        <option key={String(banco.id)} value={String(banco.id)}>
-                          {banco.nombre} · TCEA {banco.tcea}% · Seguro {banco.seguroDesgravamen}
-                        </option>
-                      ))}
-                    </select>
-                    {errors.bancoId ? <div className="invalid-feedback fw-semibold">{errors.bancoId.message}</div> : null}
-                  </div>
-
-                  <div className="col-12 col-md-6">
-                    <label className="form-label fw-semibold">Fecha de desembolso</label>
-                    <input type="date" className={`form-control ${errors.fechaDesembolso ? 'is-invalid' : ''}`} {...register('fechaDesembolso')} />
-                    {errors.fechaDesembolso ? <div className="invalid-feedback fw-semibold">{errors.fechaDesembolso.message}</div> : null}
-                  </div>
-
-                  <div className="col-12 col-md-6">
-                    <label className="form-label fw-semibold">Monto aprobado</label>
-                    <div className="input-group">
-                      <span className="input-group-text fw-bold">S/.</span>
-                      <input type="number" step="0.01" className={`form-control ${errors.montoAprobado ? 'is-invalid' : ''}`} {...register('montoAprobado')} />
-                      {errors.montoAprobado ? <div className="invalid-feedback fw-semibold">{errors.montoAprobado.message}</div> : null}
-                    </div>
-                  </div>
-
-                  <div className="col-12 col-md-6">
-                    <label className="form-label fw-semibold">Deuda restante</label>
-                    <div className="input-group">
-                      <span className="input-group-text fw-bold">S/.</span>
-                      <input type="number" step="0.01" className={`form-control ${errors.deudaRestante ? 'is-invalid' : ''}`} {...register('deudaRestante')} />
-                      {errors.deudaRestante ? <div className="invalid-feedback fw-semibold">{errors.deudaRestante.message}</div> : null}
-                    </div>
-                  </div>
-
-                  <div className="col-12 col-md-4">
-                    <label className="form-label fw-semibold">Cuotas totales</label>
-                    <input type="number" className={`form-control ${errors.cuotasTotales ? 'is-invalid' : ''}`} {...register('cuotasTotales')} />
-                    {errors.cuotasTotales ? <div className="invalid-feedback fw-semibold">{errors.cuotasTotales.message}</div> : null}
-                  </div>
-
-                  <div className="col-12 col-md-4">
-                    <label className="form-label fw-semibold">Cuotas pagadas</label>
-                    <input type="number" className={`form-control ${errors.cuotasPagadas ? 'is-invalid' : ''}`} {...register('cuotasPagadas')} />
-                    {errors.cuotasPagadas ? <div className="invalid-feedback fw-semibold">{errors.cuotasPagadas.message}</div> : null}
-                  </div>
-
-                  <div className="col-12 col-md-4">
-                    <label className="form-label fw-semibold">Monto por cuota</label>
-                    <div className="input-group">
-                      <span className="input-group-text fw-bold">S/.</span>
-                      <input type="number" step="0.01" className={`form-control ${errors.montoPorCuota ? 'is-invalid' : ''}`} {...register('montoPorCuota')} />
-                      {errors.montoPorCuota ? <div className="invalid-feedback fw-semibold">{errors.montoPorCuota.message}</div> : null}
-                    </div>
-                  </div>
-
-                  <div className="col-12 col-md-6">
-                    <label className="form-label fw-semibold">Primer vencimiento</label>
-                    <input type="date" className={`form-control ${errors.fechaPrimerVencimiento ? 'is-invalid' : ''}`} {...register('fechaPrimerVencimiento')} />
-                    {errors.fechaPrimerVencimiento ? <div className="invalid-feedback fw-semibold">{errors.fechaPrimerVencimiento.message}</div> : null}
-                  </div>
-                </div>
-              </div>
-
-              <div className="modal-footer border-0 p-4 pt-0">
-                <button type="button" className="btn btn-outline-secondary fw-bold" onClick={onClose}>
-                  Cancelar
-                </button>
-                <button type="submit" className="btn btn-danger fw-bold" disabled={isSubmitting}>
-                  {isSubmitting ? 'Guardando...' : 'Guardar préstamo'}
-                </button>
-              </div>
-            </form>
+            <PrestamoForm
+              bancos={bancos}
+              register={register}
+              errors={errors}
+              isSubmitting={isSubmitting}
+              onClose={onClose}
+              onSubmit={(event) => void handleSubmit(onSubmit)(event)}
+            />
           </div>
         </div>
-      </div>
+      </dialog>
       <div className="modal-backdrop fade show" />
     </>
   );

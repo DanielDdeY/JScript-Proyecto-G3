@@ -14,9 +14,9 @@ import {
 } from '../domain/services/gastoDisplayService';
 
 interface GastoDetalleModalProps {
-  gasto: Gasto | null;
-  onClose: () => void;
-  onActualizarEstadoDeudor: (gastoId: Gasto['id'], nombreId: string, estado: EstadoDeudaAmigo) => Promise<void>;
+  readonly gasto: Gasto | null;
+  readonly onClose: () => void;
+  readonly onActualizarEstadoDeudor: (gastoId: Gasto['id'], nombreId: string, estado: EstadoDeudaAmigo) => Promise<void>;
 }
 
 export function GastoDetalleModal({ gasto, onClose, onActualizarEstadoDeudor }: GastoDetalleModalProps) {
@@ -41,7 +41,7 @@ export function GastoDetalleModal({ gasto, onClose, onActualizarEstadoDeudor }: 
 
   return (
     <>
-      <div className="modal fade show d-block" tabIndex={-1} role="dialog" aria-modal="true">
+      <dialog open className="modal fade show d-block" aria-modal="true">
         <div className="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
           <div className="modal-content border-0 shadow-lg rounded-4">
             <div className="modal-header border-0 pb-0">
@@ -61,10 +61,10 @@ export function GastoDetalleModal({ gasto, onClose, onActualizarEstadoDeudor }: 
                   </div>
                   <div className="text-md-end">
                     <span className="badge bg-white text-dark border me-2 mb-2 px-3 py-2">
-                      <i className="bi bi-calendar-event me-1" /> {formatShortDate(gasto.fecha)}
+                      <i className="bi bi-calendar-event me-1" />{' '}{formatShortDate(gasto.fecha)}
                     </span>
                     <span className="badge bg-white text-dark border mb-2 px-3 py-2">
-                      <i className="bi bi-tag me-1" /> {gasto.categoria.nombre}
+                      <i className="bi bi-tag me-1" />{' '}{gasto.categoria.nombre}
                     </span>
                     <p className="mb-0 small text-muted fw-semibold">Prioridad: {gasto.categoria.importancia}</p>
                   </div>
@@ -82,7 +82,7 @@ export function GastoDetalleModal({ gasto, onClose, onActualizarEstadoDeudor }: 
 
               <div className="border rounded-4 p-3 bg-light mb-4">
                 <span className="d-block small text-muted fw-semibold text-uppercase mb-2">
-                  <i className="bi bi-arrow-repeat me-2" /> Reincidencia
+                  <i className="bi bi-arrow-repeat me-2" />{' '}Reincidencia
                 </span>
                 <div className="d-flex flex-wrap gap-2">
                   {obtenerEtiquetasReincidencia(gasto.reincidencia).map((etiqueta) => (
@@ -92,10 +92,10 @@ export function GastoDetalleModal({ gasto, onClose, onActualizarEstadoDeudor }: 
               </div>
 
               {etiquetaCuotas ? (
-                <div className="alert alert-warning border-0 rounded-4 d-flex align-items-center gap-2 fw-bold mb-4" role="status">
+                <output className="alert alert-warning border-0 rounded-4 d-flex align-items-center gap-2 fw-bold mb-4">
                   <i className="bi bi-credit-card-2-front-fill" />
                   <span>{etiquetaCuotas}</span>
-                </div>
+                </output>
               ) : null}
 
               {mostrarGastoCompartido ? (
@@ -130,7 +130,7 @@ export function GastoDetalleModal({ gasto, onClose, onActualizarEstadoDeudor }: 
                           onClick={() => void handleActualizarEstado(amigo.nombreId, amigo.estado)}
                         >
                           {actualizando === amigo.nombreId ? (
-                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+                            <output className="spinner-border spinner-border-sm" aria-hidden="true" />
                           ) : (
                             obtenerTextoEstadoDeudor(amigo)
                           )}
@@ -149,18 +149,18 @@ export function GastoDetalleModal({ gasto, onClose, onActualizarEstadoDeudor }: 
             </div>
           </div>
         </div>
-      </div>
+      </dialog>
       <div className="modal-backdrop fade show" />
     </>
   );
 }
 
-function DetalleItem({ label, value, icon }: { label: string; value: string; icon: string }) {
+function DetalleItem({ label, value, icon }: Readonly<{ label: string; value: string; icon: string }>) {
   return (
     <div className="col-12 col-md-6">
       <div className="border rounded-4 p-3 h-100 bg-white">
         <span className="d-block small text-muted fw-semibold text-uppercase">
-          <i className={`${icon} me-2`} /> {label}
+          <i className={`${icon} me-2`} />{' '}{label}
         </span>
         <span className="d-block fw-bold text-dark mt-1">{value}</span>
       </div>
@@ -168,7 +168,7 @@ function DetalleItem({ label, value, icon }: { label: string; value: string; ico
   );
 }
 
-function AvatarAmigo({ nombre, avatarUrl }: { nombre: string; avatarUrl?: string }) {
+function AvatarAmigo({ nombre, avatarUrl }: Readonly<{ nombre: string; avatarUrl?: string }>) {
   if (avatarUrl) {
     return <img src={avatarUrl} alt={nombre} className="gasto-amigo-avatar" />;
   }

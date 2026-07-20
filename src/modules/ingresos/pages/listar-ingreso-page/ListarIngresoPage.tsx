@@ -39,15 +39,15 @@ function ListarIngresoContent() {
 
           {error ? (
             <div className="alert alert-danger border-0 rounded-4 fw-semibold" role="alert">
-              <i className="bi bi-exclamation-triangle-fill me-2" /> {error}
+              <i className="bi bi-exclamation-triangle-fill me-2" />{' '}{error}
             </div>
           ) : null}
 
           {cargando ? (
             <div className="text-center p-5">
-              <div className="spinner-border text-primary" role="status">
-                <span className="visually-hidden">Cargando...</span>
-              </div>
+              <output className="spinner-border text-primary">
+          <span className="visually-hidden">Cargando...</span>
+        </output>
             </div>
           ) : null}
 

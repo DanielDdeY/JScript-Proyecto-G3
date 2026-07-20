@@ -18,8 +18,8 @@ export interface WalletContextValue extends WalletOverview {
 }
 
 interface WalletProviderProps {
-  children: ReactNode;
-  repository?: WalletRepository;
+  readonly children: ReactNode;
+  readonly repository?: WalletRepository;
 }
 
 interface WalletState {

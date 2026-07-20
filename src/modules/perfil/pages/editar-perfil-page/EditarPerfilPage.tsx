@@ -58,9 +58,9 @@ export function EditarPerfilPage() {
   if (cargando || !perfil) {
     return (
       <div className="min-h-loading">
-        <div className="spinner-border text-primary" role="status">
+        <output className="spinner-border text-primary">
           <span className="visually-hidden">Cargando...</span>
-        </div>
+        </output>
       </div>
     );
   }
@@ -170,10 +170,11 @@ export function EditarPerfilPage() {
           <div className="row g-3">
             {/* Nombre */}
             <div className="col-12 col-md-6">
-              <label className="form-label fw-semibold" style={{ color: 'var(--color-text)', fontSize: '0.85rem' }}>
+              <label className="form-label fw-semibold" htmlFor="perfil-nombre" style={{ color: 'var(--color-text)', fontSize: '0.85rem' }}>
                 Nombre de usuario
               </label>
               <input
+                id="perfil-nombre"
                 type="text"
                 className={`form-control ${errors.nombre ? 'is-invalid' : ''}`}
                 placeholder="Tu nombre"
@@ -184,10 +185,11 @@ export function EditarPerfilPage() {
 
             {/* Email */}
             <div className="col-12 col-md-6">
-              <label className="form-label fw-semibold" style={{ color: 'var(--color-text)', fontSize: '0.85rem' }}>
+              <label className="form-label fw-semibold" htmlFor="perfil-email" style={{ color: 'var(--color-text)', fontSize: '0.85rem' }}>
                 Correo electrónico
               </label>
               <input
+                id="perfil-email"
                 type="email"
                 className={`form-control ${errors.email ? 'is-invalid' : ''}`}
                 placeholder="correo@ejemplo.com"
@@ -198,11 +200,12 @@ export function EditarPerfilPage() {
 
             {/* Avatar upload */}
             <div className="col-12">
-              <label className="form-label fw-semibold" style={{ color: 'var(--color-text)', fontSize: '0.85rem' }}>
+              <label className="form-label fw-semibold" htmlFor="perfil-avatar" style={{ color: 'var(--color-text)', fontSize: '0.85rem' }}>
                 Foto de perfil
               </label>
               <input type="hidden" {...register('avatarUrl')} />
               <input
+                id="perfil-avatar"
                 type="file"
                 accept="image/*"
                 className={`form-control ${errors.avatarUrl ? 'is-invalid' : ''}`}
@@ -224,12 +227,12 @@ export function EditarPerfilPage() {
           >
             {isSubmitting ? (
               <>
-                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true" />
+                <output className="spinner-border spinner-border-sm" aria-hidden="true" />
                 Guardando...
               </>
             ) : (
               <>
-                <i className="bi bi-check2-all" /> Guardar cambios
+                <i className="bi bi-check2-all" />{' '}Guardar cambios
               </>
             )}
           </button>

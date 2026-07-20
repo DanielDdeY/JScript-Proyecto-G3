@@ -16,7 +16,7 @@ export function AgregarMetasPage() {
     <section className="d-flex flex-column gap-3">
       {error ? (
         <div className="alert alert-danger border-0 shadow-sm" role="alert">
-          <i className="bi bi-exclamation-triangle-fill me-2" /> {error}
+          <i className="bi bi-exclamation-triangle-fill me-2" />{' '}{error}
         </div>
       ) : null}
 

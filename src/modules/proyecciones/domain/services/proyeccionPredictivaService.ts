@@ -193,11 +193,12 @@ const calcularObligacionesTarjetas = (tarjetas: Tarjeta[], mesesProyectados: num
       const pagoMensualSugerido = tarjeta.cicloFacturacion?.pagoMinimo || tarjeta.cicloFacturacion?.montoFacturado || deudaPendiente;
       const cuotasDisponibles = pagoMensualSugerido > 0 ? Math.ceil(deudaPendiente / pagoMensualSugerido) : 0;
       const cuotasContadas = Math.min(mesesProyectados, cuotasDisponibles);
-      const banco = typeof tarjeta.banco === 'string' ? tarjeta.banco : tarjeta.banco?.nombre ?? 'Tarjeta';
+      const banco = typeof tarjeta.banco === 'string' ? tarjeta.banco : tarjeta.banco?.nombre;
+      const nombreBanco = banco ?? 'Tarjeta';
 
       return {
         id: String(tarjeta.id),
-        descripcion: `Tarjeta de crédito ${banco} ****${tarjeta.numero}`,
+        descripcion: `Tarjeta de crédito ${nombreBanco} ****${tarjeta.numero}`,
         tipo: 'TARJETA_CREDITO',
         montoProyectado: redondearSoles(Math.min(deudaPendiente, pagoMensualSugerido * cuotasContadas)),
         cuotasContadas,

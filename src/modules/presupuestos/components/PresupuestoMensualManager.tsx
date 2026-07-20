@@ -115,16 +115,17 @@ export function PresupuestoMensualManager() {
           <div className="col-12 col-lg-5">
             <form className="border rounded-3 p-4 bg-light" onSubmit={(event) => void handleSubmit(onSubmit)(event)}>
               <div className="mb-3">
-                <label className="form-label fw-semibold small">Mes</label>
-                <input type="month" className={`form-control ${errors.mes ? 'is-invalid' : ''}`} {...register('mes')} />
+                <label className="form-label fw-semibold small" htmlFor="presupuesto-mensual-mes">Mes</label>
+                <input id="presupuesto-mensual-mes" type="month" className={`form-control ${errors.mes ? 'is-invalid' : ''}`} {...register('mes')} />
                 {errors.mes ? <div className="invalid-feedback fw-semibold">{errors.mes.message}</div> : null}
               </div>
 
               <div className="mb-4">
-                <label className="form-label fw-semibold small">Límite máximo del mes</label>
+                <label className="form-label fw-semibold small" htmlFor="presupuesto-mensual-total">Límite máximo del mes</label>
                 <div className="input-group">
                   <span className="input-group-text fw-bold">S/.</span>
                   <input
+                    id="presupuesto-mensual-total"
                     type="number"
                     step="0.01"
                     className={`form-control fw-bold ${errors.totalAsignado ? 'is-invalid' : ''}`}

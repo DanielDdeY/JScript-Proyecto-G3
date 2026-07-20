@@ -8,7 +8,7 @@ import { MetasProvider } from '../../modules/proyecciones/presentation/context/M
 import { ProyeccionesProvider } from '../../modules/proyecciones/presentation/context/ProyeccionesProvider';
 
 interface AppProvidersProps {
-  children: ReactNode;
+  readonly children: ReactNode;
 }
 
 export function AppProviders({ children }: AppProvidersProps) {
