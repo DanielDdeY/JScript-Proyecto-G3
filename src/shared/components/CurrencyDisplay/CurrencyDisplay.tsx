@@ -1,7 +1,7 @@
 interface CurrencyDisplayProps {
   amount: number;
   currency?: string;
-  variant?: 'normal' | 'success' | 'danger' | 'neutral';
+  variant?: 'normal' | 'success' | 'danger' | 'neutral' | 'light';
   size?: 'sm' | 'md' | 'lg' | 'xl';
 }
 
@@ -16,6 +16,7 @@ export function CurrencyDisplay({ amount, currency = 'S/', variant = 'normal', s
   if (variant === 'success') colorClass = 'var(--color-success)';
   if (variant === 'danger') colorClass = 'var(--color-danger)';
   if (variant === 'neutral') colorClass = 'var(--color-text-muted)';
+  if (variant === 'light') colorClass = '#ffffff';
 
   const sizeStyles = {
     sm: { symbol: '0.75rem', int: '1rem', dec: '0.75rem' },

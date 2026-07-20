@@ -83,8 +83,8 @@ export function TarjetaCarousel() {
         <article className={`${obtenerClaseTarjeta(tarjetaActiva)} tarjeta-carousel-card p-4 p-md-5`}>
           <div className="d-flex justify-content-between align-items-start gap-3 mb-4">
             <div>
-              <span className="fw-bold fs-2 d-block lh-1">{obtenerBancoComoTexto(tarjetaActiva)}</span>
-              <span className="badge bg-white bg-opacity-25 mt-2 text-white py-2 px-3">
+              <span className="fw-bold fs-2 d-block lh-1 text-white">{obtenerBancoComoTexto(tarjetaActiva)}</span>
+              <span className="badge bg-white text-warning fw-bold mt-2 py-2 px-3">
                 {obtenerTipoTarjetaLabel(tarjetaActiva)}
               </span>
             </div>
@@ -103,10 +103,10 @@ export function TarjetaCarousel() {
 
           <div className="d-flex flex-wrap justify-content-between align-items-end gap-4 mt-4 tarjeta-carousel-footer">
             <div>
-              <span className="small opacity-75 d-block text-uppercase text-xs">
+              <span className="small text-white opacity-75 d-block text-uppercase text-xs fw-semibold">
                 Saldo actual
               </span>
-              <span className="fw-bold fs-3 font-monospace">{formatCurrencyPen(tarjetaActiva.saldo)}</span>
+              <span className="fw-bold fs-3 font-monospace text-white">{formatCurrencyPen(tarjetaActiva.saldo)}</span>
             </div>
 
             <div className="d-flex flex-column align-items-start align-items-md-end gap-3">

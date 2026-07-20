@@ -107,13 +107,13 @@ export function Dashboard() {
             {tarjetas.map((tarjeta) => (
               <div key={String(tarjeta.id)} className="col-12 col-md-6 col-lg-4">
                 <article className={`${obtenerClaseTarjeta(tarjeta)} card p-4 h-100 d-flex flex-column justify-content-between`}>
-                  <div className="d-flex justify-content-between align-items-center mb-4">
+                  <div className="d-flex justify-content-between align-items-center mb-4 text-white">
                     <span className="fw-bold fs-5">{obtenerNombreBanco(tarjeta)}</span>
                     <span className="small opacity-75 font-monospace">**** {obtenerUltimosDigitos(tarjeta.numero)}</span>
                   </div>
-                  <div>
+                  <div className="text-white">
                     <span className="small opacity-75 d-block mb-1">Saldo disponible</span>
-                    <CurrencyDisplay amount={tarjeta.saldo} size="lg" />
+                    <CurrencyDisplay amount={tarjeta.saldo} size="lg" variant="light" />
                   </div>
                 </article>
               </div>
